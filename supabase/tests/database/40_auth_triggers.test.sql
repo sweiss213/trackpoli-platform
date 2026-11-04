@@ -25,7 +25,7 @@ select is((select count(*)::int from public.activity_events where action = 'auth
 select is((select count(*)::int from public.activity_events where details::text like '%new-hash%' or summary like '%new-hash%'), 0, 'the hash is never written to the log');
 
 -- two-factor
-insert into auth.mfa_factors (id, user_id, factor_type, status) values (gen_random_uuid(), tests.uid('bea'), 'totp', 'unverified');
+insert into auth.mfa_factors (id, user_id, factor_type, status, created_at, updated_at) values (gen_random_uuid(), tests.uid('bea'), 'totp', 'unverified', now(), now());
 select is((select count(*)::int from public.activity_events where action = 'auth.mfa_enrolled'), 0, 'an unverified factor is not an enrolment');
 update auth.mfa_factors set status = 'verified' where user_id = tests.uid('bea');
 select is((select count(*)::int from public.activity_events where action = 'auth.mfa_enrolled' and actor_id = tests.uid('bea')), 1, 'verifying a factor writes an enrolment event');

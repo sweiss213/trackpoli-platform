@@ -125,7 +125,10 @@ select is((select char_length(message) from public.operational_events where comp
 select throws_ok($$select public.log_error('error', 'somewhere_else', 'c3', 'E3', 'm')$$, '23514', null, 'the source must be one of the four allowed');
 
 -- ============ revoke_user_sessions ====================================================================================
-insert into auth.sessions (user_id) values (tests.uid('abe')), (tests.uid('abe')), (tests.uid('bea'));
+insert into auth.sessions (id, user_id, created_at, updated_at) values
+  (gen_random_uuid(), tests.uid('abe'), now(), now()),
+  (gen_random_uuid(), tests.uid('abe'), now(), now()),
+  (gen_random_uuid(), tests.uid('bea'), now(), now());
 select is(tests.val('abe', 'aal2', format('select public.revoke_user_sessions(%L)::text', tests.uid('abe'))), 'err:42501', 'an Administrator cannot revoke sessions');
 select public.revoke_user_sessions(tests.uid('abe'));
 select is((select count(*)::int from auth.sessions where user_id = tests.uid('abe')), 0, 'the target''s sessions are gone');
