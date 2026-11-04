@@ -13,11 +13,6 @@
 
 create schema if not exists tests;
 
--- Let the test runner assume supabase_auth_admin so the access-token-hook policy test
--- (30_functions_and_grants) can impersonate the auth service. LOCAL/TEST ONLY; wrapped so a
--- restricted role that may not grant this does not fail the seed (that one subtest then stays red).
-do $$ begin grant supabase_auth_admin to postgres; exception when others then null; end $$;
-
 create table tests.people (name text primary key, id uuid not null unique);
 insert into tests.people (name, id) values
   ('mia', '00000000-0000-4000-8000-0000000000a1'),
