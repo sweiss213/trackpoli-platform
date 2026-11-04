@@ -1,7 +1,21 @@
-<!-- Copy to supabase/functions/AGENTS.md. Loads only when the agent works on edge functions. -->
 # Rules for edge functions
 
-- **Compose `_shared`, don't hand-roll.** Auth via `_shared/request-auth.ts`, the service-role client via `_shared/admin-client.ts` (`getAdminClient`), CORS + responses via `_shared/http.ts` (`handleCors`, `jsonResponse`). Never read `SUPABASE_SERVICE_ROLE_KEY` or write `Access-Control-Allow-Origin` inline in a handler.
-- **No inline admin checks.** Never query `user_roles` directly for authz - use the shared `has_role`-backed helper, so the admin predicate has one definition.
-- **Handler is thin.** Validate → call one unit of business logic → return. Keep the business logic separable and testable, not welded into `Deno.serve`.
-- **Errors are reported.** A failure that the caller can't see must land in the audit/observability sink; pass `p_user_id: null` for service-role audit writes.
+- **Compose `_shared`, don't hand-roll.** Caller identity and the privileged client via
+  `_shared/auth.ts` (`verifyCaller`, `getAdminClient`, `clientIp`, `emailHash`); the response envelope
+  and error taxonomy via `_shared/errors.ts` (`jsonOk`, `jsonError`, `AppError`); CORS via
+  `_shared/cors.ts` (`handleCors`, `corsHeaders`); audit/operational writes via `_shared/events.ts`
+  (`writeEvent`, `writeOperationalError`); rate limits via `_shared/rateLimit.ts` (`enforceRateLimit`).
+  Never read `SUPABASE_SERVICE_ROLE_KEY` or write `Access-Control-Allow-Origin` inline in a handler.
+- **Access is decided from `profiles`, not a token claim.** `verifyCaller` loads the caller's profile
+  with the service role and rejects a status that is not `active` (except where `allowInvited` is set,
+  for `complete-invite` and `record-terms`). Manager-only functions pass `requireAal2: true`. There is
+  no `user_roles` table in TrackPoli — role and status live on `profiles`.
+- **Handler is thin.** Validate the body with zod (unknown fields rejected; emails trimmed and
+  lower-cased) → call one unit of business logic → return via `jsonOk`/`jsonError`. Keep the business
+  logic separable and testable, not welded into `Deno.serve`.
+- **A change and its event are atomic.** If `writeEvent` fails, undo the change and return `internal`.
+- **Errors are reported.** Only unexpected (`internal`) failures call `writeOperationalError` (and
+  Sentry) with the request id, release and environment — never an email, name, token or request body in
+  the message or context. Expected failures (401/403/404/409/422/429) are not logged as errors.
+- **Every function** generates a `request_id` (UUID), returns it in `x-request-id`, and stores it on
+  the event it writes.

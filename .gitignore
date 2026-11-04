@@ -21,3 +21,6 @@ reports/
 .env
 .env.local
 .DS_Store
+
+# TypeScript build info
+*.tsbuildinfo

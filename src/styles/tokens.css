@@ -1,0 +1,6 @@
+/* Design tokens (grayscale scale from the wireframes, spacing, typography) are defined here when the
+   app shell lands in P1-12. Keeping the file now so the import path is stable. No colour literals are
+   allowed outside this file once the shell exists (P1-12 acceptance). */
+:root {
+  /* placeholder — populated in P1-12 */
+}

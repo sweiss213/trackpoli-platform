@@ -1,0 +1,40 @@
+-- PARKED — Phase 2/3 additions removed from ../database/30_functions_and_grants.test.sql for TP1-01.
+-- Restore by merging these rows back into the two set_eq expected lists noted below.
+-- Do NOT rename to .sql: that would make pg_prove try to run this fragment.
+
+-- (1) Into the "authenticated table grants" set_eq (currently the Phase 1 tables only),
+--     add these rows when the Phase 2 (011–013) and Phase 3 (016–020) tables land:
+--                     ('records', 'SELECT'),
+--                     ('parties', 'SELECT'),
+--                     ('sources', 'SELECT'),
+--                     ('party_manifestos', 'SELECT'),
+--                     ('citations', 'SELECT'),
+--                     ('record_history', 'SELECT'),
+--                     ('must_tick_fields', 'SELECT'),
+--                     ('field_ticks', 'SELECT'),
+--                     ('field_flags', 'SELECT'),
+--                     ('acknowledged_warnings', 'SELECT'),
+--                     ('published_snapshots', 'SELECT'),
+--                     ('tags', 'SELECT'),
+--                     ('record_tags', 'SELECT'),
+--                     ('politicians', 'SELECT'),
+--                     ('politician_roles', 'SELECT'),
+--                     ('party_memberships', 'SELECT'),
+--                     ('politician_education', 'SELECT'),
+--                     ('politician_social_accounts', 'SELECT'),
+--                     ('politician_current_party', 'SELECT'),
+--                     ('audit_integrity_runs', 'SELECT'),
+--                     ('activity_feed', 'SELECT'),
+--                     ('known_devices', 'SELECT')
+
+-- (2) Into the "functions authenticated can call" set_eq (currently the four read-only helpers only),
+--     add these Phase 2/3 application functions when their migrations land:
+--       ('create_party'), ('create_source'), ('save_record'), ('submit_for_review'), ('tick_field'),
+--       ('unticked_fields'), ('raise_flag'), ('resolve_flag'), ('verify_record'), ('request_correction'),
+--       ('reject_record'), ('add_citation'), ('remove_citation'), ('add_manifesto'), ('remove_manifesto'),
+--       ('publish_checklist'), ('publish_record'), ('unpublish_record'), ('discard_changes'),
+--       ('delete_record'), ('restore_record'), ('recently_deleted'), ('source_used_by'), ('source_replace'),
+--       ('source_retire'), ('is_active_admin'), ('record_visible'), ('create_politician'), ('save_row'),
+--       ('remove_row'), ('error_summary'), ('request_trace')
+--     and restore the original assertion message:
+--       'signed-in people can call only the four read-only helpers and the Phase 2 and 3 application functions'

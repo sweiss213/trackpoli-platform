@@ -1,0 +1,50 @@
+name: database
+
+# Proves the Phase 1 data layer on a REAL local Supabase stack (migrations 001-010, RLS, the access
+# token hook, the append-only logs and the terms gate), which this repo's contributors cannot all run
+# locally. This is the authoritative "green on real Supabase" check the TP1-01 acceptance requires.
+on:
+  pull_request:
+    paths:
+      - "supabase/**"
+      - "data-map.json"
+      - ".github/workflows/database.yml"
+  workflow_dispatch:
+
+jobs:
+  db-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # Starts Postgres + Auth locally (the runner has Docker), applies migrations 001-010 and seeds.sql.
+      - name: Start Supabase and apply migrations + seed
+        run: |
+          supabase start
+          supabase db reset
+
+      # The sandbox stub stands in for Supabase on a plain Postgres (the no-Docker path); it must NOT run
+      # against a real stack, where the roles/auth schema already exist. Remove it so `supabase test db`
+      # runs only the real pgTAP suite in supabase/tests/database/.
+      - name: Remove the no-Supabase sandbox stub before testing real Supabase
+        run: rm -rf supabase/tests/harness
+
+      - name: Run the pgTAP suite (access matrix, guards, append-only, logs, terms gate)
+        run: supabase test db
+
+      # Generated DB types must match the live schema, so schema and code cannot drift.
+      - name: Check generated database types are up to date
+        run: |
+          supabase gen types typescript --local --schema public > /tmp/database.types.ts
+          if ! diff -u src/lib/database.types.ts /tmp/database.types.ts; then
+            echo "::error::src/lib/database.types.ts is out of date. Run 'npm run gen:types' and commit."
+            exit 1
+          fi
+
+      - name: Stop Supabase
+        if: always()
+        run: supabase stop --no-backup
