@@ -167,8 +167,11 @@ jobs:
         if: steps.diff.outputs.code != ''
         env:
           CODE: ${{ steps.diff.outputs.code }}
-          SHA: ${{ steps.diff.outputs.sha }}
-        run: node .claude/skills/judge-arch/scripts/check-arch-review-coverage.mjs --log docs/arch-reviews/log.jsonl --change "$SHA" --changed-list "$CODE" --base base-arch-reviews.jsonl
+          # Match the review log on the PR branch (a stable id the committed entry can carry), not the
+          # ephemeral pull_request merge-commit SHA, which no pre-committed log entry can ever equal.
+          # Matches upstream enterprise-software-AI-skills fix for issue #213 (PR #214).
+          CHANGE_REF: ${{ github.head_ref || github.ref_name }}
+        run: node .claude/skills/judge-arch/scripts/check-arch-review-coverage.mjs --log docs/arch-reviews/log.jsonl --change "$CHANGE_REF" --changed-list "$CODE" --base base-arch-reviews.jsonl
       - name: No application code changed
         if: steps.diff.outputs.code == ''
         run: echo "No src/supabase application code in this PR - architecture review not required."
