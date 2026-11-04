@@ -12,8 +12,9 @@ max_rows = 1000
 [db]
 port = 54322
 shadow_port = 54320
-# Postgres 16: the Phase 1 migrations and pgTAP suite were authored and proven against PG 16.
-major_version = 16
+# Postgres 17 (the Supabase CLI's current supported local version). The Phase 1 migrations and pgTAP
+# suite were authored on PG 16; they are standard SQL + pgTAP and run on 17.
+major_version = 17
 
 [db.pooler]
 enabled = false
@@ -37,7 +38,6 @@ refresh_token_reuse_interval = 10
 minimum_password_length = 12
 
 [auth.email]
-enable_signup = false
 enable_confirmations = true
 # Recovery/invite links are single-use and expire within 24h (NFR-S8); Supabase has one expiry setting.
 max_frequency = "1m"
