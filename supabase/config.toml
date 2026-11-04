@@ -22,11 +22,6 @@ enabled = false
 enabled = true
 port = 54323
 
-[inbucket]
-# Local mail catcher for invite/recovery emails during development.
-enabled = true
-port = 54324
-
 [auth]
 enabled = true
 site_url = "http://localhost:3000/admin"
