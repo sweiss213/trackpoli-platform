@@ -1,0 +1,77 @@
+-- PARKED — Phase 2/3 test helpers removed from ../../seed.sql for TP1-01.
+-- These reference public.records / public.record_status / public.publish_checklist, which do not
+-- exist on a Phase-1-only database (001-010), so a SQL-language definition fails to load. Restore
+-- this whole block at the END of seed.sql when the Phase 2/3 tests (70..81) land. Do NOT rename to .sql.
+-- Phase 1 keeps only: tests.people, tests.fill, tests.run_as, tests.run, tests.val, tests.uid.
+
+-- ===== Step helpers for tests that walk a record through several calls (they keep their changes; use inside a
+-- pgTAP file, which rolls everything back at the end). tests.go runs one statement as a person and returns 'ok',
+-- or 'err:<message>' (the message is the Phase 2 error code, for example err:version_conflict). tests.goval returns
+-- 'val:<first column>' instead, and can save the value under a name that later statements use as {name}.
+create table tests.vars (name text primary key, val text not null);
+
+create function tests.subst(p_sql text) returns text language plpgsql as $$
+declare r record;
+begin
+  for r in select name, val from tests.vars loop p_sql := replace(p_sql, '{' || r.name || '}', r.val); end loop;
+  return p_sql;
+end $$;
+
+create function tests.step(p_who text, p_aal text, p_sql text, p_value boolean, p_save text) returns text
+  language plpgsql as $$
+declare v_role text; v_claims text; v_uid uuid; v_back text := current_user; v_val text; v_result text;
+begin
+  if p_who in ('anon', 'service') then
+    v_role := case p_who when 'anon' then 'anon' else 'service_role' end;
+    v_claims := json_build_object('role', v_role)::text;
+  else
+    select id into v_uid from tests.people where name = p_who;
+    if v_uid is null then raise exception 'tests.step: unknown person %', p_who; end if;
+    v_role := 'authenticated';
+    v_claims := json_build_object('sub', v_uid, 'role', 'authenticated', 'aal', p_aal, 'email', p_who || '@example.test')::text;
+  end if;
+  p_sql := tests.fill(p_who, tests.subst(p_sql));
+  begin
+    perform set_config('request.jwt.claims', v_claims, true);
+    perform set_config('role', v_role, true);
+    if p_value then execute p_sql into v_val; v_result := 'val:' || coalesce(v_val, 'null');
+    else execute p_sql; v_result := 'ok'; end if;
+  exception when others then
+    v_result := 'err:' || case when sqlstate = 'P0001' then sqlerrm else sqlstate || ' ' || sqlerrm end;
+  end;
+  perform set_config('role', v_back, true);
+  perform set_config('request.jwt.claims', '', true);
+  if p_save is not null and v_result like 'val:%' then
+    insert into tests.vars values (p_save, substr(v_result, 5)) on conflict (name) do update set val = excluded.val;
+  end if;
+  return v_result;
+end $$;
+create function tests.go(p_who text, p_sql text, p_aal text default 'aal2') returns text
+  language sql as $$ select tests.step(p_who, p_aal, p_sql, false, null) $$;
+create function tests.goval(p_who text, p_sql text, p_save text default null, p_aal text default 'aal2') returns text
+  language sql as $$ select tests.step(p_who, p_aal, p_sql, true, p_save) $$;
+-- The version of a record, read as the owner of the database (not as a person).
+create function tests.ver(p_id text) returns text language sql as $$ select version::text from public.records where id = tests.subst(p_id)::uuid $$;
+-- Wrap a step whose result a test does not need to check (prints nothing that pgTAP could mistake for a test line).
+create function tests.q(p text) returns void language plpgsql as $$ begin null; end $$;
+-- The codes of a record's pre-publish checklist as one sorted string, read as a person (the function needs one).
+create function tests.cl(p_who text, p_id text, p_level text default null) returns text language plpgsql as $$
+declare v text;
+begin
+  v := tests.goval(p_who, format($q$select string_agg(e ->> 'code', ',' order by e ->> 'code') from jsonb_array_elements(public.publish_checklist(%L)) e where %L is null or e ->> 'level' = %L$q$, tests.subst(p_id)::uuid, p_level, p_level));
+  return v;
+end $$;
+
+-- ===== Check helpers for the long Phase 3 file (80_politicians_activity), which switches the database role for many
+-- statements in a row and so cannot call pgTAP directly: these run as the owner and hand the result to pgTAP.
+create function tests.zz_chk(n text, got text, want text) returns text language plpgsql security definer as $$
+begin return is(got, want, n); end $$;
+create function tests.zz_chk(n text, got boolean, want text) returns text language sql security definer as $$ select tests.zz_chk(n, got::text, want) $$;
+create function tests.zz_chk(n text, got public.record_status, want text) returns text language sql security definer as $$ select tests.zz_chk(n, got::text, want) $$;
+create function tests.zz_ex(q text) returns text language plpgsql as $$
+begin execute q; return 'ok'; exception when others then return sqlerrm; end $$;
+create function tests.zz_v(i uuid) returns integer language sql security definer as $$ select version from public.records where id = i $$;
+create function tests.zz_n(q text) returns bigint language plpgsql security definer as $$ declare n bigint; begin execute q into n; return n; end $$;
+grant usage on schema tests to anon, authenticated, service_role;
+grant execute on function tests.zz_chk(text, text, text), tests.zz_chk(text, boolean, text), tests.zz_chk(text, public.record_status, text),
+  tests.zz_ex(text), tests.zz_v(uuid), tests.zz_n(text) to anon, authenticated, service_role;

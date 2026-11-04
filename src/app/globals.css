@@ -1,0 +1,30 @@
+/* Minimal baseline only. The design-token system (grayscale tokens from the wireframes, colours in
+   one place) and the Material 3 component layer are built with the app shell in P1-12. No colour
+   literals outside the token layer once that lands. */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  line-height: 1.5;
+}
+
+main {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}

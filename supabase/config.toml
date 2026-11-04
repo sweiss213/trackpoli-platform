@@ -1,0 +1,65 @@
+# Supabase local/CI configuration for TrackPoli. Hand-written for TP1-01 (no `supabase init` was run);
+# validate on the first real `supabase start` and adjust keys the installed CLI version requires.
+project_id = "trackpoli"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+# Postgres 16: the Phase 1 migrations and pgTAP suite were authored and proven against PG 16.
+major_version = 16
+
+[db.pooler]
+enabled = false
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+# Local mail catcher for invite/recovery emails during development.
+enabled = true
+port = 54324
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000/admin"
+additional_redirect_urls = ["http://localhost:3000/admin/auth/callback", "http://localhost:3000/admin/auth/confirm"]
+# Invite-only: no public sign-up (NFR-S1). Accounts exist only after an invite.
+enable_signup = false
+enable_anonymous_sign_ins = false
+# Access token lives 5 minutes (NFR-S5); idle/absolute limits are enforced in the app on the free plan.
+jwt_expiry = 300
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+# Minimum 12 characters, no weakening composition rules (NFR-S2).
+minimum_password_length = 12
+
+[auth.email]
+enable_signup = false
+enable_confirmations = true
+# Recovery/invite links are single-use and expire within 24h (NFR-S8); Supabase has one expiry setting.
+max_frequency = "1m"
+
+[auth.mfa]
+# Two-factor (TOTP) required for every administrator (NFR-S6, Q-1-01).
+max_enrolled_factors = 10
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+# Custom Access Token Hook (migration 006): copies role/status into the token as app_role/app_status
+# for UI routing only. The token is never the source of truth for access (RLS reads profiles live).
+[auth.hook.custom_access_token]
+enabled = true
+uri = "pg-functions://postgres/public/custom_access_token_hook"
+
+[edge_runtime]
+enabled = true
