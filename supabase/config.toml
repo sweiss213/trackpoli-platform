@@ -40,7 +40,16 @@ minimum_password_length = 12
 [auth.email]
 enable_confirmations = true
 # Recovery/invite links are single-use and expire within 24h (NFR-S8); Supabase has one expiry setting.
+# Supabase's default otp_expiry is 1h; we raise it to 24h (86400s, the max) so invite onboarding and
+# recovery both stay usable within the shared window (ADR-0008). Validate the key on first `supabase start`.
+otp_expiry = 86400
 max_frequency = "1m"
+
+# Recovery email (TP1-03, ADR-0008). Links to the /auth/confirm Continue page with the single-use
+# token_hash; the password is never in the email. Template copy is in supabase/templates/recovery.html.
+[auth.email.template.recovery]
+subject = "Reset your TrackPoli Admin password"
+content_path = "./supabase/templates/recovery.html"
 
 [auth.mfa]
 # Two-factor (TOTP) required for every administrator (NFR-S6, Q-1-01).
@@ -66,4 +75,9 @@ enabled = true
 verify_jwt = false
 
 [functions.auth-event]
+verify_jwt = false
+
+# request-password-reset (TP1-03): the forgot-password request runs before the user has a session, so the
+# gateway JWT check is off and the call is gated by INTERNAL_CALL_SECRET (assertInternalCall) instead.
+[functions.request-password-reset]
 verify_jwt = false

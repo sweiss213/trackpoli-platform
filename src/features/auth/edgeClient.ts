@@ -20,7 +20,7 @@ export class EdgeFunctionError extends Error {
 type Envelope<T> = { ok: true; data: T } | { ok: false; error: { code: string; message: string } };
 
 export async function invokeInternalFunction<T>(
-  name: "sign-in-check" | "auth-event",
+  name: "sign-in-check" | "auth-event" | "request-password-reset",
   body: Record<string, unknown>,
   ip: string | null,
 ): Promise<T> {

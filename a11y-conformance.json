@@ -1,9 +1,9 @@
 {
-  "_about": "TrackPoli WCAG 2.2 A/AA conformance record, updated for TP1-02 (the first real screens: the admin sign-in form, its error state, and the account-locked view; MD3 hand-built components in src/components/ui + src/features/auth, grayscale tokens). pass-manual verdicts are agent static reviews of the markup, CSS and ARIA of those screens; a full human keyboard + screen-reader audit of the real screens is scheduled for P1-16 (NFR-A1). Colour is deliberately grayscale for now (ADR-0006), so contrast criteria are re-verified when the brand colour lands. Regenerate per surface as more screens land.",
+  "_about": "TrackPoli WCAG 2.2 A/AA conformance record, updated for TP1-03 (adds the password-recovery screens: forgot-password request, check-your-email, set-new-password, and the shared /auth/confirm Continue page with its continue/expired/error states) on top of the TP1-02 sign-in surfaces. pass-manual verdicts are agent static reviews of the markup, CSS and ARIA of those screens; a full human keyboard + screen-reader audit of the real screens is scheduled for P1-16 (NFR-A1). Colour is deliberately grayscale for now (ADR-0006), so contrast criteria are re-verified when the brand colour lands. Regenerate per surface as more screens land.",
   "1.1.1": {
     "status": "pass-manual",
-    "note": "Icons (Icon component) are decorative with empty alt by default; the brand mark sits beside the text 'TrackPoli Admin'. No informational image lacks a text alternative.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "note": "Icons (Icon component) are decorative with empty alt (brand mark, warning, clock, mail, error, back chevron, requirement check/dot); the brand mark sits beside the text 'TrackPoli Admin'. The recovery email's logo is a hosted PNG with empty alt beside the wordmark. No informational image lacks a text alternative.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "1.2.1": {
@@ -29,18 +29,18 @@
   "1.3.1": {
     "status": "pass-manual",
     "note": "Native <label for> binds each field (TextField), the form has an accessible name (aria-labelledby), helper text is wired via aria-describedby, and the error banner is a real region; structure conveyed semantically, not by presentation.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "1.3.2": {
     "status": "pass-manual",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "1.3.4": {
     "status": "pass-manual",
     "note": "Layout is not locked to an orientation (responsive CSS, no transform-based rotation lock).",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "1.3.3": {
@@ -50,13 +50,13 @@
   "1.3.5": {
     "status": "pass-manual",
     "note": "Email uses autoComplete='username' + inputMode='email'; password uses autoComplete='current-password', so the input purpose is programmatically identified.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "1.4.1": {
     "status": "pass-manual",
     "note": "The failed-sign-in state is conveyed by banner text + a warning icon + aria-invalid + helper text, never by colour alone.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "1.4.2": {
@@ -66,13 +66,13 @@
   "1.4.3": {
     "status": "pass-manual",
     "note": "Grayscale MD3 tokens; text/background pairings inspected against 4.5:1 (normal) / 3:1 (large). Re-verified when the brand colour replaces the grayscale token values (ADR-0006).",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "1.4.4": {
     "status": "pass-manual",
     "note": "Type scale uses relative units; content reflows and remains usable at 200% zoom.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "1.4.5": {
@@ -82,18 +82,18 @@
   "1.4.10": {
     "status": "pass-manual",
     "note": "Single-column card layout reflows to a 320px viewport with no two-dimensional scrolling.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "1.4.11": {
     "status": "pass-manual",
     "note": "Text-field outlines, button surfaces, the error outline and the focus ring were inspected for >=3:1 contrast against their adjacent colours.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "1.4.12": {
     "status": "pass-manual",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "1.4.13": {
@@ -103,13 +103,13 @@
   "2.1.1": {
     "status": "pass-manual",
     "note": "All controls are native elements (input, button, anchor): the form, the password visibility toggle, the Google and Sign in buttons and the Forgot password link are fully keyboard-operable.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "2.1.2": {
     "status": "pass-manual",
     "note": "No custom focus management; nothing traps the keyboard (native controls only, no modal).",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "2.1.4": {
@@ -135,19 +135,19 @@
   "2.4.2": {
     "status": "pass-manual",
     "note": "Each route sets a descriptive document title via Next metadata.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "2.4.3": {
     "status": "pass-manual",
     "note": "DOM order matches visual order (email, password + toggle, forgot link, Google, Sign in); no tabindex re-ordering.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "2.4.4": {
     "status": "pass-manual",
     "note": "The one link ('Forgot password?') has descriptive text that states its purpose.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "2.4.5": {
@@ -157,19 +157,19 @@
   "2.4.6": {
     "status": "pass-manual",
     "note": "Headings (the h1 on each screen) and every field/button label describe their topic or purpose.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "2.4.7": {
     "status": "pass-manual",
     "note": "A visible focus ring is defined on inputs, buttons, the toggle and the link (no outline:none without a replacement).",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "2.4.11": {
     "status": "pass-manual",
     "note": "No sticky header/footer overlaps a focused control; focused elements remain fully visible within the card.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "2.5.1": {
@@ -179,13 +179,13 @@
   "2.5.2": {
     "status": "pass-manual",
     "note": "All actions are on native buttons/links, which activate on pointer-up and can be cancelled by moving off before release.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "2.5.3": {
     "status": "pass-manual",
     "note": "Visible-text buttons ('Sign in', 'Continue with Google') carry that text as their accessible name; the icon-only password toggle uses an aria-label ('Show password'/'Hide password').",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "2.5.4": {
@@ -199,7 +199,7 @@
   "2.5.8": {
     "status": "pass-manual",
     "note": "The buttons, the field, the toggle and the link each meet the 24x24 CSS-pixel minimum target size.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "3.1.1": {
@@ -212,13 +212,13 @@
   "3.2.1": {
     "status": "pass-manual",
     "note": "Focusing a field or control triggers no change of context (no auto-submit, no navigation on focus).",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "3.2.2": {
     "status": "pass-manual",
     "note": "Typing changes no context; the password toggle is an explicit button press, and submission is an explicit Sign in press.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "3.2.3": {
@@ -235,20 +235,20 @@
   },
   "3.3.1": {
     "status": "pass-manual",
-    "note": "A failed attempt is identified in text in a role='alert' banner and the field is marked aria-invalid; the locked state is stated in text.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "note": "Errors are identified in text and programmatically: the sign-in/recovery Banner (role=alert), plus aria-invalid + aria-describedby helper on fields; the confirm-password field shows an inline 'Both passwords must match.' helper when they differ.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "3.3.2": {
     "status": "pass-manual",
-    "note": "Every input has a persistent visible <label>; required fields and the Google alternative are clearly presented.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "note": "Every field has a visible <label> (TextField). The set-new-password screen states the policy inline next to the fields ('At least 12 characters'), and the request screen labels the email field.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "3.3.3": {
     "status": "pass-manual",
     "note": "A correction suggestion is deliberately withheld (the generic 'email or password is incorrect') because naming which was wrong would enable account enumeration; this is the WCAG 3.3.3 security exception (ADR-0005).",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "3.3.4": {
@@ -262,19 +262,19 @@
   "3.3.8": {
     "status": "pass-manual",
     "note": "Authentication uses email + password (and Google SSO); the password field allows paste and offers a show/hide toggle, and no cognitive-function test (puzzle, transcription) is imposed.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "4.1.2": {
     "status": "pass-manual",
     "note": "Native elements provide name/role/value; the toggle exposes aria-pressed, fields expose aria-invalid/aria-describedby.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   },
   "4.1.3": {
     "status": "pass-manual",
-    "note": "The error banner is role='alert' so a screen reader announces it on appearance; the attempts-remaining count is exposed as the field's aria-describedby helper.",
-    "reviewer": "agent static review of the TP1-02 sign-in screens (pending human a11y audit in P1-16)",
+    "note": "Status messages use role=alert (the notice Banner on sign-in, forgot-password, and reset) so they are announced without moving focus; the enumeration-safe 'check your email' acknowledgement is a heading+text state change.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
     "date": "2026-11-05"
   }
 }

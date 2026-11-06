@@ -1,5 +1,93 @@
 [
   {
+    "feature": "auth/password-recovery.feature",
+    "scenario": "A Google-only account gets the same screen and no recovery email",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "google-only-no-password",
+    "category": "negative",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/password-recovery.feature",
+    "scenario": "A reset request reveals nothing about whether an account exists",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "account-enumeration",
+    "category": "negative",
+    "quality": "security",
+    "severity": "critical",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/password-recovery.feature",
+    "scenario": "A reused or expired reset link is refused and creates no session",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "reset-link-single-use",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/password-recovery.feature",
+    "scenario": "Completing a reset ends all sessions and clears the lockout counter",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "reset-completion",
+    "category": "happy",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/password-recovery.feature",
+    "scenario": "Every reset request requires a valid bot-check token",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "bot-check",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/password-recovery.feature",
+    "scenario": "Repeated reset requests never lock the targeted account",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "no-lockout-on-request",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/password-recovery.feature",
+    "scenario": "The one-time token is exchanged only on an explicit continue, not on a page fetch",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "scanner-safe-link",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/password-recovery.feature",
+    "scenario": "The reset-request endpoint rejects a non-server caller",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "internal-only-endpoint",
+    "category": "permission",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
     "feature": "auth/sign-in-protection.feature",
     "scenario": "A fifth wrong attempt pauses the account",
     "domain": "auth",

@@ -28,8 +28,8 @@ jobs:
         run: npm ci
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
-      - name: Run sign-in UI e2e
-        run: npx playwright test e2e/sign-in.spec.ts
+      - name: Run UI e2e (sign-in + recovery)
+        run: npx playwright test e2e/sign-in.spec.ts e2e/forgot-password.spec.ts
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -44,7 +44,7 @@ jobs:
   # promoted to run on every PR, exactly like database.yml. The steps most likely to need adjustment are the
   # Edge Functions' secrets and reading the local anon/service-role keys from `supabase status`.
   e2e-full-stack:
-    name: e2e (full stack · E2E-02)
+    name: e2e (full stack · E2E-02, E2E-05)
     if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     env:
@@ -71,6 +71,7 @@ jobs:
           INTERNAL_CALL_SECRET=${INTERNAL_CALL_SECRET}
           TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
           ALLOWED_ORIGINS=
+          SITE_URL=http://localhost:3000/admin
           EOF
       - name: Start Supabase (DB + auth + functions) and seed
         run: |
@@ -83,8 +84,10 @@ jobs:
           echo "SUPABASE_SERVICE_ROLE_KEY=$(sed -n 's/^SERVICE_ROLE_KEY=//p' supabase-status.env | tr -d '\"')" >> "$GITHUB_ENV"
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
-      - name: Run the full-stack lockout e2e (E2E-02)
-        run: npx playwright test e2e/sign-in.full-stack.spec.ts
+      # E2E-05 reads the recovery email from the local mail catcher (Inbucket/Mailpit) that `supabase start`
+      # brings up; like E2E-02 this job is manual and will need CI iteration the first time.
+      - name: Run the full-stack e2e (E2E-02 lockout + E2E-05 recovery)
+        run: npx playwright test e2e/sign-in.full-stack.spec.ts e2e/password-reset.full-stack.spec.ts
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:

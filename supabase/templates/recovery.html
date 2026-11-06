@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Reset your TrackPoli Admin password</title>
+  </head>
+  <!--
+    TrackPoli Admin recovery email (TP1-03, ADR-0008). Sent by Supabase Auth for a password reset.
+    The link points at the shared /auth/confirm Continue page carrying the single-use token_hash; the
+    page exchanges the token only after the recipient clicks "Reset password", so an email security
+    scanner that merely fetches the URL cannot consume the one-time link. The password is never in this
+    email, and the link is not shown on any page (OWASP Forgot Password). Inline styles only, because
+    email clients strip <style> and external CSS.
+  -->
+  <body style="margin:0;padding:0;background:#e8e8e8;">
+    <!-- Preheader (hidden): shown as the inbox preview line. -->
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;">
+      Use the button below to set a new password. The link expires in 24 hours and can be used only once.
+    </div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#e8e8e8;">
+      <tr>
+        <td align="center" style="padding:24px;">
+          <table role="presentation" width="480" cellpadding="0" cellspacing="0"
+                 style="width:480px;max-width:100%;background:#ffffff;border-radius:28px;
+                        box-shadow:0 8px 24px rgba(0,0,0,0.12);">
+            <tr>
+              <td style="padding:40px;font-family:Roboto,Arial,Helvetica,sans-serif;color:#1b1b1b;">
+                <!-- Brand lockup: the logo chip + wordmark, matching the app screens. The logo is a hosted
+                     PNG (email clients strip SVG and block data URIs); it resolves from the app's public
+                     assets once deployed. If the image is blocked or not yet hosted, the wordmark text
+                     still shows, so the header degrades gracefully. The exact asset URL (and whether it
+                     carries the /admin basePath) is confirmed when the sending domain is set up (Q-1-21). -->
+                <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 22px;">
+                  <tr>
+                    <td style="padding-right:12px;vertical-align:middle;">
+                      <img src="{{ .SiteURL }}/email/trackpoli-mark.png" width="40" height="40" alt=""
+                           style="display:block;width:40px;height:40px;border-radius:11px;" />
+                    </td>
+                    <td style="vertical-align:middle;font-family:Roboto,Arial,Helvetica,sans-serif;
+                               font-size:16px;font-weight:600;color:#1b1b1b;">
+                      TrackPoli Admin
+                    </td>
+                  </tr>
+                </table>
+
+                <h1 style="margin:0 0 8px;font-size:28px;font-weight:400;line-height:36px;color:#1b1b1b;">
+                  Reset your password
+                </h1>
+                <p style="margin:0 0 22px;font-size:14px;line-height:20px;color:#474747;">
+                  We received a request to reset the password for your TrackPoli Admin account. Click the
+                  button below to choose a new one.
+                </p>
+
+                <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;">
+                  <tr>
+                    <td align="center" bgcolor="#d4d4d4" style="border-radius:28px;">
+                      <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery"
+                         style="display:block;padding:18px 24px;font-size:14px;font-weight:600;
+                                color:#1b1b1b;text-decoration:none;border-radius:28px;">
+                        Reset password
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="margin:22px 0 0;font-size:12px;line-height:16px;color:#474747;">
+                  If the button doesn&rsquo;t work, copy and paste this link into your browser:
+                </p>
+                <p style="margin:4px 0 0;font-size:12px;line-height:16px;word-break:break-all;">
+                  <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery"
+                     style="color:#1b1b1b;">{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery</a>
+                </p>
+
+                <p style="margin:22px 0 0;font-size:12px;line-height:16px;color:#474747;">
+                  This link expires in 24 hours and can be used only once.
+                </p>
+                <p style="margin:12px 0 0;font-size:12px;line-height:16px;color:#474747;">
+                  If you didn&rsquo;t request this, you can safely ignore this email &mdash; your password
+                  won&rsquo;t change. For your security, never share this link with anyone.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
