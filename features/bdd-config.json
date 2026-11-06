@@ -1,4 +1,4 @@
 {
-  "_comment": "Declared audiences for TrackPoli BDD coverage. check-bdd-tags requires every scenario's @audience tag to be one of these; check-bdd-coverage (runtime tier) requires each declared audience to have at least one scenario once features exist. Derived from the validated problem-statement audiences plus the backend admin role.",
-  "audiences": ["newbie", "advocate", "citizen", "veteran", "admin"]
+  "_comment": "Declared audiences for the BDD taxonomy (bdd-comprehensive-testing). Every scenario's @audience must be one of these. TrackPoli admin auth is seen by an Administrator, an Administrator Manager, and the anonymous/attacker caller who has no session.",
+  "audiences": ["administrator", "administrator-manager", "anonymous"]
 }

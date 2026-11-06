@@ -27,6 +27,27 @@ export function clientIp(req: Request, connectingIp: string | null): string | nu
   return connectingIp;
 }
 
+// Constant-time string compare, so verifying a shared secret does not leak it one character at a time
+// through response timing. Length is allowed to differ fast (it is not itself the secret).
+function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+// The pre-authentication functions (sign-in-check, auth-event) run before a user has any session, so they
+// cannot be gated by a user JWT. They are callable only by the TrackPoli server, which sends the shared
+// INTERNAL_CALL_SECRET; a browser or any other caller is refused. This keeps auth composed in _shared
+// rather than hand-rolled per handler (AGENTS.md).
+export function assertInternalCall(req: Request): void {
+  const secret = Deno.env.get("INTERNAL_CALL_SECRET");
+  const sent = req.headers.get("x-internal-call-secret");
+  if (!secret || !sent || !safeEqual(sent, secret)) {
+    throw new AppError("forbidden", "This endpoint is callable only by the TrackPoli server");
+  }
+}
+
 export async function sha256Hex(input: string): Promise<string> {
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input));
   return Array.from(new Uint8Array(digest))

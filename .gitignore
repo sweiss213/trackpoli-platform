@@ -24,3 +24,8 @@ reports/
 
 # TypeScript build info
 *.tsbuildinfo
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/

@@ -1,0 +1,77 @@
+# Production deploy (TP1-02). Manual, and gated by the GitHub "production" Environment, where the required
+# reviewers are configured — including the SECOND migration reviewer the ticket calls for (Settings ->
+# Environments -> production -> Required reviewers). Same expand-then-contract ordering as staging, plus a
+# one-click rollback that re-promotes the last known-good Vercel deployment. A migration's contract phase
+# (dropping old columns) is always a separate, later change, so a rollback never meets a missing column.
+#
+# INERT UNTIL CONFIGURED: the production Environment + its required reviewers, the secrets
+# (SUPABASE_ACCESS_TOKEN, PRODUCTION_SUPABASE_DB_PASSWORD, VERCEL_*), and the variable
+# PRODUCTION_SUPABASE_PROJECT_REF. Consider a CODEOWNERS entry on supabase/migrations for migration review.
+name: deploy-production
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "deploy or rollback"
+        type: choice
+        options: [deploy, rollback]
+        default: deploy
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ inputs.action == 'deploy' }}
+    name: deploy (production)
+    runs-on: ubuntu-latest
+    environment: production # required reviewers (incl. the second migration reviewer) gate this job
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Apply migrations to production (expand)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.PRODUCTION_SUPABASE_DB_PASSWORD }}
+        run: supabase db push --project-ref "${{ vars.PRODUCTION_SUPABASE_PROJECT_REF }}"
+
+      - name: Deploy Edge Functions to production
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: supabase functions deploy --project-ref "${{ vars.PRODUCTION_SUPABASE_PROJECT_REF }}"
+
+      - name: Deploy app to Vercel (production)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npx --yes vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          npx --yes vercel build --prod --token="$VERCEL_TOKEN"
+          npx --yes vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+
+  rollback:
+    if: ${{ inputs.action == 'rollback' }}
+    name: rollback (production)
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Roll back Vercel to the previous production deployment
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: npx --yes vercel rollback --yes --token="$VERCEL_TOKEN"

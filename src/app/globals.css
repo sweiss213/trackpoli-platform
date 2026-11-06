@@ -1,6 +1,8 @@
-/* Minimal baseline only. The design-token system (grayscale tokens from the wireframes, colours in
-   one place) and the Material 3 component layer are built with the app shell in P1-12. No colour
-   literals outside the token layer once that lands. */
+/* The design-token layer (src/styles/tokens.css) holds every colour and the M3 type scale; no colour
+   literal lives outside it. The Material 3 component layer (src/components/ui) and screens compose those
+   tokens. The full app shell arrives in P1-12; this baseline is what the sign-in screen (TP1-02) needs. */
+@import "../styles/tokens.css";
+
 * {
   box-sizing: border-box;
 }
@@ -12,19 +14,7 @@ body {
 }
 
 body {
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+  font-family: var(--md-font-family);
   line-height: 1.5;
-}
-
-main {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  color: var(--md-on-surface);
 }

@@ -1,0 +1,20 @@
+# Secret-scan config for the TrackPoli `check` workflow. Extends gitleaks' default rules and allowlists
+# the known NON-secret test fixtures (local-only dev passwords, example.test addresses, the empty env
+# example) so the scan fails only on a genuinely leaked credential.
+title = "TrackPoli gitleaks"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Known non-secret test fixtures and examples"
+paths = [
+  '''supabase/seed\.sql''',
+  '''\.env\.example''',
+  '''supabase/tests/.*''',
+  '''.*\.test\.(ts|tsx)$''',
+]
+regexes = [
+  '''LocalOnly-Passw0rd!''',
+  '''example\.test''',
+]

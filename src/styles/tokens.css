@@ -1,6 +1,58 @@
-/* Design tokens (grayscale scale from the wireframes, spacing, typography) are defined here when the
-   app shell lands in P1-12. Keeping the file now so the import path is stable. No colour literals are
-   allowed outside this file once the shell exists (P1-12 acceptance). */
+/* Material Design 3 design tokens for the TrackPoli admin app (ADR-0006). Colour roles and the type
+   scale are defined here ONLY; no colour literal may appear outside this file (decisions.md / P1-12).
+   Values are GRAYSCALE for now — the brand colour theme is applied later by swapping these values, with
+   no component changes. Taken verbatim from the Figma MD3 tokens (file: Track Poli Phase 3 — Design). */
 :root {
-  /* placeholder — populated in P1-12 */
+  /* --- Colour roles (M3 "schemes/*") --- */
+  --md-primary: #000000;
+  --md-on-primary: #ffffff;
+  --md-on-surface: #1b1b1b;
+  --md-on-surface-variant: #474747;
+  --md-outline: #777777;
+  --md-outline-variant: #c6c6c6;
+  --md-surface-container-lowest: #ffffff;
+  --md-surface-container-high: #e8e8e8;
+  --md-surface-container-highest: #e2e2e2;
+  --md-secondary-container: #d4d4d4;
+  --md-on-secondary-container: #1b1b1b;
+  --md-error: #b3261e;
+  --md-on-error: #ffffff;
+
+  /* --- Shape --- */
+  --md-shape-card: 28px;
+  --md-shape-field: 8px;
+  --md-shape-button: 28px; /* pill on a 56px control */
+  --md-shape-banner: 12px;
+  --md-shape-chip: 32px;
+
+  /* --- Elevation --- */
+  --md-elevation-card: 0px 8px 24px 0px rgba(0, 0, 0, 0.12);
+
+  /* --- Type scale (M3 "static/*"), Roboto. Family comes from next/font (--md-font-roboto). --- */
+  --md-font-family: var(--md-font-roboto), system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --md-title-medium-size: 16px;
+  --md-title-medium-line: 24px;
+  --md-title-medium-weight: 500;
+  --md-title-medium-tracking: 0.15px;
+
+  --md-headline-medium-size: 28px;
+  --md-headline-medium-line: 36px;
+  --md-headline-medium-weight: 400;
+  --md-headline-medium-tracking: 0px;
+
+  --md-body-medium-size: 14px;
+  --md-body-medium-line: 20px;
+  --md-body-medium-weight: 400;
+  --md-body-medium-tracking: 0.25px;
+
+  --md-body-small-size: 12px;
+  --md-body-small-line: 16px;
+  --md-body-small-weight: 400;
+  --md-body-small-tracking: 0.4px;
+
+  --md-label-large-size: 14px;
+  --md-label-large-line: 20px;
+  --md-label-large-weight: 500;
+  --md-label-large-tracking: 0.1px;
 }

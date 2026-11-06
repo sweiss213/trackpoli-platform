@@ -1,0 +1,22 @@
+.widget {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 16px;
+  border: 1px dashed var(--md-outline-variant);
+  border-radius: var(--md-shape-field);
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-small-size);
+  line-height: var(--md-body-small-line);
+  letter-spacing: var(--md-body-small-tracking);
+  color: var(--md-on-surface-variant);
+  text-align: center;
+}

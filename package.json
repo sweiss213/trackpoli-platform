@@ -5,7 +5,7 @@
   "description": "TrackPoli - a trusted, source-backed, plain-language political accountability platform for Nigeria.",
   "license": "UNLICENSED",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "dev": "next dev",
@@ -16,56 +16,41 @@
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test",
+    "check:bundle": "node scripts/check-bundle-size.mjs",
     "dev:all": "supabase start && next dev",
     "gen:types": "supabase gen types typescript --local --schema public > src/lib/database.types.ts",
-
     "_comment_tiers": "Gate wiring for the enterprise skills. BLOCKING tier = required status checks in .github/rulesets/main-protection.json; each passes vacuously on an empty repo and bites the moment the pattern/artifact it guards appears. RUNTIME tier = present but NOT required until its surface lands (needs a cucumber report, a JUnit report, axe results, or declared controls); until then the PR receipt must declare it applied-or-n/a. Engine scripts live under .claude/skills (pinned upstream, never edited).",
-
     "_comment_architecture": "judge-arch mechanical scanner. Reads arch-gate.config.json + arch-gate.waivers.json at the repo root. Full scan on a small/new repo (cannot miss a pre-existing violation); exit 0 clean, 1 violation, 2 bad config.",
     "check:architecture": "node .claude/skills/judge-arch/scripts/arch-gate.mjs",
     "check:architecture:changed": "node .claude/skills/judge-arch/scripts/arch-gate.mjs --changed",
-
     "_comment_discriminate": "verifiable-quality-gates / arch-encode: prove the arch-gate RULES actually fail on a planted violation, so a green architecture check means something.",
     "check:discriminate": "node .claude/skills/judge-arch/scripts/check-arch-rules-discriminate.mjs --arch-gate .claude/skills/judge-arch/scripts/arch-gate.mjs",
-
     "_comment_routing": "change-type -> required-artifact routing gate. CI passes the PR's file lists; locally pass --changed-list/--added-list. Uses routing-rules.config.json at the repo root.",
     "check:routing": "node .claude/skills/judge-arch/scripts/check-change-routing.mjs --config routing-rules.config.json",
-
     "_comment_receipt": "skill-application receipt gate: every PR carries a grounded, complete receipt in docs/skill-receipts/log.jsonl covering every skill. CI adds --changed-list/--base for diff-binding and append-only.",
     "check:receipt": "node .claude/skills/judge-arch/scripts/check-skill-receipt.mjs --receipt docs/skill-receipts/log.jsonl --skills-dir .claude/skills --config skill-receipt.config.json",
-
     "_comment_arch_review": "judge-arch review-coverage: the committed review log must cover the changed code files. CI passes --change and --changed-list.",
     "check:arch-review": "node .claude/skills/judge-arch/scripts/check-arch-review-coverage.mjs --log docs/arch-reviews/log.jsonl",
-
     "_comment_links": "dangling-reference gate: no Markdown doc may name a .md reference file that is absent.",
     "check:links": "node .claude/skills/judge-arch/scripts/check-reference-links.mjs --root .",
-
     "_comment_owasp_lints": "OWASP mechanical lints over application source. Passes on an empty src; bites on an insecure pattern.",
     "check:owasp:lints": "node .claude/skills/owasp-secure-coding-bdd/scripts/check-owasp-lints.mjs src",
-
     "_comment_no_ua": "universal-browser-device-support: no user-agent sniffing in source (use feature detection).",
     "check:no-ua": "node .claude/skills/universal-browser-device-support/scripts/check-no-ua-sniffing.mjs src",
-
     "_comment_migrations": "release-deployment-safety: expand/contract migration safety over supabase/migrations. Passes with no .sql; bites on a destructive/locking migration.",
     "check:migrations": "node .claude/skills/release-deployment-safety/scripts/check-migration-safety.mjs supabase/migrations",
-
     "_comment_pii": "compliance-data-lifecycle: every PII-looking column in the schema is declared in data-map.json. Passes with no schema; bites when an undeclared PII column is added.",
     "check:pii": "node .claude/skills/compliance-data-lifecycle/scripts/check-untagged-pii.mjs --map data-map.json supabase/migrations",
-
     "_comment_retention": "compliance-data-lifecycle: every data-map entry has a lawful retention basis. Validates the committed data-map itself.",
     "check:retention": "node .claude/skills/compliance-data-lifecycle/scripts/check-retention-basis.mjs --map data-map.json",
-
     "_comment_alerts": "sre-operational-readiness: alert rules are symptom-based and well-formed. Passes with no alert files.",
     "check:alerts": "node .claude/skills/sre-operational-readiness/scripts/check-alert-hygiene.mjs monitoring/alerts",
-
     "_comment_gherkin": "bdd-comprehensive-testing (structural half): every .feature parses and is correctly tagged. A SURFACE gate - it fails CLOSED when features/ has no .feature (a gate that scans nothing must not pass), so the gates CI job runs it only once a .feature exists. Imports @cucumber/gherkin (a devDependency), so the gates job runs `npm ci` first.",
     "check:gherkin": "node .claude/skills/bdd-comprehensive-testing/scripts/check-gherkin-valid.mjs features",
     "check:bdd-tags": "node .claude/skills/bdd-comprehensive-testing/scripts/check-bdd-tags.mjs features",
-
     "_comment_core": "BLOCKING core: the checks that are meaningfully green on an empty repo and enforce as code lands. Run unconditionally (locally and in the gates CI job). arch-gate scans and finds no violation; discriminate is self-contained; links validates docs; retention validates the committed data-map.",
     "check:core": "npm run check:architecture && npm run check:discriminate && npm run check:links && npm run check:retention",
     "check:blocking": "npm run check:core",
-
     "_comment_surface": "SURFACE gates (owasp:lints, no-ua, migrations, pii, alerts, gherkin, bdd-tags): each fails CLOSED on zero matching files by design. The gates CI job runs each ONE only when its surface has files (a guarded step), so they are required checks that stay green until the surface lands and then enforce - no manual promotion. Run any of them locally once you have that surface.",
     "bdd:index": "node .claude/skills/bdd-comprehensive-testing/scripts/bdd-index-generate.mjs features",
     "bdd:index:check": "node .claude/skills/bdd-comprehensive-testing/scripts/bdd-index-generate.mjs features --check",
@@ -76,26 +61,25 @@
     "check:a11y:axe": "node .claude/skills/universal-accessibility-wcag/scripts/check-axe-results.mjs --results reports/axe-results.json --config axe-config.json",
     "check:a11y:checklist": "node .claude/skills/universal-accessibility-wcag/scripts/check-a11y-checklist.mjs --checklist .claude/skills/universal-accessibility-wcag/assets/combined-a11y-checklist.json --record a11y-conformance.json",
     "check:security-coverage": "node .claude/skills/owasp-secure-coding-bdd/scripts/check-security-coverage.mjs",
-
     "_comment_perskill": "Per-skill gate commands wired as their own CI checks (see .github/workflows/gates.yml, one job per skill). These complement the shared core/surface scripts above.",
     "check:adr": "bash .claude/skills/architectural-decision-records/scripts/check_adr.sh docs/adr",
     "check:patterns": "node .claude/skills/pattern-selector/scripts/check-catalog-completeness.mjs .claude/skills/pattern-selector/references/design-patterns-catalog.md .claude/skills/pattern-selector/references/enterprise-patterns.md",
     "check:evidence": "node .claude/skills/skeptical-audit/scripts/check-skill-evidence-contract.mjs .",
-
     "_comment_components": "Component self-verification (verifiable-quality-gates): the discrimination tests that prove every vendored gate SCRIPT actually detects. 29 of the library's 31 test files run here; arch-gate-wired and required-checks are excluded because they assert the skills LIBRARY's own CI wiring (its context names), not any gate's behaviour. Explicit file list on purpose (bare `node --test` auto-discovery mis-runs CLI scripts as tests).",
-    "test": "node --test test/a11y-checklist.test.mjs test/alert-hygiene.test.mjs test/always-on-emit.test.mjs test/arch-gate.test.mjs test/arch-review-gates.test.mjs test/axe-results.test.mjs test/bdd-gates.test.mjs test/change-routing.test.mjs test/check-adr.test.mjs test/claim-lint.test.mjs test/committed-project-hook.test.mjs test/esk-init.test.mjs test/migration-safety.test.mjs test/new-adr.test.mjs test/no-ua-sniffing.test.mjs test/owasp-cheatsheet-catalog.test.mjs test/owasp-lints.test.mjs test/owasp-security-coverage.test.mjs test/owasp-security-features.test.mjs test/owasp-verbatim.test.mjs test/pattern-catalog.test.mjs test/reference-links.test.mjs test/retention-basis.test.mjs test/skill-evidence-contract.test.mjs test/skill-receipt.test.mjs test/skills-location.test.mjs test/test-shape.test.mjs test/untagged-pii.test.mjs test/verifiable-gates.test.mjs",
+    "test": "node --test test/a11y-checklist.test.mjs test/alert-hygiene.test.mjs test/always-on-emit.test.mjs test/arch-gate.test.mjs test/arch-review-gates.test.mjs test/axe-results.test.mjs test/bdd-gates.test.mjs test/bundle-size-gate.test.mjs test/change-routing.test.mjs test/check-adr.test.mjs test/claim-lint.test.mjs test/committed-project-hook.test.mjs test/esk-init.test.mjs test/migration-safety.test.mjs test/new-adr.test.mjs test/no-ua-sniffing.test.mjs test/owasp-cheatsheet-catalog.test.mjs test/owasp-lints.test.mjs test/owasp-security-coverage.test.mjs test/owasp-security-features.test.mjs test/owasp-verbatim.test.mjs test/pattern-catalog.test.mjs test/reference-links.test.mjs test/retention-basis.test.mjs test/skill-evidence-contract.test.mjs test/skill-receipt.test.mjs test/skills-location.test.mjs test/test-shape.test.mjs test/untagged-pii.test.mjs test/verifiable-gates.test.mjs",
     "check:components": "npm test"
   },
   "dependencies": {
-    "next": "16.4.5",
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
+    "@sentry/nextjs": "^11.11.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.0",
     "@tanstack/react-query": "^5.105.3",
+    "next": "16.4.5",
+    "next-intl": "^4.14.9",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
     "react-hook-form": "^7.91.0",
-    "zod": "^4.6.7",
-    "next-intl": "^4.14.9"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@cucumber/gherkin": "^42.0.1",

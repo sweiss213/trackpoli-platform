@@ -1,6 +1,7 @@
 -- Sign-in lockout (migration 010): 5 failures in 15 minutes pause sign-in; each further pause doubles, capped at 4 hours.
+-- Attempts-remaining and the DB-owned threshold are migration 011 (ADR-0007).
 begin;
-select plan(23);
+select plan(27);
 
 select is((select public.sign_in_paused_until('h1')), null, 'a never-seen address is not paused');
 select is((select count(*)::int from (select public.record_sign_in_failure('h1') from generate_series(1, 4)) s), 4, 'four failures run');
@@ -39,6 +40,14 @@ select is((select public.record_sign_in_failure('h2')), now() + interval '15 min
 select public.clear_sign_in_failures('h1');
 select is((select count(*)::int from public.sign_in_lockouts where email_hash = 'h1'), 0, 'clear removes the row');
 select is((select public.sign_in_paused_until('h1')), null, 'and the address is free');
+
+-- attempts remaining is owned and computed by the DB from its own threshold (migration 011, ADR-0007)
+select is((select public.sign_in_lock_threshold()), 5, 'the lockout threshold is five');
+select is((select public.sign_in_attempts_remaining('h3')), 5, 'a never-seen address has all five attempts');
+select public.record_sign_in_failure('h3') from generate_series(1, 2);
+select is((select public.sign_in_attempts_remaining('h3')), 3, 'two failures leave three attempts');
+select public.record_sign_in_failure('h3') from generate_series(1, 2);
+select is((select public.sign_in_attempts_remaining('h3')), 1, 'four failures leave one attempt');
 
 -- who may call
 select is(tests.val(w, 'aal2', $$select public.record_sign_in_failure('x')::text$$), e, w || ' calling record_sign_in_failure')

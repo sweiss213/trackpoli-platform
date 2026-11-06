@@ -1,0 +1,62 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.label {
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-small-size);
+  line-height: var(--md-body-small-line);
+  letter-spacing: var(--md-body-small-tracking);
+  color: var(--md-on-surface-variant);
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 56px;
+  padding: 0 16px;
+  background: var(--md-surface-container-lowest);
+  border: 1px solid var(--md-outline);
+  border-radius: var(--md-shape-field);
+}
+
+.input:focus-within {
+  border-color: var(--md-on-surface);
+}
+
+/* Error state: 2px error outline. Reduce padding by 1px so the inner content does not shift. */
+.inputError,
+.inputError:focus-within {
+  border: 2px solid var(--md-error);
+  padding: 0 15px;
+}
+
+.control {
+  flex: 1 0 0;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-medium-size);
+  line-height: var(--md-body-medium-line);
+  letter-spacing: var(--md-body-medium-tracking);
+  color: var(--md-on-surface);
+}
+
+.control::placeholder {
+  color: var(--md-on-surface-variant);
+}
+
+.helper {
+  margin: 0;
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-small-size);
+  line-height: var(--md-body-small-line);
+  letter-spacing: var(--md-body-small-tracking);
+  color: var(--md-on-surface-variant);
+}

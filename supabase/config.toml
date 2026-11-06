@@ -58,3 +58,12 @@ uri = "pg-functions://postgres/public/custom_access_token_hook"
 
 [edge_runtime]
 enabled = true
+
+# Pre-authentication Edge Functions (TP1-02): called only by the TrackPoli server before a user has a
+# session, so the Supabase gateway JWT check is off and the call is gated instead by INTERNAL_CALL_SECRET
+# inside the handler (supabase/functions/_shared/auth.ts: assertInternalCall).
+[functions.sign-in-check]
+verify_jwt = false
+
+[functions.auth-event]
+verify_jwt = false

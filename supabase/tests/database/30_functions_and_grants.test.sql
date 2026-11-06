@@ -1,6 +1,6 @@
--- Privileges, the helper functions and the access token hook (migrations 001 to 009).
+-- Privileges, the helper functions and the access token hook (migrations 001 to 011).
 begin;
-select plan(77);
+select plan(83);
 
 -- ============ every table has row-level security, and the API roles hold only the grants the plan gives them ============
 select is((select count(*)::int from pg_class c join pg_namespace n on n.oid = c.relnamespace
@@ -47,7 +47,9 @@ cross join (values
   ('public.purge_operational_events()'),
   ('public.sign_in_paused_until(text)'),
   ('public.record_sign_in_failure(text)'),
-  ('public.clear_sign_in_failures(text)')
+  ('public.clear_sign_in_failures(text)'),
+  ('public.sign_in_lock_threshold()'),
+  ('public.sign_in_attempts_remaining(text)')
 ) as fns (f);
 select is(has_function_privilege(r, 'public.log_error(public.ops_severity,text,text,text,text,integer,integer,uuid,text,text,uuid,jsonb)', 'execute'),
           (r = 'service_role'), r || ' on log_error')

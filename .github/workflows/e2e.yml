@@ -1,0 +1,97 @@
+# Browser end-to-end tests (TP1-02). Runs the credential-free sign-in UI suite (e2e/sign-in.spec.ts) with
+# Playwright against `next dev` - no Supabase, no secrets - so it is reliable on every PR. The full-stack
+# lockout scenario (E2E-02) is gated on E2E_FULL_STACK and is added to this workflow as a separate job once
+# the local-Supabase + seed + Turnstile-test-key wiring is finalised (it needs CI iteration, like
+# database.yml did). E2E-01 (2FA/dashboard) and E2E-16 (Google) await later tickets / the production domain.
+name: e2e
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    name: e2e (sign-in UI)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: Run sign-in UI e2e
+        run: npx playwright test e2e/sign-in.spec.ts
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # Full-stack lockout scenario (E2E-02): drives the real sign-in against a local Supabase stack (seed +
+  # Edge Functions) with Cloudflare Turnstile TEST keys. MANUAL for now: the local-stack + functions-secrets
+  # wiring below cannot be verified without Docker on a dev machine and WILL need CI iteration before it is
+  # promoted to run on every PR, exactly like database.yml. The steps most likely to need adjustment are the
+  # Edge Functions' secrets and reading the local anon/service-role keys from `supabase status`.
+  e2e-full-stack:
+    name: e2e (full stack · E2E-02)
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    env:
+      E2E_FULL_STACK: "1"
+      INTERNAL_CALL_SECRET: e2e-internal-call-secret
+      # Cloudflare Turnstile PUBLIC test keys — always pass; safe to commit.
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: "1x00000000000000000000AA"
+      TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA"
+      NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Give the Edge Functions their local secrets
+        run: |
+          cat > supabase/functions/.env <<EOF
+          INTERNAL_CALL_SECRET=${INTERNAL_CALL_SECRET}
+          TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
+          ALLOWED_ORIGINS=
+          EOF
+      - name: Start Supabase (DB + auth + functions) and seed
+        run: |
+          supabase start
+          supabase db reset
+      - name: Export the local anon + service-role keys for the app
+        run: |
+          supabase status -o env > supabase-status.env
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$(sed -n 's/^ANON_KEY=//p' supabase-status.env | tr -d '\"')" >> "$GITHUB_ENV"
+          echo "SUPABASE_SERVICE_ROLE_KEY=$(sed -n 's/^SERVICE_ROLE_KEY=//p' supabase-status.env | tr -d '\"')" >> "$GITHUB_ENV"
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: Run the full-stack lockout e2e (E2E-02)
+        run: npx playwright test e2e/sign-in.full-stack.spec.ts
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-full-stack
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
+      - name: Stop Supabase
+        if: always()
+        run: supabase stop --no-backup

@@ -1,0 +1,57 @@
+[
+  {
+    "feature": "auth/sign-in-protection.feature",
+    "scenario": "A fifth wrong attempt pauses the account",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "repeated-failures",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "critical",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/sign-in-protection.feature",
+    "scenario": "A successful sign-in clears the failure counter",
+    "domain": "auth",
+    "audience": "administrator-manager",
+    "usecase": "success-clears-failures",
+    "category": "happy",
+    "quality": "functional",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/sign-in-protection.feature",
+    "scenario": "An unknown email and a wrong password are indistinguishable",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "account-enumeration",
+    "category": "negative",
+    "quality": "security",
+    "severity": "critical",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/sign-in-protection.feature",
+    "scenario": "Every attempt requires a valid bot-check token",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "bot-check",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/sign-in-protection.feature",
+    "scenario": "The pre-authentication endpoints reject a non-server caller",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "internal-only-endpoint",
+    "category": "permission",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  }
+]

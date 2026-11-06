@@ -165,6 +165,12 @@ isOneToOne: false
 "revoke_user_sessions":
 { Args: { "p_user": string }; Returns: undefined
                            },
+"sign_in_attempts_remaining":
+{ Args: { "p_hash": string }; Returns: number
+                           },
+"sign_in_lock_threshold":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
 "sign_in_paused_until":
 { Args: { "p_hash": string }; Returns: string
                            }

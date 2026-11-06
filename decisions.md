@@ -78,6 +78,13 @@ A `console.error` is not reporting if it only writes to the browser console.
 Compose the shared layer in `supabase/functions/_shared` - do not hand-roll auth, CORS, or the
 admin client per function. See `supabase/functions/AGENTS.md`.
 
+## Edge (Cloudflare)
+The admin app sits behind Cloudflare -> Vercel. The intended edge settings (SSL Full (strict), managed
+WAF rules, never-cache `/admin/*`, sign-in and password-reset rate limits, `CF-Connecting-IP` trust via an
+origin bypass-header so Vercel is not reachable directly, and `X-Robots-Tag: noindex`) and the reasons for
+each are recorded in `docs/cloudflare-spike.md` - to be confirmed during the TP1-02 Cloudflare spike once
+the account and domain exist (Q-1-21).
+
 ---
 
 ## Decision log (ADRs)

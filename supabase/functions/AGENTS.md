@@ -18,4 +18,9 @@
   Sentry) with the request id, release and environment — never an email, name, token or request body in
   the message or context. Expected failures (401/403/404/409/422/429) are not logged as errors.
 - **Every function** generates a `request_id` (UUID), returns it in `x-request-id`, and stores it on
-  the event it writes.
+  the event it writes. Wrap the handler in `_shared/serve.ts` (`serve`), which does the request_id, CORS,
+  admin client, address resolution and the AppError→envelope / internal-reporting mapping once.
+- **Pre-authentication functions** (`sign-in-check`, `auth-event`) run before the user has a session, so
+  they cannot use `verifyCaller`. They set `verify_jwt = false` in `config.toml` and gate the call with
+  `assertInternalCall(req)` (the shared `INTERNAL_CALL_SECRET`), so only the TrackPoli server can call
+  them. Turnstile verification for a pre-auth attempt uses `_shared/turnstile.ts` (`verifyTurnstile`).
