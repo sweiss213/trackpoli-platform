@@ -56,14 +56,23 @@ export async function createServerSupabase() {
   });
 }
 
+/** The caller's two-factor assurance level, used only for routing (ADR-0009). currentLevel is the session's
+ *  present level; nextLevel is "aal2" once a verified factor exists. The RLS is_aal2() gate, not this, is
+ *  the authorization boundary. */
+export interface AssuranceLevel {
+  // Supabase types these as a loose string ("aal1" | "aal2" | (string & {})); we compare against "aal2".
+  currentLevel: string | null;
+  nextLevel: string | null;
+}
+
 /**
  * Refresh the session for a middleware pass and return the current user alongside the response that
  * carries any refreshed cookies. The caller (src/middleware.ts) owns the routing/guard decision; this
- * function owns only the session read and the cookie plumbing.
+ * function owns only the session read, the assurance-level read, and the cookie plumbing.
  */
 export async function updateSession(
   request: NextRequest,
-): Promise<{ response: NextResponse; user: User | null }> {
+): Promise<{ response: NextResponse; user: User | null; aal: AssuranceLevel | null }> {
   let response = NextResponse.next({ request });
   const supabase = createServerClient<Database>(supabaseUrl(), supabaseAnonKey(), {
     cookieOptions: COOKIE_OPTIONS,
@@ -94,5 +103,53 @@ export async function updateSession(
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  return { response, user };
+
+  // Assurance level drives only which MFA screen the user lands on (ADR-0009). Best-effort: if it cannot be
+  // read, return null and let the route gate skip the MFA redirect — RLS still denies every aal1 request, so
+  // a missing reading is a cosmetic routing gap, never a data exposure.
+  let aal: AssuranceLevel | null = null;
+  if (user) {
+    try {
+      const { data } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (data) aal = { currentLevel: data.currentLevel, nextLevel: data.nextLevel };
+    } catch (error) {
+      report("debug", "assurance-level read skipped", {
+        reason: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+  return { response, user, aal };
+}
+
+/**
+ * Exchange a Google re-authentication code to read ONLY the returning identity, without persisting the new
+ * session (ADR-0009, device replacement). The cookie writes from the exchange are discarded, so the
+ * administrator's live aal2 session is left untouched — we learn who came back from Google and compare, but
+ * do not drop them to aal1. Returns whether the returning identity matches the current session's user.
+ */
+export async function exchangeReauthIdentity(
+  code: string,
+): Promise<{ status: "ok" | "mismatch" | "error"; userId: string | null }> {
+  const { cookies } = await import("next/headers");
+  const cookieStore = await cookies();
+  const supabase = createServerClient<Database>(supabaseUrl(), supabaseAnonKey(), {
+    cookieOptions: COOKIE_OPTIONS,
+    cookies: {
+      getAll() {
+        return cookieStore.getAll();
+      },
+      // Discard every write: the re-auth session must NOT replace the live aal2 session (ADR-0009). The
+      // PKCE verifier is read above; the resulting session is intentionally thrown away.
+      setAll() {},
+    },
+  });
+
+  const {
+    data: { user: before },
+  } = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+  if (error || !data.user || !before) {
+    return { status: "error", userId: before?.id ?? null };
+  }
+  return { status: data.user.id === before.id ? "ok" : "mismatch", userId: before.id };
 }

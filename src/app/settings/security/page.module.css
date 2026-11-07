@@ -1,0 +1,18 @@
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  font-family: var(--md-font-family);
+}
+
+.heading {
+  margin: 0;
+  color: var(--md-on-surface);
+  font-size: var(--md-title-medium-size);
+  line-height: var(--md-title-medium-line);
+  letter-spacing: var(--md-title-medium-tracking);
+  font-weight: var(--md-title-medium-weight);
+}

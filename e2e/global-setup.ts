@@ -9,10 +9,17 @@ export default async function globalSetup(): Promise<void> {
     "/admin/forgot-password",
     "/admin/reset-password",
     "/admin/auth/confirm",
+    "/admin/mfa/enrol",
+    "/admin/sign-in/verify",
+    "/admin/settings/security",
     "/admin/api/sign-in",
     "/admin/api/request-password-reset",
     "/admin/api/reset-password",
     "/admin/api/auth/confirm",
+    "/admin/api/mfa/enrol",
+    "/admin/api/mfa/verify",
+    "/admin/api/mfa/replace",
+    "/admin/api/sign-out",
   ];
   for (const route of routes) {
     try {

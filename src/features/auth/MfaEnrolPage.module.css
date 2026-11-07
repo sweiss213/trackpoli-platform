@@ -1,0 +1,253 @@
+/* Forced-enrolment wizard styles; the card shell comes from authCard.module.css (ADR-0006 tokens). */
+
+.headingBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.headingBlock[data-center] {
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--md-font-family);
+  font-size: var(--md-headline-medium-size);
+  line-height: var(--md-headline-medium-line);
+  font-weight: var(--md-headline-medium-weight);
+  letter-spacing: var(--md-headline-medium-tracking);
+  color: var(--md-on-surface);
+}
+
+.subtext {
+  margin: 0;
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-medium-size);
+  line-height: var(--md-body-medium-line);
+  letter-spacing: var(--md-body-medium-tracking);
+  color: var(--md-on-surface-variant);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* How-it-works numbered list (Instructions screen) */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.stepRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.stepNum {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--md-surface-container-high);
+  color: var(--md-on-surface);
+  font-family: var(--md-font-family);
+  font-size: var(--md-label-large-size);
+  font-weight: var(--md-label-large-weight);
+  line-height: 1;
+}
+
+.stepText {
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-medium-size);
+  line-height: var(--md-body-medium-line);
+  letter-spacing: var(--md-body-medium-tracking);
+  color: var(--md-on-surface-variant);
+}
+
+/* Step progress (Step 1 of 2 + bar) */
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.stepLabel {
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-small-size);
+  line-height: var(--md-body-small-line);
+  letter-spacing: var(--md-body-small-tracking);
+  color: var(--md-on-surface-variant);
+}
+
+.bar {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.seg {
+  flex: 1 0 0;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--md-outline-variant);
+}
+
+.seg[data-on] {
+  background: var(--md-primary);
+}
+
+/* QR code */
+.qrRow {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.qrFrame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 184px;
+  height: 184px;
+  padding: 17px;
+  background: var(--md-surface-container-lowest);
+  border: 1px solid var(--md-outline-variant);
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.qrFrame img {
+  width: 150px;
+  height: 150px;
+}
+
+/* Manual setup key */
+.keyBox {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  background: var(--md-surface-container-high);
+  border-radius: var(--md-shape-field);
+  box-sizing: border-box;
+}
+
+.keyLabel,
+.accountLine {
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-small-size);
+  line-height: var(--md-body-small-line);
+  letter-spacing: var(--md-body-small-tracking);
+  color: var(--md-on-surface-variant);
+}
+
+.key {
+  font-family: var(--md-font-family);
+  font-size: var(--md-title-medium-size);
+  line-height: var(--md-title-medium-line);
+  font-weight: var(--md-title-medium-weight);
+  letter-spacing: 0.1em;
+  color: var(--md-on-surface);
+  word-break: break-all;
+}
+
+.keyAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--md-font-family);
+  font-size: var(--md-label-large-size);
+  font-weight: var(--md-label-large-weight);
+  letter-spacing: var(--md-label-large-tracking);
+  color: var(--md-primary);
+}
+
+/* Centered icon chip (success / paused / failed) */
+.iconChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--md-surface-container-high);
+  align-self: center;
+}
+
+/* Info row with a leading icon (recovery / retry note) */
+.infoRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--md-surface-container-high);
+  border-radius: var(--md-shape-field);
+  box-sizing: border-box;
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-small-size);
+  line-height: var(--md-body-small-line);
+  letter-spacing: var(--md-body-small-tracking);
+  color: var(--md-on-surface-variant);
+}
+
+/* Text + back buttons */
+.textButton {
+  align-self: center;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--md-font-family);
+  font-size: var(--md-label-large-size);
+  font-weight: var(--md-label-large-weight);
+  letter-spacing: var(--md-label-large-tracking);
+  color: var(--md-primary);
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  align-self: center;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--md-font-family);
+  font-size: var(--md-label-large-size);
+  font-weight: var(--md-label-large-weight);
+  letter-spacing: var(--md-label-large-tracking);
+  color: var(--md-on-surface);
+}
+
+.textButton:focus-visible,
+.keyAction:focus-visible,
+.backButton:focus-visible {
+  outline: 2px solid var(--md-on-surface);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

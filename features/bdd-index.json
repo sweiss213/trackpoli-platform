@@ -141,5 +141,148 @@
     "quality": "security",
     "severity": "high",
     "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "A code is required at every sign-in once enrolled",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "signin-step-up",
+    "category": "happy",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "A hijacked open session cannot replace the device without re-authentication",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "replacement-requires-reauth",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "A lost authenticator is not self-service and must be a manager recreate",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "lost-device-no-self-service",
+    "category": "negative",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "A signed-in administrator with no factor is forced to enrol before any data route",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "forced-enrolment",
+    "category": "happy",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "A wrong code at the verify step is refused and the session stays aal1",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "verify-wrong-code",
+    "category": "negative",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "Enrol at first sign-in, then replace the device, and the next sign-in needs a code",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "E2E-11",
+    "category": "happy",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "Forced enrolment applies to Google sign-ins too",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "forced-enrolment-google",
+    "category": "permission",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "No data is reachable until the second factor is satisfied",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "aal2-data-gate",
+    "category": "permission",
+    "quality": "security",
+    "severity": "critical",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "Repeated wrong codes during replacement are rate-limited, not endlessly retriable",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "replacement-attempt-cap",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "Replacing a device requires password and the current code for an email administrator",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "device-replacement",
+    "category": "happy",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "Replacing a device uses Google re-auth and the current code for a Google-only administrator",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "device-replacement-google",
+    "category": "happy",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "The only Admin manager who loses their device cannot self-recreate from the app",
+    "domain": "auth",
+    "audience": "administrator-manager",
+    "usecase": "lost-device-only-manager",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/two-factor.feature",
+    "scenario": "Two-factor cannot be switched off",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "no-self-disable",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
   }
 ]

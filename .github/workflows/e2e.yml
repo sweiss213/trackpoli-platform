@@ -44,7 +44,7 @@ jobs:
   # promoted to run on every PR, exactly like database.yml. The steps most likely to need adjustment are the
   # Edge Functions' secrets and reading the local anon/service-role keys from `supabase status`.
   e2e-full-stack:
-    name: e2e (full stack · E2E-02, E2E-05)
+    name: e2e (full stack · E2E-02, E2E-05, E2E-11)
     if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     env:
@@ -86,8 +86,8 @@ jobs:
         run: npx playwright install --with-deps chromium
       # E2E-05 reads the recovery email from the local mail catcher (Inbucket/Mailpit) that `supabase start`
       # brings up; like E2E-02 this job is manual and will need CI iteration the first time.
-      - name: Run the full-stack e2e (E2E-02 lockout + E2E-05 recovery)
-        run: npx playwright test e2e/sign-in.full-stack.spec.ts e2e/password-reset.full-stack.spec.ts
+      - name: Run the full-stack e2e (E2E-02 lockout + E2E-05 recovery + E2E-11 two-factor)
+        run: npx playwright test e2e/sign-in.full-stack.spec.ts e2e/password-reset.full-stack.spec.ts e2e/two-factor.full-stack.spec.ts
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:

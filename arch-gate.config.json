@@ -38,7 +38,7 @@
     {
       "name": "Exactly one Supabase client",
       "include": ["src/**/*.{ts,tsx}"],
-      "exclude": ["src/lib/supabase/client.ts", "src/lib/supabase/server.ts", "src/lib/supabase/admin.ts", "src/lib/supabase/types.ts", "**/*.test.{ts,tsx}", "src/test/**"],
+      "exclude": ["src/lib/supabase/client.ts", "src/lib/supabase/server.ts", "src/lib/supabase/admin.ts", "src/lib/supabase/verifier.ts", "src/lib/supabase/types.ts", "**/*.test.{ts,tsx}", "src/test/**"],
       "forbid": ["createClient\\s*(<[^>]*>)?\\s*\\(", "createServerClient\\s*\\("],
       "message": "A second Supabase client. There is exactly one configured client per context (browser/server/admin) in src/lib/supabase. Import the canonical client; never construct another (auth/session/RLS config must live in one place)."
     },

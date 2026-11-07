@@ -1,10 +1,10 @@
 {
-  "_about": "TrackPoli WCAG 2.2 A/AA conformance record, updated for TP1-03 (adds the password-recovery screens: forgot-password request, check-your-email, set-new-password, and the shared /auth/confirm Continue page with its continue/expired/error states) on top of the TP1-02 sign-in surfaces. pass-manual verdicts are agent static reviews of the markup, CSS and ARIA of those screens; a full human keyboard + screen-reader audit of the real screens is scheduled for P1-16 (NFR-A1). Colour is deliberately grayscale for now (ADR-0006), so contrast criteria are re-verified when the brand colour lands. Regenerate per surface as more screens land.",
+  "_about": "TrackPoli WCAG 2.2 A/AA conformance record, updated for TP1-04 (adds the two-factor screens: the forced-enrolment wizard /mfa/enrol with its instructions, scan/key, code, success, paused, couldn't-start and session-expired states; the sign-in step-up /sign-in/verify; and the Security-tab device-replacement modal with its intro, re-auth password/Google, new-device, new-code, lost-device and outcome states) on top of the TP1-02 sign-in and TP1-03 recovery surfaces. pass-manual verdicts are agent static reviews of the markup, CSS and ARIA of those screens; a full human keyboard + screen-reader audit of the real screens is scheduled for P1-16 (NFR-A1). Colour is deliberately grayscale for now (ADR-0006), so contrast criteria are re-verified when the brand colour lands. Regenerate per surface as more screens land.",
   "1.1.1": {
     "status": "pass-manual",
-    "note": "Icons (Icon component) are decorative with empty alt (brand mark, warning, clock, mail, error, back chevron, requirement check/dot); the brand mark sits beside the text 'TrackPoli Admin'. The recovery email's logo is a hosted PNG with empty alt beside the wordmark. No informational image lacks a text alternative.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "Icons (Icon component) are decorative with empty alt (brand mark, warning, clock, lock, phone, copy, check, error, back chevron); the brand mark sits beside 'TrackPoli Admin'. The enrolment/replacement QR is an <img> with a meaningful alt ('QR code to add TrackPoli Admin to your authenticator app' / 'QR code for your new authenticator device'). No informational image lacks a text alternative.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
+    "date": "2026-11-07"
   },
   "1.2.1": {
     "status": "not-applicable",
@@ -28,9 +28,9 @@
   },
   "1.3.1": {
     "status": "pass-manual",
-    "note": "Native <label for> binds each field (TextField), the form has an accessible name (aria-labelledby), helper text is wired via aria-describedby, and the error banner is a real region; structure conveyed semantically, not by presentation.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "Semantic structure: each screen/dialog has a heading tied by aria-labelledby; the enrolment 'how it works' and the replacement intro are ordered lists; the replacement modal is role=dialog aria-modal; step progress is text ('Step 1 of 2/3') not colour-only.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
+    "date": "2026-11-07"
   },
   "1.3.2": {
     "status": "pass-manual",
@@ -102,9 +102,9 @@
   },
   "2.1.1": {
     "status": "pass-manual",
-    "note": "All controls are native elements (input, button, anchor): the form, the password visibility toggle, the Google and Sign in buttons and the Forgot password link are fully keyboard-operable.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "Every control is a native <button> or <input> (continue/verify/replace/re-authenticate, the code fields, the show/scan toggles, the text links), so the whole enrol/verify/replacement flow is keyboard-operable; no pointer-only handlers.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
+    "date": "2026-11-07"
   },
   "2.1.2": {
     "status": "pass-manual",
@@ -140,9 +140,9 @@
   },
   "2.4.3": {
     "status": "pass-manual",
-    "note": "DOM order matches visual order (email, password + toggle, forgot link, Google, Sign in); no tabindex re-ordering.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "Focus order follows the DOM in the step wizards and the replacement modal (heading -> fields -> primary action -> secondary links); steps render in logical order.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
+    "date": "2026-11-07"
   },
   "2.4.4": {
     "status": "pass-manual",
@@ -162,9 +162,9 @@
   },
   "2.4.7": {
     "status": "pass-manual",
-    "note": "A visible focus ring is defined on inputs, buttons, the toggle and the link (no outline:none without a replacement).",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "Focus is visible: the shared buttons, text links, key-copy and Google re-auth controls all define :focus-visible outlines (authCard / MfaEnrolPage / TwoFactorCard modules).",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
+    "date": "2026-11-07"
   },
   "2.4.11": {
     "status": "pass-manual",
@@ -184,9 +184,9 @@
   },
   "2.5.3": {
     "status": "pass-manual",
-    "note": "Visible-text buttons ('Sign in', 'Continue with Google') carry that text as their accessible name; the icon-only password toggle uses an aria-label ('Show password'/'Hide password').",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "The visible label text starts the accessible name for each control (e.g. 'Verify and turn on', 'Replace device', 'Re-authenticate with Google'), so label-in-name holds for voice control.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
+    "date": "2026-11-07"
   },
   "2.5.4": {
     "status": "not-applicable",
@@ -235,15 +235,15 @@
   },
   "3.3.1": {
     "status": "pass-manual",
-    "note": "Errors are identified in text and programmatically: the sign-in/recovery Banner (role=alert), plus aria-invalid + aria-describedby helper on fields; the confirm-password field shows an inline 'Both passwords must match.' helper when they differ.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "Errors are identified in text, never colour alone: a role=alert Banner for wrong/expired codes and re-auth failures, and field-level aria-invalid + helper text on the code inputs.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
+    "date": "2026-11-07"
   },
   "3.3.2": {
     "status": "pass-manual",
-    "note": "Every field has a visible <label> (TextField). The set-new-password screen states the policy inline next to the fields ('At least 12 characters'), and the request screen labels the email field.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "Every input has a visible <label> (New password, Verification code, Current password, Code from your current device, 6-digit code) — kept even where the design shows a bare box — plus inputmode=numeric and autocomplete=one-time-code.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
+    "date": "2026-11-07"
   },
   "3.3.3": {
     "status": "pass-manual",
@@ -267,14 +267,14 @@
   },
   "4.1.2": {
     "status": "pass-manual",
-    "note": "Native elements provide name/role/value; the toggle exposes aria-pressed, fields expose aria-invalid/aria-describedby.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "Native elements provide name/role/value; the replacement modal exposes role=dialog + aria-modal + aria-labelledby; the Google re-auth button exposes its state; code fields expose aria-invalid/aria-describedby.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
+    "date": "2026-11-07"
   },
   "4.1.3": {
     "status": "pass-manual",
-    "note": "Status messages use role=alert (the notice Banner on sign-in, forgot-password, and reset) so they are announced without moving focus; the enumeration-safe 'check your email' acknowledgement is a heading+text state change.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "Status messages use role=alert (the Banner component) so a wrong/expired-code or re-auth-failed message is announced when it appears, without moving focus.",
+    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
+    "date": "2026-11-07"
   }
 }

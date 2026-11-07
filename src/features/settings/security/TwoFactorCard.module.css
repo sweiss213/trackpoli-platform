@@ -1,0 +1,319 @@
+/* Two-factor card + device-replacement modal (ADR-0006 tokens). */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 560px;
+  padding: 24px;
+  background: var(--md-surface-container-lowest);
+  border: 1px solid var(--md-outline-variant);
+  border-radius: var(--md-shape-card);
+  font-family: var(--md-font-family);
+}
+
+.title {
+  margin: 0;
+  color: var(--md-on-surface);
+  font-size: var(--md-title-medium-size);
+  line-height: var(--md-title-medium-line);
+  letter-spacing: var(--md-title-medium-tracking);
+  font-weight: var(--md-title-medium-weight);
+}
+
+.status,
+.note {
+  margin: 0;
+  color: var(--md-on-surface-variant);
+  font-size: var(--md-body-medium-size);
+  line-height: var(--md-body-medium-line);
+  letter-spacing: var(--md-body-medium-tracking);
+}
+
+.status[data-enrolled="true"] {
+  color: var(--md-on-surface);
+}
+
+.action {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 10px 24px;
+  border: 1px solid var(--md-outline);
+  border-radius: var(--md-shape-button);
+  background: var(--md-surface-container-high);
+  color: var(--md-on-surface);
+  font-family: inherit;
+  font-size: var(--md-label-large-size);
+  line-height: var(--md-label-large-line);
+  letter-spacing: var(--md-label-large-tracking);
+  font-weight: var(--md-label-large-weight);
+  cursor: pointer;
+}
+
+/* Modal */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.32);
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 480px;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  background: var(--md-surface-container-lowest);
+  border-radius: var(--md-shape-card);
+  box-shadow: var(--md-elevation-card);
+}
+
+.stepLabel {
+  margin: 0;
+  color: var(--md-on-surface-variant);
+  font-size: var(--md-body-small-size);
+  line-height: var(--md-body-small-line);
+  letter-spacing: var(--md-body-small-tracking);
+}
+
+.dialogTitle {
+  margin: 0;
+  color: var(--md-on-surface);
+  font-size: var(--md-title-medium-size);
+  line-height: var(--md-title-medium-line);
+  letter-spacing: var(--md-title-medium-tracking);
+  font-weight: var(--md-title-medium-weight);
+}
+
+.dialogText,
+.fieldLabel {
+  margin: 0;
+  color: var(--md-on-surface-variant);
+  font-size: var(--md-body-medium-size);
+  line-height: var(--md-body-medium-line);
+  letter-spacing: var(--md-body-medium-tracking);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.textButton,
+.textLink {
+  align-self: flex-start;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--md-font-family);
+  font-size: var(--md-label-large-size);
+  font-weight: var(--md-label-large-weight);
+  letter-spacing: var(--md-label-large-tracking);
+}
+
+.textButton {
+  color: var(--md-on-surface);
+}
+
+.textLink {
+  color: var(--md-primary);
+}
+
+/* Google re-auth */
+.googleRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.googleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 56px;
+  border: 1px solid var(--md-outline);
+  border-radius: var(--md-shape-field);
+  background: var(--md-surface-container-lowest);
+  color: var(--md-on-surface);
+  cursor: pointer;
+  font-family: var(--md-font-family);
+  font-size: var(--md-label-large-size);
+  font-weight: var(--md-label-large-weight);
+  letter-spacing: var(--md-label-large-tracking);
+}
+
+.googleButton[data-done="true"] {
+  cursor: default;
+  color: var(--md-on-surface-variant);
+}
+
+/* QR / key */
+.qrRow {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.qrFrame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 184px;
+  height: 184px;
+  padding: 17px;
+  border: 1px solid var(--md-outline-variant);
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.keyBox {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  background: var(--md-surface-container-high);
+  border-radius: var(--md-shape-field);
+  box-sizing: border-box;
+}
+
+.key {
+  font-family: var(--md-font-family);
+  font-size: var(--md-title-medium-size);
+  line-height: var(--md-title-medium-line);
+  font-weight: var(--md-title-medium-weight);
+  letter-spacing: 0.1em;
+  color: var(--md-on-surface);
+  word-break: break-all;
+}
+
+.keyAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--md-font-family);
+  font-size: var(--md-label-large-size);
+  font-weight: var(--md-label-large-weight);
+  letter-spacing: var(--md-label-large-tracking);
+  color: var(--md-primary);
+}
+
+/* Intro overview numbered steps */
+.introSteps {
+  list-style: none;
+  margin: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  background: var(--md-surface-container-high);
+  border-radius: var(--md-shape-field);
+  box-sizing: border-box;
+}
+
+.introRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.introNum {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--md-surface-container-lowest);
+  color: var(--md-on-surface);
+  font-family: var(--md-font-family);
+  font-size: var(--md-label-large-size);
+  font-weight: var(--md-label-large-weight);
+  line-height: 1;
+}
+
+.introText {
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-medium-size);
+  line-height: var(--md-body-medium-line);
+  letter-spacing: var(--md-body-medium-tracking);
+  color: var(--md-on-surface-variant);
+}
+
+/* Info box (lost-device "what happens next") */
+.infoBox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  padding: 16px;
+  background: var(--md-surface-container-high);
+  border-radius: var(--md-shape-field);
+  box-sizing: border-box;
+}
+
+.infoTitle {
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-medium-size);
+  font-weight: var(--md-label-large-weight);
+  color: var(--md-on-surface);
+}
+
+.infoBody {
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-small-size);
+  line-height: var(--md-body-small-line);
+  letter-spacing: var(--md-body-small-tracking);
+  color: var(--md-on-surface-variant);
+}
+
+/* Outcome screens (paused / success / failed) */
+.outcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.iconChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--md-surface-container-high);
+}
+
+.action:focus-visible,
+.textButton:focus-visible,
+.textLink:focus-visible,
+.keyAction:focus-visible,
+.googleButton:focus-visible {
+  outline: 2px solid var(--md-on-surface);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
