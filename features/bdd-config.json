@@ -1,4 +1,4 @@
 {
-  "_comment": "Declared audiences for the BDD taxonomy (bdd-comprehensive-testing). Every scenario's @audience must be one of these. TrackPoli admin auth is seen by an Administrator, an Administrator Manager, and the anonymous/attacker caller who has no session.",
-  "audiences": ["administrator", "administrator-manager", "anonymous"]
+  "_comment": "Declared audiences for the BDD taxonomy (bdd-comprehensive-testing). Every scenario's @audience must be one of these. TrackPoli admin auth is seen by an Administrator, an Administrator Manager, and the anonymous/attacker caller who has no session. The design-system effort (ADR-0011) adds four more: a developer coding a feature with the system, a maintainer relying on CI to enforce it, an assistive-tech user of the rendered components, and an end-user seeing the migrated screens. Added in PR 0 so the design-system scenarios authored in later PRs pass check-bdd-tags.",
+  "audiences": ["administrator", "administrator-manager", "anonymous", "developer", "maintainer", "assistive-tech", "end-user"]
 }
