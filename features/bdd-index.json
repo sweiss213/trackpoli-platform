@@ -88,6 +88,83 @@
     "status": "covered"
   },
   {
+    "feature": "auth/role-based-access.feature",
+    "scenario": "A missing route shows the not-found screen inside the shell",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "not-found",
+    "category": "negative",
+    "quality": "security",
+    "severity": "low",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/role-based-access.feature",
+    "scenario": "A session whose role cannot be confirmed is treated as not a manager",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "unreadable-role-fail-closed",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/role-based-access.feature",
+    "scenario": "A signed-in administrator is bounced off the public-only sign-in screen",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "public-only",
+    "category": "happy",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/role-based-access.feature",
+    "scenario": "An Administrator is denied a manager route in the page and the API",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "E2E-08",
+    "category": "permission",
+    "quality": "security",
+    "severity": "critical",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/role-based-access.feature",
+    "scenario": "An Administrator manager may open the manager route and read the manager data",
+    "domain": "auth",
+    "audience": "administrator-manager",
+    "usecase": "manager-allowed",
+    "category": "happy",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/role-based-access.feature",
+    "scenario": "The manager navigation is hidden for an Administrator but never relied on for security",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "manager-nav-hidden",
+    "category": "permission",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/role-based-access.feature",
+    "scenario": "The manager navigation is shown to an Administrator manager",
+    "domain": "auth",
+    "audience": "administrator-manager",
+    "usecase": "manager-nav-shown",
+    "category": "happy",
+    "quality": "security",
+    "severity": "low",
+    "status": "covered"
+  },
+  {
     "feature": "auth/safe-sessions.feature",
     "scenario": "A deleted activity cookie fails open to the session's other controls, never a lockout",
     "domain": "auth",
