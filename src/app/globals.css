@@ -1,8 +1,62 @@
 /* The design-token layer (src/styles/tokens.css) holds every colour and the M3 type scale; no colour
    literal lives outside it. The Material 3 component layer (src/components/ui) and screens compose those
-   tokens. The full app shell arrives in P1-12; this baseline is what the sign-in screen (TP1-02) needs. */
+   tokens. Tailwind CSS v4 + shadcn/ui are wired here (ADR-0011) as scaffolding: PR 0 adds no shadcn
+   component and migrates no screen, so nothing visual changes yet. */
+
+/* Cascade-layer order is fixed up front so Tailwind's layers sort deterministically. */
+@layer theme, base, components, utilities;
+
+/* Token layer first, so the shadcn variables (--background, --primary, ...) it defines are available to
+   the @theme mapping below. Kept per the project rule that globals.css imports the token layer. */
 @import "../styles/tokens.css";
 
+/* Tailwind v4, theme + utilities ONLY. Preflight (Tailwind's global element reset) is intentionally
+   NOT imported: enabling it now would restyle the existing hand-built CSS-Module screens and break
+   PR 0's no-visual-change guarantee. Preflight is added by the first migration PR (PR 3), where the
+   screens actually adopt shadcn primitives and parity is verified (ADR-0011). */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
+
+/* Tailwind v4 content sources (replaces the v3 tailwind.config content globs): scan all app source. */
+@source "../**/*.{ts,tsx}";
+
+/* shadcn/ui dark variant: class-based and OPT-IN. Inert until a `.dark` ancestor exists, so it changes
+   nothing on the current screens. Dark token VALUES live in src/styles/tokens.css under `.dark`. */
+@custom-variant dark (&:is(.dark *));
+
+/* Map shadcn's semantic colour utilities (bg-background, text-foreground, border-input, ring-ring, ...)
+   onto the token-layer variables. `inline` makes each utility emit `var(--background)` etc. directly, so
+   colour still resolves through the token file and a theme swap needs no rebuild. No colour literal lives
+   here — every value is a var() into src/styles/tokens.css (decisions.md). */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* Baseline reset the screens already rely on (unchanged from before the Tailwind wiring). */
 * {
   box-sizing: border-box;
 }

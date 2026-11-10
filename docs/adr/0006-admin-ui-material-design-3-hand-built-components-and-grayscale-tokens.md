@@ -4,7 +4,12 @@ Date: 2026-11-05
 
 ## Status
 
-Accepted
+Superseded by [ADR-0011](0011-adopt-shadcn-ui-radix-tailwind-as-the-component-system.md)
+
+Accepted 2026-11-05; superseded 2026-11-10. The hand-built MD3 components and the Tailwind rejection are
+replaced by adopting shadcn/ui (Radix + Tailwind). The MD3 **grayscale design tokens** in
+`src/styles/tokens.css` are kept: ADR-0011 maps shadcn's theme variables onto them, so the "no colour
+literal outside the token file" rule and the token-value-swap path for colour/dark mode still hold.
 
 ## Context
 
