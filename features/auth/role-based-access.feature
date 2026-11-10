@@ -1,6 +1,6 @@
 Feature: Role-based access (route guards, manager-only routes, forbidden + not-found)
   An administrator sees only what their role allows, and manager-only routes and data stay closed to
-  Administrators even if they type the URL or call the API directly (P1-11, ADR-0011). Access is enforced in
+  Administrators even if they type the URL or call the API directly (P1-11, ADR-0012). Access is enforced in
   three layers: the middleware early redirect and the nested guard wrappers are ROUTING only — they read the
   role from the access-token claims (migration 006) surfaced through AuthProvider — while the database (RLS,
   migration 005/009) is what actually protects the data, denying a non-manager the manager tables no matter

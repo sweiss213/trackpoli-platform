@@ -4,7 +4,7 @@ import { decideRequireActive } from "@/features/auth/guards/decisions";
 import { AppShell } from "@/features/shell/AppShell";
 
 // The authenticated route group's layout (TP1-06). Every page inside it renders within the admin shell and
-// behind the session + active guards. Enforcement is layered (ADR-0011): the middleware already redirected an
+// behind the session + active guards. Enforcement is layered (ADR-0012): the middleware already redirected an
 // unauthenticated/unverified/manager-forbidden request before this runs; this is the server-side defense that
 // also holds when middleware is bypassed, and RLS is the real boundary for the data. Role gating for the
 // manager route lives on that route itself; here we only require a signed-in, non-deactivated administrator.

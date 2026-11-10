@@ -92,7 +92,7 @@ export async function middleware(request: NextRequest) {
     default: {
       // Stage 4: role gate (TP1-06). An administrator who reaches a manager-only route is redirected to the
       // forbidden screen, keeping the attempted path for its breadcrumb + copy. UX routing only — the manager
-      // API returns 403 and RLS returns no rows to a non-manager regardless (ADR-0011).
+      // API returns 403 and RLS returns no rows to a non-manager regardless (ADR-0012).
       const roleDecision = decideRoleGate({ path, authenticated: Boolean(user), role });
       if (roleDecision.action === "forbidden") {
         const forbiddenUrl = new URL("/admin/forbidden", request.url);

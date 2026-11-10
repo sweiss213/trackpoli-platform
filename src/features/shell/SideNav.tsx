@@ -4,7 +4,7 @@
 // the current role — the manager-only "Admin management" entry is hidden for an Administrator — with the
 // active item from the current path, collapsible Records/Workflow sections, and the user block + Log out.
 // Hiding a manager entry is a UX convenience ONLY; the middleware role gate, the API 403 and RLS are the
-// security (ADR-0011). Role comes from AuthProvider (useAuth); this component makes no auth decision.
+// security (ADR-0012). Role comes from AuthProvider (useAuth); this component makes no auth decision.
 
 import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";

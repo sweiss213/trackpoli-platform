@@ -1,4 +1,4 @@
-# 0011. Role-based access: three-layer guards, claim-read role, and the authenticated app shell
+# 0012. Role-based access: three-layer guards, claim-read role, and the authenticated app shell
 
 Date: 2026-11-10
 

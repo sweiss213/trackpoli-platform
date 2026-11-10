@@ -2,10 +2,10 @@
 
 // The nested guard wrappers (TP1-06), reading ONLY from AuthProvider (useAuth) and applying the pure
 // decisions. They are a UX/composition layer: the authoritative enforcement is the middleware early redirect,
-// the (app) server layout, the manager route's server role check, the API 403, and RLS (ADR-0011). So a
+// the (app) server layout, the manager route's server role check, the API 403, and RLS (ADR-0012). So a
 // wrapper redirect that a client briefly skips is never an exposure — it is belt-and-suspenders on top of the
 // server layers. RequireMfa and RequireTerms are NOT client wrappers: MFA is enforced by the middleware aal
-// gate (ADR-0009), and terms by restrictive RLS with the guard slot inert until its screen lands (ADR-0011),
+// gate (ADR-0009), and terms by restrictive RLS with the guard slot inert until its screen lands (ADR-0012),
 // because AuthProvider carries only { authenticated, role, status }, not aal or terms acceptance.
 
 import { useEffect, type ReactNode } from "react";

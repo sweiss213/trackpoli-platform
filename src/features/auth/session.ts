@@ -19,7 +19,7 @@ export async function getSessionUser(): Promise<AuthUser | null> {
   } = await supabase.auth.getUser();
   if (!user) return null;
   // Role/status come from the verified access-token claims (migration 006); routing/rendering only, never
-  // authorization — the database (RLS) decides access (TP1-06, ADR-0011).
+  // authorization — the database (RLS) decides access (TP1-06, ADR-0012).
   const { role, status } = await readAdminClaims(supabase);
   return { id: user.id, email: user.email ?? null, role, status };
 }

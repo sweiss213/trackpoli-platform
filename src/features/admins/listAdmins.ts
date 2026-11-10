@@ -2,7 +2,7 @@
 // database itself (decisions.md: UI/route -> service -> lib). Two layers protect it: this checks the role
 // claim and returns "forbidden" for a non-manager, AND the RLS profiles_select_manager policy means even if
 // that check were bypassed a non-manager's select returns only their own row, never the full list. The role
-// claim is for the clean 403; RLS is the real boundary (ADR-0011).
+// claim is for the clean 403; RLS is the real boundary (ADR-0012).
 
 import { createServerSupabase, readAdminClaims } from "@/lib/supabase/server";
 import { MANAGER_ROLE } from "@/lib/roles";

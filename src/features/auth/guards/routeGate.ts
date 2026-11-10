@@ -2,7 +2,7 @@
 // redirect; this owns only the rule: which paths are manager-only, and whether a session may enter one. It
 // runs AFTER the sign-in and MFA gates, so by the time it fires the session is authenticated and (on a gated
 // path) aal2. Like the other gates it is UX routing, never the boundary — the manager API returns 403 and
-// RLS returns no rows to a non-manager regardless of this decision (ADR-0011).
+// RLS returns no rows to a non-manager regardless of this decision (ADR-0012).
 
 import { matchesAny } from "@/features/auth/requireMfa";
 import { MANAGER_ROLE, type AdminRole } from "@/lib/roles";

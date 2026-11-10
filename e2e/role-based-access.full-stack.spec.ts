@@ -1,7 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 import { createHmac } from "node:crypto";
 
-// Full-stack role-based-access scenario (E2E-08, ADR-0011). Gated on E2E_FULL_STACK so the credential-free CI
+// Full-stack role-based-access scenario (E2E-08, ADR-0012). Gated on E2E_FULL_STACK so the credential-free CI
 // run skips it; it needs a local Supabase stack (migrations + the 7-person seed with the access-token hook
 // enabled), the app, and Cloudflare Turnstile TEST keys. Like the other full-stack specs it will need CI
 // iteration before it is promoted. It signs in as a plain Administrator (role 'admin', not a manager),

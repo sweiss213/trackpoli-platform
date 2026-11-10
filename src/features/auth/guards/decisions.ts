@@ -3,10 +3,10 @@
 //
 // These guards are a ROUTING/RENDERING layer, exactly like RequireMfa (ADR-0009): they decide which screen a
 // session lands on. They are NOT the authorization boundary — the database (RLS) is, denying an administrator
-// manager table regardless of how they reached the route (ADR-0005/0009/0011). So a role/status read that is
+// manager table regardless of how they reached the route (ADR-0005/0009/0012). So a role/status read that is
 // missing or wrong is a cosmetic routing bug, never a data exposure. Role/status come from the verified
 // access-token claims; MFA (aal) is handled by decideMfaGate, and terms is an inert slot until its screen
-// lands (ADR-0011).
+// lands (ADR-0012).
 
 import type { AdminRole, AdminStatus } from "@/lib/roles";
 
@@ -52,7 +52,7 @@ export function decideRequireRole(
   return auth.role === required ? "allow" : "forbidden";
 }
 
-// RequireTerms — must have accepted the current policies. INERT for now (ADR-0011, option A): the
+// RequireTerms — must have accepted the current policies. INERT for now (ADR-0012, option A): the
 // terms-acceptance screen is a later ticket and the database (restrictive RLS, migration 009) already blocks
 // the data until acceptance. Only an explicit false routes to the (future) terms screen; null/true allow.
 export type TermsAction = "allow" | "terms";

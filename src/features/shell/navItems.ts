@@ -1,7 +1,7 @@
 // The admin side-nav model (TP1-06; Figma 805:19276), as pure data + a pure role filter so the
 // "manager nav hidden for Administrators" rule is unit-tested without rendering. The SideNav component
 // renders this; hiding a manager entry is a UX convenience, NEVER the security boundary — an Administrator
-// who types the URL still hits the middleware role gate, the API 403 and RLS (ADR-0011).
+// who types the URL still hits the middleware role gate, the API 403 and RLS (ADR-0012).
 //
 // Badge counts (Review 12, Activity 3) are design placeholders until the real workflow data lands; they are
 // not wired to a source in this ticket.

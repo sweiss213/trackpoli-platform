@@ -150,7 +150,7 @@ export async function updateSession(
         reason: error instanceof Error ? error.message : String(error),
       });
     }
-    // Role/status for route gating (ADR-0011). Best-effort; RLS still protects the data regardless.
+    // Role/status for route gating (ADR-0012). Best-effort; RLS still protects the data regardless.
     ({ role, status } = await readAdminClaims(supabase));
   }
   return { response, user, aal, role, status };

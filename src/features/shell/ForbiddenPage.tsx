@@ -4,7 +4,7 @@
 // route its role may not open — in this ticket, an Administrator on a manager-only route. The copy is
 // role-aware (the design's "super administrators" was a misnomer; the role is Administrator manager), and the
 // code chip shows the attempted path from ?from. This screen is UX only; the manager API returns 403 and RLS
-// returns no rows regardless (ADR-0011).
+// returns no rows regardless (ADR-0012).
 
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/features/auth/useAuth";
