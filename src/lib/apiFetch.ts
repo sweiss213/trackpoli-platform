@@ -6,6 +6,12 @@
 
 import { report } from "@/lib/report";
 
+// Dispatched on the window when any API call comes back 401 (session gone). SessionGuard listens and lands
+// the administrator on /session-expired (TP1-05). Only 401 maps to expiry: a 403 is an authorization denial
+// (RLS/role), not an ended session, so it is left for the caller to surface rather than hidden behind a
+// "session expired" screen.
+export const SESSION_EXPIRED_EVENT = "trackpoli:session-expired";
+
 /** A failed API call, carrying the HTTP status so callers can branch without re-parsing. */
 export class ApiError extends Error {
   readonly status: number;
@@ -51,6 +57,10 @@ export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): 
 
   if (!response.ok) {
     report("warning", "apiFetch non-2xx response", { path, method, status: response.status });
+    // A 401 means the session is gone; signal the session layer (SessionGuard) to land on /session-expired.
+    if (response.status === 401 && typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT));
+    }
     throw new ApiError(`Request to ${path} failed`, response.status);
   }
 

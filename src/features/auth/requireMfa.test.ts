@@ -40,6 +40,12 @@ describe("decideMfaGate — unauthenticated", () => {
       decideMfaGate(input({ authenticated: false, path: "/auth/callback", currentLevel: null, nextLevel: null })),
     ).toEqual({ action: "allow" });
   });
+
+  it("treats the session-expired screen as public (no session after a timeout)", () => {
+    expect(
+      decideMfaGate(input({ authenticated: false, path: "/session-expired", currentLevel: null, nextLevel: null })),
+    ).toEqual({ action: "allow" });
+  });
 });
 
 describe("decideMfaGate — authenticated at aal2", () => {
@@ -74,6 +80,12 @@ describe("decideMfaGate — authenticated below aal2", () => {
       action: "allow",
     });
     expect(decideMfaGate(input({ path: "/api/mfa/enrol", currentLevel: "aal1", nextLevel: "aal1" }))).toEqual({
+      action: "allow",
+    });
+  });
+
+  it("does NOT redirect the activity ping (the idle timer keeps running during forced enrolment)", () => {
+    expect(decideMfaGate(input({ path: "/api/session/activity", currentLevel: "aal1", nextLevel: "aal1" }))).toEqual({
       action: "allow",
     });
   });

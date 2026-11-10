@@ -12,6 +12,16 @@ Generated from the feature files by `bdd-index-generate.mjs` - do not edit by ha
 | auth/password-recovery.feature | Repeated reset requests never lock the targeted account | auth | anonymous | no-lockout-on-request | adverse | security | medium | covered |
 | auth/password-recovery.feature | The one-time token is exchanged only on an explicit continue, not on a page fetch | auth | anonymous | scanner-safe-link | adverse | security | high | covered |
 | auth/password-recovery.feature | The reset-request endpoint rejects a non-server caller | auth | anonymous | internal-only-endpoint | permission | security | high | covered |
+| auth/safe-sessions.feature | A deleted activity cookie fails open to the session's other controls, never a lockout | auth | administrator | timeout-fail-open | adverse | security | medium | covered |
+| auth/safe-sessions.feature | A normal sign-out does not revoke the administrator's other devices | auth | administrator | local-sign-out-scope | negative | security | medium | covered |
+| auth/safe-sessions.feature | A tampered last-activity cookie is never accepted to extend a session | auth | administrator | forged-activity-cookie | adverse | security | high | covered |
+| auth/safe-sessions.feature | An expired session calling an API is sent to the session-expired screen | auth | anonymous | expired-api-401 | adverse | security | medium | covered |
+| auth/safe-sessions.feature | An idle session warns, then lands on the session-expired screen keeping the return path | auth | administrator | E2E-06 | happy | security | high | covered |
+| auth/safe-sessions.feature | An over-idle session is rejected server-side, not just in the browser | auth | administrator | middleware-enforced | adverse | security | high | covered |
+| auth/safe-sessions.feature | Choosing Stay signed in extends the session | auth | administrator | stay-signed-in | happy | security | medium | covered |
+| auth/safe-sessions.feature | Signing out in one tab signs out the other within two seconds | auth | administrator | E2E-07 | happy | security | high | covered |
+| auth/safe-sessions.feature | Signing out other sessions leaves this session signed in | auth | administrator | sign-out-others | happy | security | high | covered |
+| auth/safe-sessions.feature | The session ends at the 4-hour absolute limit even while active | auth | administrator | absolute-limit | adverse | security | high | covered |
 | auth/sign-in-protection.feature | A fifth wrong attempt pauses the account | auth | anonymous | repeated-failures | adverse | security | critical | covered |
 | auth/sign-in-protection.feature | A successful sign-in clears the failure counter | auth | administrator-manager | success-clears-failures | happy | functional | medium | covered |
 | auth/sign-in-protection.feature | An unknown email and a wrong password are indistinguishable | auth | anonymous | account-enumeration | negative | security | critical | covered |

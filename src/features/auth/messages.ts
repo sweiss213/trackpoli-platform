@@ -95,6 +95,44 @@ export const MFA_ENROL_MESSAGES = {
   back: "Back",
 } as const;
 
+// Safe-sessions copy (TP1-05, ADR-0010; Figma 1211:2489 session-expired + 1396:175539 warning dialogs). Two
+// warning dialogs: the idle one is extendable ("Stay signed in"); the 4-hour one is a hard cap and cannot be
+// extended ("Sign in again"). The minute figure in a title tracks the configured warning lead, and the live
+// countdown in the note is formatted as m:ss. The expired-screen footnote states the 15-minute idle policy
+// (Q-1-02), correcting the design's placeholder "30 minutes".
+export const SESSION_MESSAGES = {
+  // Idle warning — extendable
+  idleTitle: (mins: number) => `You will be signed out in ${mins} ${mins === 1 ? "minute" : "minutes"}`,
+  idleBody: "You've been inactive for a while. For your security, we'll sign you out when the time runs out.",
+  idleNoteBody:
+    "Choose Stay signed in to keep working. If you do nothing, you'll need to sign in again and unsaved changes will be lost.",
+  staySignedIn: "Stay signed in",
+  signOut: "Sign out",
+  // 4-hour absolute warning — not extendable
+  absoluteTitle: (mins: number) => `Your session ends in ${mins} ${mins === 1 ? "minute" : "minutes"}`,
+  absoluteBody:
+    "For your security, a session lasts at most 4 hours. Staying active doesn't extend it, so you'll need to sign in again.",
+  absoluteNoteBody: "Save your work now. After you sign in again, you'll come back to this page.",
+  dismiss: "Dismiss",
+  signInAgain: "Sign in again",
+  noteTitle: (clock: string) => `Time left: ${clock}`,
+  // Session-expired screen (the page the browser lands on after a timeout)
+  expiredIdleTitle: "Your session has expired",
+  expiredIdleBody: "You were signed out after a period of inactivity. Sign in again to return to the console.",
+  expiredAbsoluteTitle: "Your session has ended",
+  expiredAbsoluteBody: "Your session reached its 4-hour limit. Sign in again to return to the console.",
+  expiredFootnote: "Admin sessions end automatically after 15 minutes of inactivity to protect political data.",
+  // Active sessions card — the bulk "sign out other sessions" action
+  activeSessionsTitle: "Active sessions",
+  thisDevice: "This device",
+  signOutEverywhereTitle: "Sign out everywhere else",
+  signOutEverywhereBody: "Ends all sessions except this one.",
+  signOutOthers: "Sign out other sessions",
+  signOutOthersBusy: "Signing out…",
+  signedOutOthers: "Signed out of your other sessions.",
+  signOutOthersError: "We couldn't sign out the other sessions. Please try again.",
+} as const;
+
 // Device-replacement copy (ADR-0009, Figma 1296:85823 / 1296:89239). The replacement runs in a Security-tab
 // modal; re-auth is password or Google by account type. A lost device is never self-service — the copy
 // points at the manager-recreate path (role-aware for managers).

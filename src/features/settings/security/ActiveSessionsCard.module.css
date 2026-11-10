@@ -1,0 +1,76 @@
+/* Active sessions card (TP1-05; Figma 1396:175539), ADR-0006 tokens. Mirrors the Two-factor card shell. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 560px;
+  padding: 24px;
+  background: var(--md-surface-container-lowest);
+  border: 1px solid var(--md-outline-variant);
+  border-radius: var(--md-shape-card);
+  font-family: var(--md-font-family);
+}
+
+.title {
+  margin: 0;
+  color: var(--md-on-surface);
+  font-size: var(--md-title-medium-size);
+  line-height: var(--md-title-medium-line);
+  letter-spacing: var(--md-title-medium-tracking);
+  font-weight: var(--md-title-medium-weight);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--md-outline-variant);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rowTitle {
+  color: var(--md-on-surface);
+  font-size: var(--md-body-medium-size);
+  line-height: var(--md-body-medium-line);
+  letter-spacing: var(--md-body-medium-tracking);
+}
+
+.rowBody {
+  color: var(--md-on-surface-variant);
+  font-size: var(--md-body-small-size);
+  line-height: var(--md-body-small-line);
+  letter-spacing: var(--md-body-small-tracking);
+}
+
+.action {
+  flex-shrink: 0;
+  padding: 10px 24px;
+  border: 1px solid var(--md-outline);
+  border-radius: var(--md-shape-button);
+  background: var(--md-surface-container-high);
+  color: var(--md-on-surface);
+  font-family: inherit;
+  font-size: var(--md-label-large-size);
+  line-height: var(--md-label-large-line);
+  letter-spacing: var(--md-label-large-tracking);
+  font-weight: var(--md-label-large-weight);
+  cursor: pointer;
+}
+
+.action:disabled {
+  cursor: default;
+  color: var(--md-on-surface-variant);
+}
+
+.action:focus-visible {
+  outline: 2px solid var(--md-on-surface);
+  outline-offset: 2px;
+}

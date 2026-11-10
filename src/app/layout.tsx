@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { AuthProvider } from "@/features/auth/AuthProvider";
 import { getSessionUser } from "@/features/auth/session";
+import { SessionGuard } from "@/features/auth/session/SessionGuard";
+import { sessionLimits } from "@/lib/config";
 import "./globals.css";
 
 // Roboto is the Material Design 3 default type (ADR-0006); next/font self-hosts it and exposes the
@@ -27,7 +29,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en-GB" className={roboto.variable}>
       <body>
-        <AuthProvider user={user}>{children}</AuthProvider>
+        <AuthProvider user={user}>
+          {children}
+          {/* Safe sessions (TP1-05): idle/absolute warnings + cross-tab sync, only for a signed-in admin. */}
+          <SessionGuard enabled={user !== null} limits={sessionLimits()} />
+        </AuthProvider>
       </body>
     </html>
   );

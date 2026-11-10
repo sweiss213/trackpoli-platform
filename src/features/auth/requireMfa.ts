@@ -5,18 +5,27 @@
 // RequireMfa is a ROUTING layer, never the authorization boundary: the RLS is_aal2() gate denies every aal1
 // request regardless of routing, so a miss here is cosmetic, not a data exposure (ADR-0009).
 
-// Paths reachable without a session: the sign-in screen, the OAuth routes, and the sign-in API.
-export const MFA_PUBLIC_PATHS = ["/sign-in", "/auth/callback", "/auth/google", "/api/sign-in"] as const;
+// Paths reachable without a session: the sign-in screen, the OAuth routes, the sign-in API, and the
+// session-expired screen (the browser lands there after a timeout once the session cookies are cleared, so
+// it must be viewable with no session — TP1-05).
+export const MFA_PUBLIC_PATHS = [
+  "/sign-in",
+  "/auth/callback",
+  "/auth/google",
+  "/api/sign-in",
+  "/session-expired",
+] as const;
 
 // Paths a signed-in administrator may reach while still at aal1, so the two-factor funnel cannot deadlock:
-// the enrol and verify screens, their APIs, and sign-out (so a stuck user can always leave). Everything
-// else requires aal2 to resolve.
+// the enrol and verify screens, their APIs, sign-out (so a stuck user can always leave), and the activity
+// ping (the idle timer must keep running during forced enrolment, TP1-05). Everything else requires aal2.
 export const MFA_EXEMPT_PATHS = [
   "/mfa/enrol",
   "/sign-in/verify",
   "/api/mfa/enrol",
   "/api/mfa/verify",
   "/api/sign-out",
+  "/api/session/activity",
 ] as const;
 
 /** Normalise away the /admin basePath whether or not the runtime includes it in the pathname. */

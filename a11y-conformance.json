@@ -1,10 +1,10 @@
 {
-  "_about": "TrackPoli WCAG 2.2 A/AA conformance record, updated for TP1-04 (adds the two-factor screens: the forced-enrolment wizard /mfa/enrol with its instructions, scan/key, code, success, paused, couldn't-start and session-expired states; the sign-in step-up /sign-in/verify; and the Security-tab device-replacement modal with its intro, re-auth password/Google, new-device, new-code, lost-device and outcome states) on top of the TP1-02 sign-in and TP1-03 recovery surfaces. pass-manual verdicts are agent static reviews of the markup, CSS and ARIA of those screens; a full human keyboard + screen-reader audit of the real screens is scheduled for P1-16 (NFR-A1). Colour is deliberately grayscale for now (ADR-0006), so contrast criteria are re-verified when the brand colour lands. Regenerate per surface as more screens land.",
+  "_about": "TrackPoli WCAG 2.2 A/AA conformance record, updated for TP1-05 (adds the safe-session screens: the /session-expired page, the idle and 4-hour-cap warning alertdialog with its live countdown, and the Security-tab Active sessions card) on top of the TP1-02 sign-in, TP1-03 recovery and TP1-04 two-factor surfaces. pass-manual verdicts are agent static reviews of the markup, CSS and ARIA of those screens; a full human keyboard + screen-reader audit of the real screens is scheduled for P1-16 (NFR-A1). Colour is deliberately grayscale for now (ADR-0006), so contrast criteria are re-verified when the brand colour lands. Regenerate per surface as more screens land.",
   "1.1.1": {
     "status": "pass-manual",
-    "note": "Icons (Icon component) are decorative with empty alt (brand mark, warning, clock, lock, phone, copy, check, error, back chevron); the brand mark sits beside 'TrackPoli Admin'. The enrolment/replacement QR is an <img> with a meaningful alt ('QR code to add TrackPoli Admin to your authenticator app' / 'QR code for your new authenticator device'). No informational image lacks a text alternative.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-07"
+    "note": "Icons (Icon component) are decorative with empty alt (brand mark, warning, clock, lock, phone, copy, check, error, back chevron); the brand mark sits beside 'TrackPoli Admin'. The enrolment/replacement QR is an <img> with a meaningful alt ('QR code to add TrackPoli Admin to your authenticator app' / 'QR code for your new authenticator device'). No informational image lacks a text alternative. TP1-05: the session-expired clock icon is decorative (empty alt) next to the heading; the warning dialog and Active sessions card use text, not icon-only meaning.",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   },
   "1.2.1": {
     "status": "not-applicable",
@@ -28,9 +28,9 @@
   },
   "1.3.1": {
     "status": "pass-manual",
-    "note": "Semantic structure: each screen/dialog has a heading tied by aria-labelledby; the enrolment 'how it works' and the replacement intro are ordered lists; the replacement modal is role=dialog aria-modal; step progress is text ('Step 1 of 2/3') not colour-only.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-07"
+    "note": "Semantic structure: each screen/dialog has a heading tied by aria-labelledby; the enrolment 'how it works' and the replacement intro are ordered lists; the replacement modal is role=dialog aria-modal; step progress is text ('Step 1 of 2/3') not colour-only. TP1-05: the timeout warning is role=alertdialog with aria-labelledby (title) + aria-describedby (body); the Active sessions card and session-expired screen use headings tied by aria-labelledby and plain text rows.",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   },
   "1.3.2": {
     "status": "pass-manual",
@@ -65,9 +65,9 @@
   },
   "1.4.3": {
     "status": "pass-manual",
-    "note": "Grayscale MD3 tokens; text/background pairings inspected against 4.5:1 (normal) / 3:1 (large). Re-verified when the brand colour replaces the grayscale token values (ADR-0006).",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "Grayscale MD3 tokens; text/background pairings inspected against 4.5:1 (normal) / 3:1 (large). Re-verified when the brand colour replaces the grayscale token values (ADR-0006). TP1-05: the warning dialog, session-expired card and Active sessions card reuse the same grayscale text/surface token pairings already inspected against 4.5:1 / 3:1.",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   },
   "1.4.4": {
     "status": "pass-manual",
@@ -102,15 +102,15 @@
   },
   "2.1.1": {
     "status": "pass-manual",
-    "note": "Every control is a native <button> or <input> (continue/verify/replace/re-authenticate, the code fields, the show/scan toggles, the text links), so the whole enrol/verify/replacement flow is keyboard-operable; no pointer-only handlers.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-07"
+    "note": "Every control is a native <button> or <input> (continue/verify/replace/re-authenticate, the code fields, the show/scan toggles, the text links), so the whole enrol/verify/replacement flow is keyboard-operable; no pointer-only handlers. TP1-05: every control (Stay signed in / Sign out / Sign in again / Dismiss, Sign out other sessions, Sign in again) is a real <button> operable by keyboard; the alertdialog traps Tab within itself while open.",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   },
   "2.1.2": {
     "status": "pass-manual",
-    "note": "No custom focus management; nothing traps the keyboard (native controls only, no modal).",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-05"
+    "note": "No custom focus management; nothing traps the keyboard (native controls only, no modal). TP1-05: the warning alertdialog's focus trap is escapable by activating one of its buttons (which closes it); it is not a permanent keyboard trap.",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   },
   "2.1.4": {
     "status": "not-applicable",
@@ -140,9 +140,9 @@
   },
   "2.4.3": {
     "status": "pass-manual",
-    "note": "Focus order follows the DOM in the step wizards and the replacement modal (heading -> fields -> primary action -> secondary links); steps render in logical order.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-07"
+    "note": "Focus order follows the DOM in the step wizards and the replacement modal (heading -> fields -> primary action -> secondary links); steps render in logical order. TP1-05: opening the warning dialog moves focus to its primary action and restores focus to the previously focused element on close.",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   },
   "2.4.4": {
     "status": "pass-manual",
@@ -162,9 +162,9 @@
   },
   "2.4.7": {
     "status": "pass-manual",
-    "note": "Focus is visible: the shared buttons, text links, key-copy and Google re-auth controls all define :focus-visible outlines (authCard / MfaEnrolPage / TwoFactorCard modules).",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-07"
+    "note": "Focus is visible: the shared buttons, text links, key-copy and Google re-auth controls all define :focus-visible outlines (authCard / MfaEnrolPage / TwoFactorCard modules). TP1-05: the dialog text button and the Active sessions action expose a visible :focus-visible outline.",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   },
   "2.4.11": {
     "status": "pass-manual",
@@ -184,9 +184,9 @@
   },
   "2.5.3": {
     "status": "pass-manual",
-    "note": "The visible label text starts the accessible name for each control (e.g. 'Verify and turn on', 'Replace device', 'Re-authenticate with Google'), so label-in-name holds for voice control.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-07"
+    "note": "The visible label text starts the accessible name for each control (e.g. 'Verify and turn on', 'Replace device', 'Re-authenticate with Google'), so label-in-name holds for voice control. TP1-05: each control's visible label is its accessible name (Stay signed in, Sign out, Sign in again, Dismiss, Sign out other sessions).",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   },
   "2.5.4": {
     "status": "not-applicable",
@@ -235,15 +235,15 @@
   },
   "3.3.1": {
     "status": "pass-manual",
-    "note": "Errors are identified in text, never colour alone: a role=alert Banner for wrong/expired codes and re-auth failures, and field-level aria-invalid + helper text on the code inputs.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-07"
+    "note": "Errors are identified in text, never colour alone: a role=alert Banner for wrong/expired codes and re-auth failures, and field-level aria-invalid + helper text on the code inputs. TP1-05: the Active sessions failure is identified by a role=alert banner with text, not colour.",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   },
   "3.3.2": {
     "status": "pass-manual",
-    "note": "Every input has a visible <label> (New password, Verification code, Current password, Code from your current device, 6-digit code) — kept even where the design shows a bare box — plus inputmode=numeric and autocomplete=one-time-code.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-07"
+    "note": "Every input has a visible <label> (New password, Verification code, Current password, Code from your current device, 6-digit code) — kept even where the design shows a bare box — plus inputmode=numeric and autocomplete=one-time-code. TP1-05: the Active sessions action and the dialog actions carry clear visible labels; no input needs a separate instruction.",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   },
   "3.3.3": {
     "status": "pass-manual",
@@ -267,14 +267,14 @@
   },
   "4.1.2": {
     "status": "pass-manual",
-    "note": "Native elements provide name/role/value; the replacement modal exposes role=dialog + aria-modal + aria-labelledby; the Google re-auth button exposes its state; code fields expose aria-invalid/aria-describedby.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-07"
+    "note": "Native elements provide name/role/value; the replacement modal exposes role=dialog + aria-modal + aria-labelledby; the Google re-auth button exposes its state; code fields expose aria-invalid/aria-describedby. TP1-05: the warning dialog exposes role=alertdialog + aria-modal + aria-labelledby/aria-describedby; all actions are buttons with text names.",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   },
   "4.1.3": {
     "status": "pass-manual",
-    "note": "Status messages use role=alert (the Banner component) so a wrong/expired-code or re-auth-failed message is announced when it appears, without moving focus.",
-    "reviewer": "agent static review of the TP1-02 sign-in + TP1-03 recovery + TP1-04 two-factor (enrol wizard, sign-in verify, and the Security-tab replacement modal) screens (pending human a11y audit in P1-16)",
-    "date": "2026-11-07"
+    "note": "Status messages use role=alert (the Banner component) so a wrong/expired-code or re-auth-failed message is announced when it appears, without moving focus. TP1-05: the Active sessions success/failure use the role=alert Banner so they are announced; the per-second countdown is aria-hidden so a screen reader is not spammed, with the static note sentence carrying the meaning.",
+    "reviewer": "agent static review extended to the TP1-05 safe-session screens (the /session-expired page, the idle/4-hour-cap warning alertdialog, and the Security-tab Active sessions card) (pending human a11y audit in P1-16)",
+    "date": "2026-11-10"
   }
 }

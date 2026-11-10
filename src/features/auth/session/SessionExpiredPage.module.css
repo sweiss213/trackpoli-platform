@@ -1,0 +1,49 @@
+/* Session-expired screen (TP1-05; Figma 1211:2489), ADR-0006 tokens. Reuses authCard.module.css for the page,
+   card, brand and footer; this holds the icon chip and the centred heading block. */
+
+.iconRow {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.iconChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 32px;
+  background: var(--md-surface-container-highest);
+}
+
+.headingBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  color: var(--md-on-surface);
+  font-family: var(--md-font-family);
+  font-size: var(--md-headline-medium-size);
+  line-height: var(--md-headline-medium-line);
+  letter-spacing: var(--md-headline-medium-tracking);
+  font-weight: var(--md-headline-medium-weight);
+}
+
+.body {
+  margin: 0;
+  color: var(--md-on-surface-variant);
+  font-family: var(--md-font-family);
+  font-size: var(--md-body-medium-size);
+  line-height: var(--md-body-medium-line);
+  letter-spacing: var(--md-body-medium-tracking);
+}
+
+.fullButton {
+  width: 100%;
+}

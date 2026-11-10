@@ -88,6 +88,116 @@
     "status": "covered"
   },
   {
+    "feature": "auth/safe-sessions.feature",
+    "scenario": "A deleted activity cookie fails open to the session's other controls, never a lockout",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "timeout-fail-open",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/safe-sessions.feature",
+    "scenario": "A normal sign-out does not revoke the administrator's other devices",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "local-sign-out-scope",
+    "category": "negative",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/safe-sessions.feature",
+    "scenario": "A tampered last-activity cookie is never accepted to extend a session",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "forged-activity-cookie",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/safe-sessions.feature",
+    "scenario": "An expired session calling an API is sent to the session-expired screen",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "expired-api-401",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/safe-sessions.feature",
+    "scenario": "An idle session warns, then lands on the session-expired screen keeping the return path",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "E2E-06",
+    "category": "happy",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/safe-sessions.feature",
+    "scenario": "An over-idle session is rejected server-side, not just in the browser",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "middleware-enforced",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/safe-sessions.feature",
+    "scenario": "Choosing Stay signed in extends the session",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "stay-signed-in",
+    "category": "happy",
+    "quality": "security",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/safe-sessions.feature",
+    "scenario": "Signing out in one tab signs out the other within two seconds",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "E2E-07",
+    "category": "happy",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/safe-sessions.feature",
+    "scenario": "Signing out other sessions leaves this session signed in",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "sign-out-others",
+    "category": "happy",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/safe-sessions.feature",
+    "scenario": "The session ends at the 4-hour absolute limit even while active",
+    "domain": "auth",
+    "audience": "administrator",
+    "usecase": "absolute-limit",
+    "category": "adverse",
+    "quality": "security",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
     "feature": "auth/sign-in-protection.feature",
     "scenario": "A fifth wrong attempt pauses the account",
     "domain": "auth",

@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { requireUser } from "@/features/auth/session";
 import { getTwoFactorStatus } from "@/features/settings/security/twoFactor";
 import { TwoFactorCard } from "@/features/settings/security/TwoFactorCard";
+import { ActiveSessionsCard } from "@/features/settings/security/ActiveSessionsCard";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default async function Page() {
           isManager={status.isManager}
         />
       </Suspense>
+      <ActiveSessionsCard />
     </main>
   );
 }
