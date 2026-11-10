@@ -85,6 +85,23 @@ origin bypass-header so Vercel is not reachable directly, and `X-Robots-Tag: noi
 each are recorded in `docs/cloudflare-spike.md` - to be confirmed during the TP1-02 Cloudflare spike once
 the account and domain exist (Q-1-21).
 
+## Design system - compose shadcn/ui, never raw controls or ad-hoc CSS
+Feature code uses the shadcn/ui primitives in `src/components/ui/`; it does not hand-roll controls or
+colour. Raw interactive elements, new CSS Modules, and colour literals live ONLY in `src/components/ui/`
+(the primitive layer) and colour ONLY in `src/styles/tokens.css`. Enforced on changed files by
+`check:design-system` (`scripts/check-design-system.mjs`), scoped to changed files so the pre-existing
+debt in `src/features` is retired by the screen-by-screen migration, not blocked all at once (ADR-0011).
+```
+// never - a raw control or a colour literal in feature code (src/app, src/features, non-ui components)
+<button className={styles.primary}>Save</button>   // raw <button> + CSS Module
+const danger = '#b3261e'                            // hex outside src/styles/tokens.css
+// always - the design-system primitive; colour via a semantic token / Tailwind colour utility
+import { Button } from '@/components/ui/button'
+<Button variant="destructive">Save</Button>
+```
+This extends the standing "no colour literal outside the token file" rule to raw controls and CSS Modules
+too. The exception is `src/components/ui/`, where the primitives are defined. See `src/components/AGENTS.md`.
+
 ---
 
 ## Decision log (ADRs)
