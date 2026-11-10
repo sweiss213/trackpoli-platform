@@ -43,6 +43,7 @@
           { "context": "skill (sre-operational-readiness)" },
           { "context": "skill (usability-ux-universal-design)" },
           { "context": "always-on" },
+          { "context": "design-system" },
           { "context": "routing" },
           { "context": "receipt" },
           { "context": "arch-review" },
