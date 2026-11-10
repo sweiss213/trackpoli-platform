@@ -175,3 +175,36 @@ jobs:
       - name: No application code changed
         if: steps.diff.outputs.code == ''
         run: echo "No src/supabase application code in this PR - architecture review not required."
+
+  design-system:
+    # TR-4 / ADR-0011 D4: block NEW feature code that bypasses the shadcn/ui design system. CHANGED
+    # FILES ONLY (never the whole tree), so the pre-existing raw-control + CSS-Module debt in src/features
+    # is not blocked here - the screen-by-screen migration PRs retire it. Its discriminating test runs in
+    # the `verifiable-quality-gates` skill job (npm test). Required check in main-protection.json.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Compute changed and added files versus the base
+        id: diff
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch --no-tags origin "$BASE_REF"
+          base=$(git merge-base HEAD "origin/$BASE_REF")
+          changed=$(git diff --name-only --diff-filter=ACMR "$base" HEAD | paste -sd, -)
+          added=$(git diff --name-only --diff-filter=A "$base" HEAD | paste -sd, -)
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          echo "added=$added" >> "$GITHUB_OUTPUT"
+      - name: Design-system enforcement gate (changed files only)
+        env:
+          CHANGED: ${{ steps.diff.outputs.changed }}
+          ADDED: ${{ steps.diff.outputs.added }}
+        run: |
+          if [ -z "$CHANGED" ]; then echo "no changed files in this PR - nothing to enforce"; exit 0; fi
+          node scripts/check-design-system.mjs --changed-list "$CHANGED" --added-list "$ADDED"
