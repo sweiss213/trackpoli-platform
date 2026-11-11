@@ -36,3 +36,12 @@ Feature: Existing features migrate to the design system
     When a new administrator enrols through the instructions, QR and code steps
     Then the flow behaves exactly as before the migration
     And the step actions, back links, sign-out and wrong-code alert still work
+
+  # PR 6 (settings/security). Executed by TwoFactorCard.test.tsx.
+
+  @audience:end-user @usecase:settings-2fa-migrated @category:happy @quality:functional @severity:high
+  Scenario: The two-factor card and device-replacement modal use design-system components with behaviour parity
+    Given the two-factor card and replacement modal migrated to the design-system button, input and alert
+    When an administrator replaces their authenticator device
+    Then the flow behaves exactly as before the migration
+    And the re-authentication, new-device, code steps, lost-device path and modal actions still work

@@ -54,12 +54,5 @@
     "reason": "Transitional: only the hand-built Button import is repointed; pre-existing raw controls are migrated and this waiver removed in PR 7 (session + home). ADR-0011 D5.",
     "approvedBy": "mdenner",
     "expires": "2026-12-31"
-  },
-  {
-    "rule": "raw-control",
-    "path": "src/features/settings/security/TwoFactorCard.tsx",
-    "reason": "Transitional: only the hand-built Button import is repointed; pre-existing raw controls are migrated and this waiver removed in PR 6 (settings/security). ADR-0011 D5.",
-    "approvedBy": "mdenner",
-    "expires": "2026-12-31"
   }
 ]

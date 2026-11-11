@@ -94,4 +94,14 @@ describe("TwoFactorCard", () => {
     expect(dialog().getByText(/an Admin manager must re-create your account/)).toBeInTheDocument();
     expect(dialog().getByText(/Your history stays readable/)).toBeInTheDocument();
   });
+
+  it("associates the migrated fields with their labels (shadcn Input + Label)", () => {
+    render(<TwoFactorCard enrolled accountType="password" isManager={false} />);
+    fireEvent.click(screen.getByRole("button", { name: "Replace device" }));
+    fireEvent.click(dialog().getByRole("button", { name: "Get started" }));
+    const password = dialog().getByLabelText("Current password");
+    const code = dialog().getByLabelText("Code from your current device");
+    expect(password.tagName).toBe("INPUT");
+    expect(code.tagName).toBe("INPUT");
+  });
 });
