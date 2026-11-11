@@ -104,7 +104,7 @@ export function SideNav({ displayName }: { displayName: string }) {
       const active = isActive(node.href);
       return (
         <li key={node.href}>
-          <Link href={`/admin${node.href}`} className={styles.item} data-active={active} aria-current={active ? "page" : undefined}>
+          <Link href={node.href} className={styles.item} data-active={active} aria-current={active ? "page" : undefined}>
             <Icon src={ICONS[node.icon]} size={24} />
             <span className={styles.label}>{node.label}</span>
           </Link>
@@ -132,7 +132,7 @@ export function SideNav({ displayName }: { displayName: string }) {
               const active = isActive(leaf.href);
               return (
                 <li key={leaf.href}>
-                  <Link href={`/admin${leaf.href}`} className={styles.subItem} data-active={active} aria-current={active ? "page" : undefined}>
+                  <Link href={leaf.href} className={styles.subItem} data-active={active} aria-current={active ? "page" : undefined}>
                     <span className={styles.label}>{leaf.label}</span>
                     {leaf.badge !== undefined ? <span className={styles.badge}>{leaf.badge}</span> : null}
                   </Link>

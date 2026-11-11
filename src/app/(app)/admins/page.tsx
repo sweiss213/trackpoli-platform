@@ -11,7 +11,8 @@ export const metadata: Metadata = { title: "Admin management · TrackPoli Admin"
 // The admin-management actions (invite, roles, deactivate) are their own ticket; this is the guarded shell.
 export default async function Page() {
   const user = await requireUser();
-  if (user.role !== MANAGER_ROLE) redirect("/admin/forbidden?from=/admin/admins");
+  // basePath-relative path (next/navigation redirect() prepends "/admin"); ?from is display-only, so it keeps the real /admin path.
+  if (user.role !== MANAGER_ROLE) redirect("/forbidden?from=/admin/admins");
   return (
     <Placeholder
       title="Admin management"

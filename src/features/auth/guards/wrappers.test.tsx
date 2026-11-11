@@ -32,7 +32,8 @@ describe("PublicOnly", () => {
     auth({ role: "admin", status: "active" });
     render(<PublicOnly><p>sign in form</p></PublicOnly>);
     expect(screen.queryByText("sign in form")).not.toBeInTheDocument();
-    expect(replace).toHaveBeenCalledWith("/admin");
+    // basePath-relative: router.replace prepends the "/admin" basePath, so a literal "/admin" here would be /admin/admin.
+    expect(replace).toHaveBeenCalledWith("/");
   });
 });
 
@@ -44,7 +45,7 @@ describe("RequireSession", () => {
 
     auth(null);
     rerender(<RequireSession><p>app</p></RequireSession>);
-    expect(replace).toHaveBeenCalledWith("/admin/sign-in");
+    expect(replace).toHaveBeenCalledWith("/sign-in");
   });
 });
 
@@ -56,7 +57,7 @@ describe("RequireActive", () => {
 
     auth({ role: "admin", status: "deactivated" });
     rerender(<RequireActive><p>app</p></RequireActive>);
-    expect(replace).toHaveBeenCalledWith("/admin/sign-in");
+    expect(replace).toHaveBeenCalledWith("/sign-in");
   });
 });
 

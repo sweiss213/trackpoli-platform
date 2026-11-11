@@ -12,6 +12,7 @@ Generated from the feature files by `bdd-index-generate.mjs` - do not edit by ha
 | auth/password-recovery.feature | Repeated reset requests never lock the targeted account | auth | anonymous | no-lockout-on-request | adverse | security | medium | covered |
 | auth/password-recovery.feature | The one-time token is exchanged only on an explicit continue, not on a page fetch | auth | anonymous | scanner-safe-link | adverse | security | high | covered |
 | auth/password-recovery.feature | The reset-request endpoint rejects a non-server caller | auth | anonymous | internal-only-endpoint | permission | security | high | covered |
+| auth/role-based-access.feature | A guard redirect for a visitor without a session resolves to a single-basePath sign-in URL | auth | anonymous | guard-redirect-basepath | permission | functional | critical | covered |
 | auth/role-based-access.feature | A missing route shows the not-found screen inside the shell | auth | administrator | not-found | negative | security | low | covered |
 | auth/role-based-access.feature | A session whose role cannot be confirmed is treated as not a manager | auth | administrator | unreadable-role-fail-closed | adverse | security | high | covered |
 | auth/role-based-access.feature | A signed-in administrator is bounced off the public-only sign-in screen | auth | anonymous | public-only | happy | security | medium | covered |

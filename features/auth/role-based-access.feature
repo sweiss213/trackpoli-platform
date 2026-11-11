@@ -7,6 +7,18 @@ Feature: Role-based access (route guards, manager-only routes, forbidden + not-f
   how they arrived. Hiding the manager navigation is a convenience, never the boundary. The full end-to-end
   run (E2E-08) is gated on the full-stack harness; the executable step definitions land with it.
 
+  # basePath correctness (ADR-0014): Next prepends the "/admin" basePath to the Next-aware nav APIs
+  # (<Link>, useRouter().push/replace, next/navigation redirect()), so those call sites must be
+  # basePath-relative. Regression guard for the /admin/admin double-prefix 404 outage. Executed by
+  # wrappers.test.tsx (the client guard redirect asserts the basePath-relative target).
+
+  @audience:anonymous @usecase:guard-redirect-basepath @category:permission @quality:functional @severity:critical
+  Scenario: A guard redirect for a visitor without a session resolves to a single-basePath sign-in URL
+    Given the app is served under the "/admin" basePath
+    When a visitor without a session reaches a guarded route and the client guard redirects them
+    Then the router is asked to replace with the basePath-relative "/sign-in"
+    And the browser resolves to "/admin/sign-in", never the doubled "/admin/admin/sign-in"
+
   @audience:administrator @usecase:E2E-08 @category:permission @security @owasp:authorization @severity:critical
   Scenario: An Administrator is denied a manager route in the page and the API
     Given a signed-in Administrator (not a manager)

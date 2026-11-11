@@ -11,7 +11,7 @@ import { AppShell } from "@/features/shell/AppShell";
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser(); // redirects to sign-in when there is no session
   const active = decideRequireActive({ authenticated: true, status: user.status });
-  if (active === "deactivated") redirect("/admin/sign-in"); // no deactivated screen yet; the session is dead to RLS
+  if (active === "deactivated") redirect("/sign-in"); // no deactivated screen yet; the session is dead to RLS
   // "onboarding" (invited) and "allow" both render for now — the invite/onboarding flow is a later ticket.
 
   return <AppShell displayName={user.email ?? "Administrator"}>{children}</AppShell>;
