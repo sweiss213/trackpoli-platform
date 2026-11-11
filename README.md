@@ -8,3 +8,5 @@ Hello world from Linux because Windows was annoying me 😠 - Lucy
 Finally I can also say 'hello' from Windows - Lucy
 
 Hi there, this is Anika aka Pikachu
+
+I am just saying Hi so I don't get fined - Scott
