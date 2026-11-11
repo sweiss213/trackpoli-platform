@@ -10,11 +10,12 @@
 // autocomplete="one-time-code" / inputmode="numeric" input so it stays WCAG-AA and works with password
 // managers (universal-accessibility-wcag).
 
-import { useState, type FormEvent } from "react";
-import { Banner } from "@/components/ui/Banner";
-import { Button } from "@/components/ui/Button";
+import { useId, useState, type FormEvent } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/Icon";
-import { TextField } from "@/components/ui/TextField";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/apiFetch";
 import { MFA_MESSAGES } from "./messages";
 import card from "./authCard.module.css";
@@ -32,6 +33,7 @@ type VerifyResponse =
 const CODE_PATTERN = /^\d{6}$/;
 
 export function MfaVerifyPage() {
+  const codeId = useId();
   const [code, setCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -92,24 +94,32 @@ export function MfaVerifyPage() {
           <p className={styles.subtext}>{MFA_MESSAGES.verifyIntro}</p>
         </div>
 
-        {notice ? <Banner icon={<Icon src={warningIcon} size={22} />}>{notice}</Banner> : null}
+        {notice ? (
+          <Alert>
+            <Icon src={warningIcon} size={22} />
+            <AlertDescription>{notice}</AlertDescription>
+          </Alert>
+        ) : null}
 
         <div className={styles.fields}>
-          <TextField
-            label="Verification code"
-            name="one-time-code"
-            autoComplete="one-time-code"
-            inputMode="numeric"
-            pattern="\d{6}"
-            maxLength={6}
-            required
-            value={code}
-            onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
-            error={fieldError}
-          />
+          <div className="flex w-full flex-col gap-1.5">
+            <Label htmlFor={codeId}>Verification code</Label>
+            <Input
+              id={codeId}
+              name="one-time-code"
+              autoComplete="one-time-code"
+              inputMode="numeric"
+              pattern="\d{6}"
+              maxLength={6}
+              required
+              value={code}
+              onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
+              aria-invalid={fieldError || undefined}
+            />
+          </div>
         </div>
 
-        <Button variant="filled" type="submit" disabled={!canSubmit}>
+        <Button variant="secondary" className="w-full" type="submit" disabled={!canSubmit}>
           Verify
         </Button>
 

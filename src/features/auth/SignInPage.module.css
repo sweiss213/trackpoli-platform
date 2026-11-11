@@ -72,20 +72,3 @@
   letter-spacing: var(--md-body-small-tracking);
   color: var(--md-on-surface-variant);
 }
-
-.toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.toggle:focus-visible {
-  outline: 2px solid var(--md-on-surface);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
