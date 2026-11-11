@@ -87,6 +87,8 @@ describe("MfaEnrolPage", () => {
       expect(screen.getByRole("alert")).toHaveTextContent("That code isn't right. Check your app and try again."),
     );
     expect(screen.getByRole("heading", { name: "Enter the 6-digit code" })).toBeInTheDocument();
+    // The migrated design-system input exposes its error state to assistive tech (shadcn Input aria-invalid).
+    expect(screen.getByLabelText("6-digit code")).toHaveAttribute("aria-invalid", "true");
   });
 
   it("switches to the paused screen when verification is rate-limited", async () => {

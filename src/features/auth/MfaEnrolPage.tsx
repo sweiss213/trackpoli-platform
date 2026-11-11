@@ -8,11 +8,12 @@
 // session to aal2. Sign out is always available so a stuck administrator can leave. Presentation + wiring
 // only — the MFA decisions are server-side.
 
-import { useState, type FormEvent } from "react";
-import { Banner } from "@/components/ui/Banner";
-import { Button } from "@/components/ui/LegacyButton";
+import { useId, useState, type FormEvent } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/Icon";
-import { TextField } from "@/components/ui/TextField";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { apiFetch, ApiError } from "@/lib/apiFetch";
 import { report } from "@/lib/report";
 import { MFA_ENROL_MESSAGES as M } from "./messages";
@@ -71,6 +72,7 @@ function StepProgress({ current }: { current: 1 | 2 }) {
 }
 
 export function MfaEnrolPage({ email }: { email: string }) {
+  const codeId = useId();
   const [step, setStep] = useState<Step>("instructions");
   const [enrol, setEnrol] = useState<EnrolStartResponse | null>(null);
   const [code, setCode] = useState("");
@@ -171,12 +173,12 @@ export function MfaEnrolPage({ email }: { email: string }) {
               </li>
             ))}
           </ol>
-          <Button variant="filled" onClick={begin} disabled={busy}>
+          <Button variant="secondary" className="w-full" onClick={begin} disabled={busy}>
             {M.continueButton}
           </Button>
-          <button type="button" className={styles.textButton} onClick={signOut}>
+          <Button variant="ghost" size="inline" type="button" className={styles.textButton} onClick={signOut}>
             {M.signOut}
-          </button>
+          </Button>
           <p className={card.footer}>{M.gateNote}</p>
         </section>
       </main>
@@ -202,16 +204,16 @@ export function MfaEnrolPage({ email }: { email: string }) {
               <img src={qrSrc(enrol.qrCode)} alt="QR code to add TrackPoli Admin to your authenticator app" width={150} height={150} />
             </span>
           </div>
-          <button type="button" className={styles.textButton} onClick={() => setStep("manual")}>
+          <Button variant="ghost" size="inline" type="button" className={styles.textButton} onClick={() => setStep("manual")}>
             {M.enterKeyLink}
-          </button>
-          <Button variant="filled" onClick={() => setStep("code")}>
+          </Button>
+          <Button variant="secondary" className="w-full" onClick={() => setStep("code")}>
             {M.continueButton}
           </Button>
-          <button type="button" className={styles.backButton} onClick={() => setStep("instructions")}>
+          <Button variant="ghost" size="inline" type="button" className={styles.backButton} onClick={() => setStep("instructions")}>
             <Icon src={arrowBackIcon} size={20} />
             <span>{M.back}</span>
-          </button>
+          </Button>
         </section>
       </main>
     );
@@ -233,16 +235,16 @@ export function MfaEnrolPage({ email }: { email: string }) {
           <div className={styles.keyBox}>
             <span className={styles.keyLabel}>{M.keyLabel}</span>
             <span className={styles.key}>{groupKey(enrol.secret)}</span>
-            <button type="button" className={styles.keyAction} onClick={copyKey}>
+            <Button variant="ghost" size="inline" type="button" className={styles.keyAction} onClick={copyKey}>
               <Icon src={copyIcon} size={18} />
               <span>{copied ? M.copied : M.copyKey}</span>
-            </button>
+            </Button>
             <span className={styles.accountLine}>TrackPoli Admin · {email}</span>
           </div>
-          <button type="button" className={styles.textButton} onClick={() => setStep("scan")}>
+          <Button variant="ghost" size="inline" type="button" className={styles.textButton} onClick={() => setStep("scan")}>
             {M.scanInsteadLink}
-          </button>
-          <Button variant="filled" onClick={() => setStep("code")}>
+          </Button>
+          <Button variant="secondary" className="w-full" onClick={() => setStep("code")}>
             {M.continueButton}
           </Button>
         </section>
@@ -264,28 +266,36 @@ export function MfaEnrolPage({ email }: { email: string }) {
             </h2>
             <p className={styles.subtext}>{M.codeBody}</p>
           </div>
-          {codeError ? <Banner icon={<Icon src={warningIcon} size={22} />}>{codeError}</Banner> : null}
+          {codeError ? (
+            <Alert>
+              <Icon src={warningIcon} size={22} />
+              <AlertDescription>{codeError}</AlertDescription>
+            </Alert>
+          ) : null}
           <div className={styles.fields}>
-            <TextField
-              label="6-digit code"
-              name="one-time-code"
-              autoComplete="one-time-code"
-              inputMode="numeric"
-              pattern="\d{6}"
-              maxLength={6}
-              required
-              value={code}
-              onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
-              error={Boolean(codeError)}
-            />
+            <div className="flex w-full flex-col gap-1.5">
+              <Label htmlFor={codeId}>6-digit code</Label>
+              <Input
+                id={codeId}
+                name="one-time-code"
+                autoComplete="one-time-code"
+                inputMode="numeric"
+                pattern="\d{6}"
+                maxLength={6}
+                required
+                value={code}
+                onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
+                aria-invalid={Boolean(codeError) || undefined}
+              />
+            </div>
           </div>
-          <Button variant="filled" type="submit" disabled={!canSubmit}>
+          <Button variant="secondary" className="w-full" type="submit" disabled={!canSubmit}>
             {M.verifyButton}
           </Button>
-          <button type="button" className={styles.backButton} onClick={() => setStep("scan")}>
+          <Button variant="ghost" size="inline" type="button" className={styles.backButton} onClick={() => setStep("scan")}>
             <Icon src={arrowBackIcon} size={20} />
             <span>{M.backToQr}</span>
-          </button>
+          </Button>
         </form>
       </main>
     );
@@ -311,7 +321,7 @@ export function MfaEnrolPage({ email }: { email: string }) {
             <span>{M.successRecovery}</span>
           </div>
           <Button
-            variant="filled"
+            variant="secondary" className="w-full"
             onClick={() => {
               // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- full load so the aal2 session is applied and the dashboard renders
               window.location.assign("/admin");
@@ -343,7 +353,7 @@ export function MfaEnrolPage({ email }: { email: string }) {
             <Icon src={lockIcon} size={22} />
             <span>{M.pausedRetry}</span>
           </div>
-          <Button variant="filled" onClick={signOut}>
+          <Button variant="secondary" className="w-full" onClick={signOut}>
             {M.signOut}
           </Button>
           <p className={card.footer}>{M.pausedHelp}</p>
@@ -368,7 +378,7 @@ export function MfaEnrolPage({ email }: { email: string }) {
             <p className={styles.subtext}>{M.sessionExpiredBody}</p>
           </div>
           <Button
-            variant="filled"
+            variant="secondary" className="w-full"
             onClick={() => {
               // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- full load back to sign-in; the lapsed session is already gone
               window.location.assign("/admin/sign-in");
@@ -396,12 +406,12 @@ export function MfaEnrolPage({ email }: { email: string }) {
           </h1>
           <p className={styles.subtext}>{M.failedBody}</p>
         </div>
-        <Button variant="filled" onClick={begin} disabled={busy}>
+        <Button variant="secondary" className="w-full" onClick={begin} disabled={busy}>
           {M.tryAgain}
         </Button>
-        <button type="button" className={styles.textButton} onClick={signOut}>
+        <Button variant="ghost" size="inline" type="button" className={styles.textButton} onClick={signOut}>
           {M.signOut}
-        </button>
+        </Button>
         <p className={card.footer}>{M.failedHelp}</p>
       </section>
     </main>
