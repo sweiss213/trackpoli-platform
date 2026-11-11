@@ -55,6 +55,7 @@ Generated from the feature files by `bdd-index-generate.mjs` - do not edit by ha
 | design-system/component-accessibility.feature | The button is keyboard operable with a visible focus state | design-system | assistive-tech | button-a11y | happy | accessibility | high | covered |
 | design-system/component-accessibility.feature | The input exposes its label and invalid state to assistive tech | design-system | assistive-tech | input-a11y | happy | accessibility | high | covered |
 | design-system/migration.feature | The forgot-password screen uses design-system components with behaviour parity | design-system | end-user | forgot-password-migrated | happy | functional | high | covered |
+| design-system/migration.feature | The session-timeout warning dialog uses design-system components with behaviour parity | design-system | end-user | session-warning-migrated | happy | functional | high | covered |
 | design-system/migration.feature | The set-new-password screen uses design-system components with behaviour parity | design-system | end-user | reset-password-migrated | happy | functional | high | covered |
 | design-system/migration.feature | The sign-in screen uses design-system components with behaviour parity | design-system | end-user | signin-migrated | happy | functional | high | covered |
 | design-system/migration.feature | The two-factor card and device-replacement modal use design-system components with behaviour parity | design-system | end-user | settings-2fa-migrated | happy | functional | high | covered |

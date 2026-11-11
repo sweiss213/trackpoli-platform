@@ -39,6 +39,27 @@ describe("SessionWarningDialog — idle mode (extendable)", () => {
   });
 });
 
+describe("SessionWarningDialog — design-system migration parity (PR 7, ADR-0011 D5)", () => {
+  it("keeps both actions native <button>s and focuses the primary on open (focus trap intact)", () => {
+    render(
+      <SessionWarningDialog
+        mode="idle-warn"
+        secondsLeft={119}
+        warnMinutes={2}
+        onPrimary={vi.fn()}
+        onSecondary={vi.fn()}
+      />,
+    );
+    // The shadcn Button renders a real <button>, so the dialog's querySelectorAll('button')
+    // focus trap still finds both actions and the primary (rendered last) takes focus on open.
+    const secondary = screen.getByRole("button", { name: "Sign out" });
+    const primary = screen.getByRole("button", { name: "Stay signed in" });
+    expect(secondary.tagName).toBe("BUTTON");
+    expect(primary.tagName).toBe("BUTTON");
+    expect(document.activeElement).toBe(primary);
+  });
+});
+
 describe("SessionWarningDialog — absolute mode (not extendable)", () => {
   it("shows the 4-hour copy with Sign in again / Dismiss", () => {
     const onPrimary = vi.fn();

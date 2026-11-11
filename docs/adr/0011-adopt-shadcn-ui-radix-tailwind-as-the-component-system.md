@@ -99,3 +99,29 @@ guarantee:
   long production soak; the Preflight deferral means shadcn components rendered before PR 3 would lack the
   reset they assume, so no component is added until PR 3 turns Preflight on. The grayscale tokens are not
   a finished visual design — brand colour and dark mode are applied later by redefining token values.
+
+## Implementation note — PR 7 (D5 contract step, 2026-11-10)
+
+PR 7 migrates the session-timeout warning dialog (`SessionWarningDialog`) onto the shadcn Button and
+removes the **last** shadcn-migration waiver (`approvedBy: mdenner`), so the D5 migration-waiver count is
+now **0**. The 7 TP1-06 app-shell waivers (`approvedBy: Giuliana Wladessa Manca`) are untouched — the
+shell migrates in its own future PR.
+
+The D5 contract phase ("delete the replaced hand-built component") is executed **only where it is safe by
+the zero-importer rule**, not forced:
+
+- **Removed:** `TextField` (`src/components/ui/TextField.tsx` + `.module.css`) — repo-wide grep shows **0**
+  importers; it is dead and deleted.
+- **Retained (still imported — reported, not forced):**
+  - `LegacyButton` — still imported by `ConfirmPage.tsx` and `SessionExpiredPage.tsx` (2 screens, not in
+    this PR's scope).
+  - `Banner` — still imported by `ActiveSessionsCard.tsx`.
+  - `Icon` — still imported by **14** files across auth, settings and the TP1-06 shell (every migrated
+    screen kept the hand-built `Icon`; it was never swapped for a primitive).
+
+So the series' **screen migrations and waivers are complete (0 remaining)**, but the hand-built *component
+layer* is not fully retired: `LegacyButton`, `Banner` and `Icon` outlive it because out-of-scope screens
+(and, for `Icon`, the whole app) still depend on them. Their removal is deferred to the PRs that migrate
+`ConfirmPage` / `SessionExpiredPage` (frees `LegacyButton`), `ActiveSessionsCard` (frees `Banner`), and
+an `Icon`→primitive decision plus the TP1-06 shell migration (frees `Icon`). `button/` is already a flat
+`button.tsx`, so there is nothing to flatten.
