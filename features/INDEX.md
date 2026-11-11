@@ -12,6 +12,13 @@ Generated from the feature files by `bdd-index-generate.mjs` - do not edit by ha
 | auth/password-recovery.feature | Repeated reset requests never lock the targeted account | auth | anonymous | no-lockout-on-request | adverse | security | medium | covered |
 | auth/password-recovery.feature | The one-time token is exchanged only on an explicit continue, not on a page fetch | auth | anonymous | scanner-safe-link | adverse | security | high | covered |
 | auth/password-recovery.feature | The reset-request endpoint rejects a non-server caller | auth | anonymous | internal-only-endpoint | permission | security | high | covered |
+| auth/role-based-access.feature | A missing route shows the not-found screen inside the shell | auth | administrator | not-found | negative | security | low | covered |
+| auth/role-based-access.feature | A session whose role cannot be confirmed is treated as not a manager | auth | administrator | unreadable-role-fail-closed | adverse | security | high | covered |
+| auth/role-based-access.feature | A signed-in administrator is bounced off the public-only sign-in screen | auth | anonymous | public-only | happy | security | medium | covered |
+| auth/role-based-access.feature | An Administrator is denied a manager route in the page and the API | auth | administrator | E2E-08 | permission | security | critical | covered |
+| auth/role-based-access.feature | An Administrator manager may open the manager route and read the manager data | auth | administrator-manager | manager-allowed | happy | security | high | covered |
+| auth/role-based-access.feature | The manager navigation is hidden for an Administrator but never relied on for security | auth | administrator | manager-nav-hidden | permission | security | medium | covered |
+| auth/role-based-access.feature | The manager navigation is shown to an Administrator manager | auth | administrator-manager | manager-nav-shown | happy | security | low | covered |
 | auth/safe-sessions.feature | A deleted activity cookie fails open to the session's other controls, never a lockout | auth | administrator | timeout-fail-open | adverse | security | medium | covered |
 | auth/safe-sessions.feature | A normal sign-out does not revoke the administrator's other devices | auth | administrator | local-sign-out-scope | negative | security | medium | covered |
 | auth/safe-sessions.feature | A tampered last-activity cookie is never accepted to extend a session | auth | administrator | forged-activity-cookie | adverse | security | high | covered |

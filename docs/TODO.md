@@ -103,3 +103,37 @@ finished in this ticket's code.
       cookie, the `Clear-Site-Data` header, and the `/session-expired` redirect behave once the app sits
       behind Cloudflare → Vercel with the `/admin/*` never-cache rule (docs/cloudflare-spike.md). **Needs:**
       the Cloudflare + Vercel deploy (Q-1-21).
+
+## From TP1-06 (branch `feat/tp1-06-role-based-access`)
+
+The role-based-access code shipped, but these are **acceptance / verification / scope items** that cannot be
+finished in this ticket's code.
+
+- [ ] **Make E2E-08 pass and promote it off the gate.** The full-stack spec
+      (`e2e/role-based-access.full-stack.spec.ts`) is written but skipped — gated on `E2E_FULL_STACK`. Stand
+      up the harness (Supabase stack with the access-token hook enabled + the 7-person seed + Turnstile TEST
+      keys), sign in as a plain Administrator, and confirm `/admins` shows the forbidden screen and
+      `/admin/api/admins` returns 403. This is the ticket's acceptance criterion ("E2E-08 passes"). **Needs:**
+      the full-stack harness.
+
+- [ ] **Live-verify the authenticated shell (visual + keyboard).** The app shell, side navigation, forbidden
+      and not-found screens were built from the exact Figma design context but cannot render without a
+      session, so they have not been seen running. Once the stack is up, check the shell against the designs
+      and run a keyboard + screen-reader pass (part of the P1-16 a11y audit). **Needs:** the full-stack stack.
+
+- [ ] **Surface the profile `display_name` in the shell.** The side nav and top bar currently show the
+      administrator's email as the display name; the real name lives in `profiles.display_name`. Read it
+      (own-row RLS allows it) and pass it to the shell. **Needs:** a small session/profile read; no infra.
+
+- [ ] **Wire the "Request access" action on the forbidden screen.** It currently links to Settings as a
+      placeholder. Decide and build the real request-access flow (e.g. notify an Administrator manager).
+      **Needs:** its own small ticket.
+
+- [ ] **Finish the RequireTerms guard when the terms screen lands.** The guard slot is inert (option A); the
+      restrictive RLS enforces terms at the data layer meanwhile. When the terms-acceptance screen + API are
+      built, wire RequireTerms to redirect an un-accepted session there and surface acceptance to the client.
+      **Needs:** the terms/onboarding ticket.
+
+- [ ] **Handle the `invited` (onboarding) and `deactivated` states properly.** TP1-06 redirects a deactivated
+      session to sign-in and lets an invited one through; the real onboarding/invite flow and a deactivated
+      screen are their own ticket. **Needs:** the invite/onboarding ticket.
