@@ -6,6 +6,8 @@
 export default async function globalSetup(): Promise<void> {
   const base = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000";
   const routes = [
+    "/admin/gallery",
+    "/admin/gallery/shell",
     "/admin/forgot-password",
     "/admin/reset-password",
     "/admin/auth/confirm",

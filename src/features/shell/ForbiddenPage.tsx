@@ -9,7 +9,7 @@
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/features/auth/useAuth";
 import { roleLabel } from "@/lib/roles";
-import { ErrorState } from "./ErrorState";
+import { ErrorScreen } from "./ErrorScreen";
 import forbiddenIcon from "./assets/forbidden.svg";
 
 export function ForbiddenPage() {
@@ -18,7 +18,7 @@ export function ForbiddenPage() {
   const from = params.get("from");
 
   return (
-    <ErrorState
+    <ErrorScreen
       icon={forbiddenIcon}
       title="You don't have access to this page"
       body={`This section is limited to Administrator managers. Your ${roleLabel(user?.role ?? null)} account doesn't include permission to open it.`}

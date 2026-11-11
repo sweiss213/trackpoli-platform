@@ -61,3 +61,10 @@ Generated from the feature files by `bdd-index-generate.mjs` - do not edit by ha
 | design-system/migration.feature | The sign-in screen uses design-system components with behaviour parity | design-system | end-user | signin-migrated | happy | functional | high | covered |
 | design-system/migration.feature | The two-factor card and device-replacement modal use design-system components with behaviour parity | design-system | end-user | settings-2fa-migrated | happy | functional | high | covered |
 | design-system/migration.feature | The two-factor enrolment wizard uses design-system components with behaviour parity | design-system | end-user | mfa-enrol-migrated | happy | functional | high | covered |
+| shell/admin-shell.feature | A keyboard user can skip the navigation and reach the main content | shell | assistive-tech | E2E-13 | happy | accessibility | high | covered |
+| shell/admin-shell.feature | An automated accessibility scan finds no serious or critical violations | shell | assistive-tech | E2E-14 | happy | accessibility | high | covered |
+| shell/admin-shell.feature | The manager navigation entry is hidden for an Administrator | shell | administrator | manager-nav-hidden-shell | permission | accessibility | medium | covered |
+| shell/admin-shell.feature | The navigation drawer traps focus and returns it on close | shell | assistive-tech | E2E-13 | happy | accessibility | high | covered |
+| shell/admin-shell.feature | The navigation is a rail on desktop and a drawer on small screens | shell | end-user | responsive-nav | happy | functional | medium | covered |
+| shell/admin-shell.feature | The password field keeps paste and the correct autocomplete, never exposing the value | shell | end-user | password-field-paste | happy | security | medium | covered |
+| shell/admin-shell.feature | The shell renders at the 320px minimum width without horizontal scrolling | shell | end-user | responsive-min-width | boundary | functional | medium | covered |

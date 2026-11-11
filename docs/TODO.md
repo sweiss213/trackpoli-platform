@@ -137,3 +137,28 @@ finished in this ticket's code.
 - [ ] **Handle the `invited` (onboarding) and `deactivated` states properly.** TP1-06 redirects a deactivated
       session to sign-in and lets an invited one through; the real onboarding/invite flow and a deactivated
       screen are their own ticket. **Needs:** the invite/onboarding ticket.
+
+## From TP1-07 (branch `feat/tp1-07-admin-workspace-shell`)
+
+The shell + shared component library shipped and is verified headlessly (E2E-13 keyboard, E2E-14 axe with
+0 serious/critical, Lighthouse LCP 912ms). These are **verification / CI-wiring items** that cannot be
+finished in this ticket's code.
+
+- [ ] **Wire the NFR-P1 Lighthouse check into CI.** `scripts/check-lighthouse.mjs` + `lighthouse.config.json`
+      exist and pass locally (LCP 912ms, TBT 16ms, perf 0.98 against the shell demo, budget LCP <= 2500ms),
+      but like the axe scaffold it needs a running app + Chrome, so it is not in the dependency-free CI yet.
+      Add a CI job that builds + starts with `NEXT_PUBLIC_ENABLE_GALLERY=1` and runs `npm run check:lighthouse`.
+      **Needs:** a browser-capable CI job. Re-point it at real admin screens as they land.
+
+- [ ] **Live-verify the authenticated shell (real session).** E2E-13/E2E-14 run against the credential-free
+      gallery + shell demo (mock `AuthProvider`); the real `(app)` shell behind a session has not been seen
+      running. Once the full-stack harness is up, run the keyboard + axe passes against the authenticated
+      shell and check it against the Figma frames. **Needs:** the full-stack stack (shared with TP1-06).
+
+- [ ] **Human keyboard + screen-reader a11y audit (NFR-A1).** The conformance record's pass-manual verdicts are
+      agent static reviews plus the automated axe scan; the full human assistive-tech audit of the rendered
+      shell is scheduled for P1-16. **Needs:** the P1-16 audit.
+
+- [x] **Add dedicated keyboard-event unit tests for the remaining interactive primitives.** Done:
+      `otp-field.test.tsx` and `NavItem.test.tsx` now assert each is a native, focusable control kept in the
+      tab order (reachable and operable by keyboard), for parity with the dialog/form/snackbar tests.

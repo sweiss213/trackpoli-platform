@@ -4,14 +4,14 @@
 // not exist; the code chip shows the attempted path (the current URL). Presentation only.
 
 import { usePathname } from "next/navigation";
-import { ErrorState } from "./ErrorState";
+import { ErrorScreen } from "./ErrorScreen";
 import notFoundIcon from "./assets/not-found.svg";
 
 export function NotFoundPage() {
   const pathname = usePathname() ?? "";
 
   return (
-    <ErrorState
+    <ErrorScreen
       icon={notFoundIcon}
       title="We couldn't find that page"
       body="The page or record you're looking for doesn't exist. It may have been moved, or deleted and sent to Recently deleted."

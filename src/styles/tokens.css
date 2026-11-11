@@ -57,6 +57,12 @@
   --md-label-large-weight: 500;
   --md-label-large-tracking: 0.1px;
 
+  /* M3 label-small — used by StatusTag and other compact chips (TP1-07). */
+  --md-label-small-size: 11px;
+  --md-label-small-line: 16px;
+  --md-label-small-weight: 500;
+  --md-label-small-tracking: 0.5px;
+
   /* --- shadcn/ui theme variables (ADR-0011) ---
      shadcn components read semantic roles (--background, --foreground, --primary, --border, --ring,
      ...). We map each onto the MD3 grayscale role above with var(), so there is still exactly ONE home

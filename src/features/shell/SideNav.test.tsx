@@ -15,6 +15,10 @@ const mockUseAuth = vi.mocked(useAuth);
 // were raw <button>s; they are now the shadcn Button. They must stay native <button>s with the same
 // accessible names and aria state, and the nav <Link>s must stay basePath-relative (ADR-0014 - Next adds
 // the /admin basePath, so a literal /admin would double-prefix).
+//
+// TP1-07: the rail collapse is CONTROLLED by AppShell — SideNav renders the collapse button only when an
+// onToggleCollapsed handler is passed, its label/aria-pressed reflect the `collapsed` prop, and a click
+// calls the handler (the parent owns the state). The section open/close is SideNav's own local state.
 describe("SideNav - shell shadcn migration parity", () => {
   beforeEach(() => {
     mockUseAuth.mockReturnValue({
@@ -24,7 +28,7 @@ describe("SideNav - shell shadcn migration parity", () => {
   });
 
   it("keeps the collapse, section and log-out controls as native <button>s with their names and aria state", () => {
-    render(<SideNav displayName="Ada Admin" />);
+    render(<SideNav displayName="Ada Admin" onToggleCollapsed={() => {}} />);
     const collapse = screen.getByRole("button", { name: "Collapse navigation" });
     expect(collapse.tagName).toBe("BUTTON");
     expect(collapse).toHaveAttribute("aria-pressed", "false");
@@ -37,12 +41,23 @@ describe("SideNav - shell shadcn migration parity", () => {
     expect(logout.tagName).toBe("BUTTON");
   });
 
-  it("toggles the collapse (aria-pressed) and a section (aria-expanded)", () => {
-    render(<SideNav displayName="Ada Admin" />);
+  it("calls onToggleCollapsed when the controlled collapse button is clicked", () => {
+    const onToggleCollapsed = vi.fn();
+    render(<SideNav displayName="Ada Admin" onToggleCollapsed={onToggleCollapsed} />);
     fireEvent.click(screen.getByRole("button", { name: "Collapse navigation" }));
-    expect(screen.getByRole("button", { name: "Expand navigation" })).toHaveAttribute("aria-pressed", "true");
+    expect(onToggleCollapsed).toHaveBeenCalledTimes(1);
+  });
 
+  it("reflects the collapsed prop on the rail button (label + aria-pressed)", () => {
+    render(<SideNav displayName="Ada Admin" collapsed onToggleCollapsed={() => {}} />);
+    const collapse = screen.getByRole("button", { name: "Expand navigation" });
+    expect(collapse).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("toggles a section's local open state (aria-expanded)", () => {
+    render(<SideNav displayName="Ada Admin" onToggleCollapsed={() => {}} />);
     const records = screen.getByRole("button", { name: "Records" });
+    expect(records).toHaveAttribute("aria-expanded", "true");
     fireEvent.click(records);
     expect(records).toHaveAttribute("aria-expanded", "false");
   });
