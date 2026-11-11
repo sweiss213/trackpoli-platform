@@ -102,6 +102,31 @@ import { Button } from '@/components/ui/button'
 This extends the standing "no colour literal outside the token file" rule to raw controls and CSS Modules
 too. The exception is `src/components/ui/`, where the primitives are defined. See `src/components/AGENTS.md`.
 
+## Routing - basePath-relative in Next-aware nav, `/admin` only in raw APIs
+The app is served under `basePath: "/admin"` (next.config.ts). Next prepends that basePath AUTOMATICALLY
+to its own nav APIs, so a literal `/admin` there double-prefixes to `/admin/admin/...` (a 404 - this took
+production down once). Classify by the API, not by a blanket rule (ADR-0014). Enforced by the arch-gate
+rule "No literal /admin in Next-aware navigation".
+```
+// never - a literal /admin in a Next-aware nav API (Next adds the basePath -> /admin/admin -> 404)
+<Link href="/admin/settings">…</Link>
+router.replace('/admin/sign-in')
+redirect('/admin/sign-in')               // next/navigation, server AND client both add basePath
+// always - basePath-relative; Next prepends /admin
+<Link href="/settings">…</Link>
+router.replace('/sign-in')
+redirect('/sign-in')
+// keep /admin ONLY in RAW APIs (no basePath added): raw browser nav, plain <a>, fetch, request-based URLs
+window.location.assign('/admin/sign-in')
+<a href="/admin/sign-in">…</a>
+apiFetch('/admin/api/sign-in')
+NextResponse.redirect(new URL('/admin/sign-in', request.url))   // middleware / route handlers
+```
+Limit (honest): the gate is line-based, so a path built from a variable (`const to = '/admin/x'; router.replace(to)`)
+or an `href` on a different line is NOT caught by the gate - those are caught by the unit tests, `judge-arch`,
+and a preview click-through. Path NORMALISATION that strips the live pathname (`pathname.startsWith('/admin')`,
+`.slice('/admin'.length)`) correctly keeps `/admin`: it reads the real runtime path, which includes basePath.
+
 ---
 
 ## Decision log (ADRs)

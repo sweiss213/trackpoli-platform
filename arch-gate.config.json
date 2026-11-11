@@ -69,6 +69,17 @@
       "exclude": ["supabase/functions/_shared/**"],
       "forbid": ["Access-Control-Allow-Origin", "new Response\\(\\s*JSON\\.stringify"],
       "message": "Inline CORS/response shaping duplicated per function drifts (a missing preflight header silently fails requests). Use the shared cors/json helpers in supabase/functions/_shared."
+    },
+    {
+      "name": "No literal /admin in Next-aware navigation (basePath is added automatically)",
+      "include": ["src/**/*.{ts,tsx}"],
+      "exclude": ["**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}", "**/AGENTS.md"],
+      "forbid": [
+        "<Link[^>]*href=\\{?[`\"']/admin",
+        "\\.(push|replace)\\(\\s*[`\"']/admin",
+        "(?<![.\\w])redirect\\(\\s*[`\"']/admin"
+      ],
+      "message": "A literal /admin in a Next-aware nav API (<Link href>, useRouter().push/replace, next/navigation redirect()) double-prefixes: Next adds the basePath automatically, producing /admin/admin/... (404, ADR-0014). Use a basePath-relative path. Keep /admin ONLY in raw APIs (window.location, plain <a href>, apiFetch, new URL(..., request.url) in middleware/route handlers, cookie path, absolute OAuth redirectTo)."
     }
   ]
 }

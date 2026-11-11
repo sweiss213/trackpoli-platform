@@ -223,7 +223,8 @@
   },
   "3.2.3": {
     "status": "not-applicable",
-    "note": "Consistent navigation applies across a set of pages; the shell navigation arrives in P1-12."
+    "note": "Consistent navigation applies across a set of pages; the shell navigation arrives in P1-12. basePath fix (ADR-0014): the side-nav links and the forbidden/not-found and guard redirect destinations were corrected to resolve to a single /admin prefix (they 404-doubled before); navigation targets are consistent and reach the intended page. No link text, semantics, focus or ARIA changed.",
+    "date": "2026-11-10"
   },
   "3.2.4": {
     "status": "not-applicable",

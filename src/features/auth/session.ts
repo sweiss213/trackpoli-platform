@@ -26,6 +26,6 @@ export async function getSessionUser(): Promise<AuthUser | null> {
 
 export async function requireUser(): Promise<AuthUser> {
   const user = await getSessionUser();
-  if (!user) redirect("/admin/sign-in");
+  if (!user) redirect("/sign-in");
   return user;
 }

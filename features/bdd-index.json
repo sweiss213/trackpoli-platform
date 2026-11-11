@@ -89,6 +89,17 @@
   },
   {
     "feature": "auth/role-based-access.feature",
+    "scenario": "A guard redirect for a visitor without a session resolves to a single-basePath sign-in URL",
+    "domain": "auth",
+    "audience": "anonymous",
+    "usecase": "guard-redirect-basepath",
+    "category": "permission",
+    "quality": "functional",
+    "severity": "critical",
+    "status": "covered"
+  },
+  {
+    "feature": "auth/role-based-access.feature",
     "scenario": "A missing route shows the not-found screen inside the shell",
     "domain": "auth",
     "audience": "administrator",
