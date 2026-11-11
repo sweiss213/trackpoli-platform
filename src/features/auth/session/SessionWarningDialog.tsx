@@ -11,7 +11,7 @@
 // (aria-hidden) so a screen reader is not spammed every second; the static note sentence carries the meaning.
 
 import { useEffect, useRef } from "react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/LegacyButton";
 import { SESSION_MESSAGES as M } from "@/features/auth/messages";
 import styles from "./SessionWarningDialog.module.css";
 

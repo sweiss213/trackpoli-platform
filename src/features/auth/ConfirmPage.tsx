@@ -8,7 +8,7 @@
 // unexpected failure shows the error state. Presentation + wiring only.
 
 import { useState } from "react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/LegacyButton";
 import { Icon } from "@/components/ui/Icon";
 import { apiFetch } from "@/lib/apiFetch";
 import card from "./authCard.module.css";

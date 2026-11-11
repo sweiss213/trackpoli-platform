@@ -7,11 +7,12 @@
 // credential was wrong or whether the email exists. Presentation + wiring only — all the decision logic
 // lives server-side.
 
-import { useCallback, useState, type FormEvent } from "react";
-import { Banner } from "@/components/ui/Banner";
-import { Button } from "@/components/ui/Button";
+import { useCallback, useId, useState, type FormEvent } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/Icon";
-import { TextField } from "@/components/ui/TextField";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/apiFetch";
 import { AccountLockedCard } from "./AccountLockedCard";
 import { TurnstileSlot } from "./TurnstileSlot";
@@ -33,6 +34,9 @@ type SignInResponse =
 const NEEDS_TURNSTILE = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
 
 export function SignInPage() {
+  const emailId = useId();
+  const passwordId = useId();
+  const passwordHelperId = useId();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -128,42 +132,62 @@ export function SignInPage() {
         </div>
 
         {notice ? (
-          <Banner icon={<Icon src={warningIcon} size={22} />}>{notice}</Banner>
+          <Alert>
+            <Icon src={warningIcon} size={22} />
+            <AlertDescription>{notice}</AlertDescription>
+          </Alert>
         ) : null}
 
         <div className={styles.fields}>
-          <TextField
-            label="Email"
-            type="email"
-            name="email"
-            autoComplete="username"
-            inputMode="email"
-            required
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <TextField
-            label="Password"
-            type={showPassword ? "text" : "password"}
-            name="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            error={fieldError}
-            helperText={passwordHelper}
-            trailing={
-              <button
+          <div className="flex w-full flex-col gap-1.5">
+            <Label htmlFor={emailId}>Email</Label>
+            <Input
+              id={emailId}
+              type="email"
+              name="email"
+              autoComplete="username"
+              inputMode="email"
+              required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </div>
+          <div className="flex w-full flex-col gap-1.5">
+            <Label htmlFor={passwordId}>Password</Label>
+            <div className="relative">
+              <Input
+                id={passwordId}
+                type={showPassword ? "text" : "password"}
+                name="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                aria-invalid={fieldError || undefined}
+                aria-describedby={passwordHelper ? passwordHelperId : undefined}
+                className="pr-14"
+              />
+              <Button
                 type="button"
-                className={styles.toggle}
+                variant="ghost"
+                size="icon"
+                className="absolute top-1/2 right-1 -translate-y-1/2"
                 aria-label={showPassword ? "Hide password" : "Show password"}
                 aria-pressed={showPassword}
                 onClick={() => setShowPassword((value) => !value)}
               >
                 <Icon src={visibilityIcon} size={22} />
-              </button>
-            }
-          />
+              </Button>
+            </div>
+            {passwordHelper ? (
+              <p
+                id={passwordHelperId}
+                className="m-0 text-[length:var(--md-body-small-size)] leading-[var(--md-body-small-line)] tracking-[var(--md-body-small-tracking)] text-muted-foreground"
+              >
+                {passwordHelper}
+              </p>
+            ) : null}
+          </div>
         </div>
 
         <div className={styles.forgotRow}>
@@ -179,19 +203,20 @@ export function SignInPage() {
         </div>
 
         <Button
-          variant="outlined"
-          leading={<Icon src={googleIcon} size={20} />}
+          variant="outline"
+          className="w-full"
           onClick={() => {
             // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- navigates to a redirect route handler (not a Next page); must be a full browser navigation
             window.location.assign("/admin/auth/google");
           }}
         >
+          <Icon src={googleIcon} size={20} />
           Continue with Google
         </Button>
 
         <TurnstileSlot onToken={handleToken} resetKey={turnstileResetKey} />
 
-        <Button variant="filled" type="submit" disabled={!canSubmit}>
+        <Button variant="secondary" className="w-full" type="submit" disabled={!canSubmit}>
           Sign in
         </Button>
 
