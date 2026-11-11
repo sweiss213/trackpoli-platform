@@ -42,6 +42,17 @@ const REQUIRED_INCLUDE = [
 const REQUIRED_DASH_FORBID = ["\\u2014", "\\u2013", "\\u2012", "\\u2015", "\\u2212"]; // em, en, figure, horizontal-bar, minus
 const REQUIRED_WEB_FORBID = ["\\bfetch\\s*\\(", "\\baxios\\b", "new\\s+Response\\b", "require\\(['\"]https?:?['\"]\\)"];
 
+// The literal-/admin nav rule (ADR-0014, hardened in ADR-0018). Every forbid pattern below MUST stay in
+// the live config: dropping the object-literal `href:` pattern reopens the exact gap that shipped a
+// double-prefixed breadcrumb through the gate (TP1-07 finding F1), and dropping the `(?!\w)` boundary
+// would start false-flagging legitimate routes like /admins. Guard both so a weakening turns this red.
+const REQUIRED_NAV_FORBID = [
+  "<Link[^>]*href=\\{?[`\"']/admin(?!\\w)",
+  "href:\\s*[`\"']/admin(?!\\w)",
+  "\\.(push|replace)\\(\\s*[`\"']/admin(?!\\w)",
+  "(?<![.\\w])redirect\\(\\s*[`\"']/admin(?!\\w)",
+];
+
 function runGate(cwd) {
   const res = spawnSync(process.execPath, [GATE], { cwd, encoding: "utf8", timeout: 60000 });
   return { status: res.status, out: (res.stdout || "") + (res.stderr || "") };
@@ -130,4 +141,36 @@ test("wired: the committed no-web rule catches a planted outbound call (discrimi
   assert.equal(runGate(dirty).status, 1, "a planted fetch() in a scripts file must fail the live gate");
   const clean = withCommittedConfig("svc/scripts/probe.mjs", "const r = compute();\n");
   assert.equal(runGate(clean).status, 0, "the same file without an outbound call must pass");
+});
+
+test("wired: the literal-/admin nav rule keeps all four forbids incl. the object-literal href (ADR-0018)", () => {
+  const nav = rule("No literal /admin in Next-aware navigation (basePath is added automatically)");
+  assert.ok(nav, "the literal-/admin nav rule was removed from the live config");
+  // Dropping any one of these to get CI green is the exact regression this catches - in particular the
+  // object-literal `href:` pattern, whose absence let a double-prefixed breadcrumb slip through (F1).
+  for (const f of REQUIRED_NAV_FORBID) {
+    assert.ok((nav.forbid || []).includes(f), `the literal-/admin rule no longer forbids ${f} (weakening must be caught)`);
+  }
+});
+
+test("wired: the nav rule catches a planted /admin in a nav-data object literal (ADR-0018, discriminating)", () => {
+  // The F1 form: /admin carried in a breadcrumb/nav-data object, later handed to a Next <Link>. The
+  // inline-only pattern missed this; the object-literal `href:` pattern must flag it.
+  const dirty = withCommittedConfig("src/features/shell/probe.tsx",
+    'export const crumbs = [{ label: "Admins", href: "/admin/admins" }];\n');
+  assert.equal(runGate(dirty).status, 1, "a planted object-literal href:'/admin/...' must fail the live gate");
+});
+
+test("wired: the nav rule catches a planted template-literal /admin on a <Link> (the original NavItem bug)", () => {
+  const dirty = withCommittedConfig("src/features/shell/probe.tsx",
+    "export const n = <Link href={`/admin${p}`}>x</Link>;\n");
+  assert.equal(runGate(dirty).status, 1, "a planted <Link href={`/admin${...}`}> must fail the live gate");
+});
+
+test("wired: the nav rule does NOT false-flag a legitimate /admins route (the (?!\\w) boundary holds)", () => {
+  // /admins is a real app-relative route (Next adds the basePath -> /admin/admins); the boundary must let
+  // it pass. A clean twin of the F1 case proves the rule keys on the /admin path segment, not substring.
+  const clean = withCommittedConfig("src/features/shell/probe.tsx",
+    'export const crumbs = [{ label: "Admins", href: "/admins" }];\n');
+  assert.equal(runGate(clean).status, 0, "a legitimate href:'/admins' must pass (no /admin/admin false-positive)");
 });

@@ -106,22 +106,30 @@ too. The exception is `src/components/ui/`, where the primitives are defined. Se
 The app is served under `basePath: "/admin"` (next.config.ts). Next prepends that basePath AUTOMATICALLY
 to its own nav APIs, so a literal `/admin` there double-prefixes to `/admin/admin/...` (a 404 - this took
 production down once). Classify by the API, not by a blanket rule (ADR-0014). Enforced by the arch-gate
-rule "No literal /admin in Next-aware navigation".
+rule "No literal /admin in Next-aware navigation" - hardened in ADR-0018 to ALSO catch `/admin` carried in
+a nav-data object literal (`href: "/admin/..."` in a breadcrumb crumb or nav item) that is later handed to
+a Next `<Link>`, which is how a double-prefixed breadcrumb slipped the gate once (TP1-07 finding F1).
 ```
 // never - a literal /admin in a Next-aware nav API (Next adds the basePath -> /admin/admin -> 404)
 <Link href="/admin/settings">…</Link>
 router.replace('/admin/sign-in')
 redirect('/admin/sign-in')               // next/navigation, server AND client both add basePath
+const crumbs = [{ label: 'Admins', href: '/admin/admins' }]   // nav data handed to <Link> later (ADR-0018)
 // always - basePath-relative; Next prepends /admin
 <Link href="/settings">…</Link>
 router.replace('/sign-in')
 redirect('/sign-in')
+const crumbs = [{ label: 'Admins', href: '/admins' }]         // a real route; /admins is NOT a violation
 // keep /admin ONLY in RAW APIs (no basePath added): raw browser nav, plain <a>, fetch, request-based URLs
 window.location.assign('/admin/sign-in')
 <a href="/admin/sign-in">…</a>
 apiFetch('/admin/api/sign-in')
 NextResponse.redirect(new URL('/admin/sign-in', request.url))   // middleware / route handlers
 ```
+The rule keys on `/admin` as a whole path segment (a `(?!\w)` boundary), so a route like `/admins` is
+correctly allowed - Next serves it at `/admin/admins`. Proven live: `navItems.ts` ships `href: "/admins"`
+and `npm run check:architecture` is green; `check:discriminate` plants `nav/crumbs.tsx` to prove the gate
+flags the object-literal form.
 Limit (honest): the gate is line-based, so a path built from a variable (`const to = '/admin/x'; router.replace(to)`)
 or an `href` on a different line is NOT caught by the gate - those are caught by the unit tests, `judge-arch`,
 and a preview click-through. Path NORMALISATION that strips the live pathname (`pathname.startsWith('/admin')`,

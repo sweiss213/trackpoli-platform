@@ -75,11 +75,12 @@
       "include": ["src/**/*.{ts,tsx}"],
       "exclude": ["**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}", "**/AGENTS.md"],
       "forbid": [
-        "<Link[^>]*href=\\{?[`\"']/admin",
-        "\\.(push|replace)\\(\\s*[`\"']/admin",
-        "(?<![.\\w])redirect\\(\\s*[`\"']/admin"
+        "<Link[^>]*href=\\{?[`\"']/admin(?!\\w)",
+        "href:\\s*[`\"']/admin(?!\\w)",
+        "\\.(push|replace)\\(\\s*[`\"']/admin(?!\\w)",
+        "(?<![.\\w])redirect\\(\\s*[`\"']/admin(?!\\w)"
       ],
-      "message": "A literal /admin in a Next-aware nav API (<Link href>, useRouter().push/replace, next/navigation redirect()) double-prefixes: Next adds the basePath automatically, producing /admin/admin/... (404, ADR-0014). Use a basePath-relative path. Keep /admin ONLY in raw APIs (window.location, plain <a href>, apiFetch, new URL(..., request.url) in middleware/route handlers, cookie path, absolute OAuth redirectTo)."
+      "message": "A literal /admin in a Next-aware nav API double-prefixes: Next adds the basePath automatically, producing /admin/admin/... (404, ADR-0014). This covers /admin written inline on a <Link href>/push/replace/redirect() AND /admin carried in a nav-data object literal (href: \"/admin/...\" in breadcrumb crumbs or nav items) that is later handed to a Next <Link> (ADR-0018). Use a basePath-relative path (e.g. href: \"/admins\", which the (?!\\w) boundary deliberately allows - only /admin as a whole path segment is a violation). Keep /admin ONLY in raw APIs (window.location, plain <a href>, apiFetch, new URL(..., request.url) in middleware/route handlers, cookie path, absolute OAuth redirectTo)."
     }
   ]
 }

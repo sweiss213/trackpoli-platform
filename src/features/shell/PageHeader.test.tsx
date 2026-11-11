@@ -15,6 +15,21 @@ describe("PageHeader", () => {
     expect(screen.getByRole("button", { name: "New record" })).toBeInTheDocument();
   });
 
+  it("passes a crumb href straight to the link as a basePath-relative path (ADR-0018)", () => {
+    // Crumb hrefs are app-relative; Next adds the /admin basePath. A caller must never put a literal
+    // /admin in a crumb (it would double-prefix to /admin/admin/... 404) - the arch-gate rule forbids it.
+    // PageHeader must pass the href through verbatim so a basePath-relative value stays basePath-relative.
+    render(
+      <PageHeader
+        title="Politicians"
+        breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Politicians" }]}
+      />,
+    );
+    const crumb = screen.getByRole("link", { name: "Dashboard" });
+    expect(crumb).toHaveAttribute("href", "/");
+    expect(crumb.getAttribute("href") ?? "").not.toContain("/admin/admin");
+  });
+
   it("renders a breadcrumb nav with links and a current page", () => {
     render(
       <PageHeader

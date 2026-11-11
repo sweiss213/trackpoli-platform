@@ -89,7 +89,7 @@ function Interactive() {
       <Section title="Page header">
         <PageHeader
           title="Politicians"
-          breadcrumbs={[{ label: "Records", href: "/admin" }, { label: "Politicians" }]}
+          breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Politicians" }]}
           actions={<Button variant="secondary">New record</Button>}
         />
       </Section>
