@@ -13,9 +13,10 @@
 
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import type { User } from "@supabase/supabase-js";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
 import type { Database } from "@/lib/database.types";
 import { report } from "@/lib/report";
+import { normaliseRole, normaliseStatus, type AdminRole, type AdminStatus } from "@/lib/roles";
 import { supabaseAnonKey, supabaseUrl } from "./config";
 
 const COOKIE_OPTIONS = { path: "/admin" } as const;
@@ -66,13 +67,43 @@ export interface AssuranceLevel {
 }
 
 /**
+ * Read the administrator's role/status from the verified access-token claims (app_role/app_status, migration
+ * 006). Routing/rendering only — RLS is the authorization boundary (ADR-0005/0009). Best-effort: returns
+ * nulls if the claims cannot be read, so a reading gap degrades to "no role opinion", never a hard failure.
+ */
+export async function readAdminClaims(
+  supabase: SupabaseClient<Database>,
+): Promise<{ role: AdminRole | null; status: AdminStatus | null }> {
+  try {
+    const { data } = await supabase.auth.getClaims();
+    const claims = data?.claims as Record<string, unknown> | undefined;
+    if (!claims) return { role: null, status: null };
+    return { role: normaliseRole(claims.app_role), status: normaliseStatus(claims.app_status) };
+  } catch (error) {
+    // The token should always carry the role claim, so a read failure is an anomaly that fail-CLOSES a real
+    // manager out of manager routes — report at warning (Sentry), not debug, so a regression is visible
+    // (judge-arch TP1-06 LOW). Routing still degrades gracefully to "no role opinion"; RLS protects the data.
+    report("warning", "admin claims could not be read (role routing degraded)", {
+      reason: error instanceof Error ? error.message : String(error),
+    });
+    return { role: null, status: null };
+  }
+}
+
+/**
  * Refresh the session for a middleware pass and return the current user alongside the response that
  * carries any refreshed cookies. The caller (src/middleware.ts) owns the routing/guard decision; this
  * function owns only the session read, the assurance-level read, and the cookie plumbing.
  */
 export async function updateSession(
   request: NextRequest,
-): Promise<{ response: NextResponse; user: User | null; aal: AssuranceLevel | null }> {
+): Promise<{
+  response: NextResponse;
+  user: User | null;
+  aal: AssuranceLevel | null;
+  role: AdminRole | null;
+  status: AdminStatus | null;
+}> {
   let response = NextResponse.next({ request });
   const supabase = createServerClient<Database>(supabaseUrl(), supabaseAnonKey(), {
     cookieOptions: COOKIE_OPTIONS,
@@ -108,6 +139,8 @@ export async function updateSession(
   // read, return null and let the route gate skip the MFA redirect — RLS still denies every aal1 request, so
   // a missing reading is a cosmetic routing gap, never a data exposure.
   let aal: AssuranceLevel | null = null;
+  let role: AdminRole | null = null;
+  let status: AdminStatus | null = null;
   if (user) {
     try {
       const { data } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
@@ -117,8 +150,10 @@ export async function updateSession(
         reason: error instanceof Error ? error.message : String(error),
       });
     }
+    // Role/status for route gating (ADR-0012). Best-effort; RLS still protects the data regardless.
+    ({ role, status } = await readAdminClaims(supabase));
   }
-  return { response, user, aal };
+  return { response, user, aal, role, status };
 }
 
 /**

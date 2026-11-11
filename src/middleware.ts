@@ -16,6 +16,7 @@ import { hasSupabaseEnv, internalCallSecret } from "@/lib/supabase/config";
 import { updateSession } from "@/lib/supabase/server";
 import { decideMfaGate, normalisePath } from "@/features/auth/requireMfa";
 import { decideSessionGate } from "@/features/auth/session/sessionGate";
+import { decideRoleGate } from "@/features/auth/guards/routeGate";
 import { ACTIVITY_COOKIE, evaluateActivity, readActivity } from "@/lib/sessionActivity";
 import { sessionLimits } from "@/lib/config";
 import { report } from "@/lib/report";
@@ -36,7 +37,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const { response, user, aal } = await updateSession(request);
+  const { response, user, aal, role } = await updateSession(request);
   const path = normalisePath(request.nextUrl.pathname);
 
   // Stage 1: session-timeout enforcement (TP1-05). Best-effort: if the cookie or secret cannot be read, the
@@ -88,8 +89,18 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/admin/mfa/enrol", request.url));
     case "verify":
       return NextResponse.redirect(new URL("/admin/sign-in/verify", request.url));
-    default:
+    default: {
+      // Stage 4: role gate (TP1-06). An administrator who reaches a manager-only route is redirected to the
+      // forbidden screen, keeping the attempted path for its breadcrumb + copy. UX routing only — the manager
+      // API returns 403 and RLS returns no rows to a non-manager regardless (ADR-0012).
+      const roleDecision = decideRoleGate({ path, authenticated: Boolean(user), role });
+      if (roleDecision.action === "forbidden") {
+        const forbiddenUrl = new URL("/admin/forbidden", request.url);
+        forbiddenUrl.searchParams.set("from", request.nextUrl.pathname);
+        return NextResponse.redirect(forbiddenUrl);
+      }
       return response;
+    }
   }
 }
 
