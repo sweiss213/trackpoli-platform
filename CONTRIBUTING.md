@@ -41,6 +41,73 @@ Defined as code in `.github/rulesets/main-protection.json` and applied with
 - `arch-review` — the `judge-arch` review for the change is recorded in
   `docs/arch-reviews/log.jsonl` and covers the changed code files.
 
+## Design system (shadcn/ui)
+
+TrackPoli's UI is built from the [shadcn/ui](https://ui.shadcn.com/) component system (Radix + Tailwind),
+adopted in [ADR-0011](docs/adr/0011-adopt-shadcn-ui-radix-tailwind-as-the-component-system.md) (which
+supersedes ADR-0006). The components are **vendored source we own**, not an installed runtime library.
+
+### Getting the design system
+
+Clone this repo — there is nothing separate to clone or install. After `npm ci` you have the design-system
+foundation: Tailwind, the Material Design 3 tokens, `cn()` in `@/lib/utils`, and `components.json`. The
+shadcn primitives live in `src/components/ui/`; they are generated with the CLI as screens are migrated
+(ADR-0011, PRs 3–7), so `src/components/ui/` currently also holds the hand-built components the migration
+is replacing. Add any primitive you need with the CLI below — it lands in the same folder.
+
+### Adding a new primitive
+
+Use the shadcn CLI; the generated source lands in `src/components/ui/` and is committed in your PR and
+code-reviewed like any other source:
+
+```bash
+npx shadcn@latest add dialog
+```
+
+Review the generated file before committing (we own it from then on). Keep it in `src/components/ui/`.
+
+### Conventions
+
+- **Import via the aliases:** `import { Button } from "@/components/ui/button"` and
+  `import { cn } from "@/lib/utils"`. Do not reach into relative paths.
+- **Compose classes with `cn()`** (`@/lib/utils`): it merges `clsx` conditional classes and collapses
+  conflicting Tailwind utilities (last one wins).
+- **Token-first styling.** Use the semantic colour utilities (`bg-background`, `text-foreground`,
+  `border-input`, `ring-ring`, …), which resolve to the Material Design 3 grayscale tokens. **Never write
+  a colour literal (hex / `rgb()` / `hsl()`) outside `src/styles/tokens.css`** — that file is the one home
+  for colour (`decisions.md`). A brand-colour or dark theme is a token-value swap, no component change.
+
+```tsx
+// ❌ never — a raw control + a colour literal in feature code
+<button className={styles.primary} style={{ color: "#b3261e" }}>Save</button>
+// ✅ always — the design-system primitive; colour via a semantic utility
+import { Button } from "@/components/ui/button";
+<Button variant="destructive">Save</Button>
+```
+
+### The enforcement gate
+
+`check:design-system` (`scripts/check-design-system.mjs`) blocks feature code that bypasses the design
+system. In a **changed** file under `src/` and **outside** `src/components/ui/` it fails on:
+
+- a raw interactive element used directly — `<button>`, `<input>`, `<select>`, `<textarea>` — instead of
+  the `@/components/ui/*` equivalent;
+- a newly-added `*.module.css` for a UI control (the CSS-Module path is retired for components);
+- a hex / `rgb()` / `hsl()` colour literal outside `src/styles/tokens.css`.
+
+Raw elements, CSS Modules, and colour literals are allowed **only** inside `src/components/ui/`, where the
+primitives are defined. The gate scans **changed files only**, so the pre-existing hand-built screens are
+not blocked wholesale — they are migrated screen by screen (ADR-0011). Two things to know:
+
+- **Touch a file, fully convert it.** The gate reads the whole content of a file you change, not just your
+  diff. If you edit a screen that still has raw controls, convert all of them (or you will not pass).
+- **Escape hatch:** a transitional change that must touch a not-yet-migrated file can add an **expiring**
+  waiver to `design-system-gate.waivers.json` (fields: `rule`, `path`, `reason`, `approvedBy`, `expires`).
+  Waivers expire by design; the ratchet only tightens.
+
+The rule is also written as a negative code example in
+[`src/components/AGENTS.md`](src/components/AGENTS.md) and [`decisions.md`](decisions.md).
+
 ## Before you open a pull request
 
 1. Run `npm run check:blocking` and the surface gate for any surface you touched; fix what fails.
