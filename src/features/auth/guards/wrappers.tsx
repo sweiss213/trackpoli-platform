@@ -25,7 +25,8 @@ function useClientRedirect(to: string | null): void {
 /** PublicOnly — a signed-in administrator is sent into the app; an anonymous visitor sees the children. */
 export function PublicOnly({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
-  const to = decidePublicOnly({ authenticated: isAuthenticated }) === "to-app" ? "/admin" : null;
+  // basePath-relative: Next (useRouter/router.replace) prepends the "/admin" basePath automatically.
+  const to = decidePublicOnly({ authenticated: isAuthenticated }) === "to-app" ? "/" : null;
   useClientRedirect(to);
   return to ? null : <>{children}</>;
 }
@@ -33,7 +34,7 @@ export function PublicOnly({ children }: { children: ReactNode }) {
 /** RequireSession — renders the children only for a signed-in administrator, else redirects to sign-in. */
 export function RequireSession({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
-  const to = decideRequireSession({ authenticated: isAuthenticated }) === "sign-in" ? "/admin/sign-in" : null;
+  const to = decideRequireSession({ authenticated: isAuthenticated }) === "sign-in" ? "/sign-in" : null;
   useClientRedirect(to);
   return to ? null : <>{children}</>;
 }
@@ -42,7 +43,7 @@ export function RequireSession({ children }: { children: ReactNode }) {
 export function RequireActive({ children }: { children: ReactNode }) {
   const { user, isAuthenticated } = useAuth();
   const action = decideRequireActive({ authenticated: isAuthenticated, status: user?.status ?? null });
-  const to = action === "sign-in" || action === "deactivated" ? "/admin/sign-in" : null;
+  const to = action === "sign-in" || action === "deactivated" ? "/sign-in" : null;
   useClientRedirect(to);
   return to ? null : <>{children}</>;
 }

@@ -16,8 +16,8 @@ export function NotFoundPage() {
       title="We couldn't find that page"
       body="The page or record you're looking for doesn't exist. It may have been moved, or deleted and sent to Recently deleted."
       code={`Error 404 · Not found · ${pathname}`}
-      primary={{ label: "Back to dashboard", href: "/admin" }}
-      secondary={{ label: "Go to Recently deleted", href: "/admin/recently-deleted" }}
+      primary={{ label: "Back to dashboard", href: "/" }}
+      secondary={{ label: "Go to Recently deleted", href: "/recently-deleted" }}
     />
   );
 }

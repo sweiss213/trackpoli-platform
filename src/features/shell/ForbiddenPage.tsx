@@ -23,8 +23,8 @@ export function ForbiddenPage() {
       title="You don't have access to this page"
       body={`This section is limited to Administrator managers. Your ${roleLabel(user?.role ?? null)} account doesn't include permission to open it.`}
       code={`Error 403 · Forbidden · ${from ?? "this page"}`}
-      primary={{ label: "Back to dashboard", href: "/admin" }}
-      secondary={{ label: "Request access", href: "/admin/settings" }}
+      primary={{ label: "Back to dashboard", href: "/" }}
+      secondary={{ label: "Request access", href: "/settings" }}
     />
   );
 }
