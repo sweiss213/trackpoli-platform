@@ -4,7 +4,7 @@
 // comes back with outcome "locked". It states the pause generically (no account detail), tells the user
 // when they can try again (derived from lockedUntil), and offers a way back to the form. Pure presentation.
 
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/Icon";
 import { formatTimeUntil } from "@/lib/relativeTime";
 import card from "./authCard.module.css";
@@ -44,7 +44,7 @@ export function AccountLockedCard({ lockedUntil, onBack }: { lockedUntil: string
           <p className={styles.infoText}>You can try signing in again {formatTimeUntil(lockedUntil)}.</p>
         </div>
 
-        <Button variant="filled" onClick={onBack}>
+        <Button variant="secondary" className="w-full" onClick={onBack}>
           Back to sign in
         </Button>
 

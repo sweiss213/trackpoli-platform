@@ -10,7 +10,7 @@
 
 import { useState, type FormEvent } from "react";
 import { Banner } from "@/components/ui/Banner";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/LegacyButton";
 import { Icon } from "@/components/ui/Icon";
 import { TextField } from "@/components/ui/TextField";
 import { apiFetch, ApiError } from "@/lib/apiFetch";

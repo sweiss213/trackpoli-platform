@@ -12,7 +12,7 @@
 
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/LegacyButton";
 import { Icon } from "@/components/ui/Icon";
 import { apiFetch } from "@/lib/apiFetch";
 import { report } from "@/lib/report";

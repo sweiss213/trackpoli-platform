@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
-import styles from "./Button.module.css";
+import styles from "./LegacyButton.module.css";
 
 // Material 3 buttons (ADR-0006), grayscale tokens. "filled" is the primary action (currently the
 // secondary-container role per the design); "outlined" is the neutral/secondary action. Pure presentation.

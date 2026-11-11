@@ -47,5 +47,26 @@
     "reason": "TP1-06 error-state built with a raw <button> before the shadcn/ui button primitive exists (ADR-0012, pre-ADR-0011 migration); migrates to @/components/ui/button with the shell migration PR.",
     "approvedBy": "Giuliana Wladessa Manca",
     "expires": "2027-02-10"
+  },
+  {
+    "rule": "raw-control",
+    "path": "src/features/auth/MfaEnrolPage.tsx",
+    "reason": "Transitional: PR 3/4 only repoint this file's hand-built Button import during the shadcn migration; its pre-existing raw controls are migrated and this waiver removed in PR 5 (MFA enrol). ADR-0011 D5.",
+    "approvedBy": "mdenner",
+    "expires": "2026-12-31"
+  },
+  {
+    "rule": "raw-control",
+    "path": "src/features/auth/session/SessionWarningDialog.tsx",
+    "reason": "Transitional: only the hand-built Button import is repointed; pre-existing raw controls are migrated and this waiver removed in PR 7 (session + home). ADR-0011 D5.",
+    "approvedBy": "mdenner",
+    "expires": "2026-12-31"
+  },
+  {
+    "rule": "raw-control",
+    "path": "src/features/settings/security/TwoFactorCard.tsx",
+    "reason": "Transitional: only the hand-built Button import is repointed; pre-existing raw controls are migrated and this waiver removed in PR 6 (settings/security). ADR-0011 D5.",
+    "approvedBy": "mdenner",
+    "expires": "2026-12-31"
   }
 ]

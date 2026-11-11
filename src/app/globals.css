@@ -1,20 +1,22 @@
 /* The design-token layer (src/styles/tokens.css) holds every colour and the M3 type scale; no colour
    literal lives outside it. The Material 3 component layer (src/components/ui) and screens compose those
-   tokens. Tailwind CSS v4 + shadcn/ui are wired here (ADR-0011) as scaffolding: PR 0 adds no shadcn
-   component and migrates no screen, so nothing visual changes yet. */
+   tokens. Tailwind CSS v4 + shadcn/ui are wired here (ADR-0011). PR 3 (the sign-in migration pilot) turns
+   Preflight ON: shadcn primitives assume Tailwind's base reset. */
 
-/* Cascade-layer order is fixed up front so Tailwind's layers sort deterministically. */
+/* Cascade-layer order is fixed up front so Tailwind's layers sort deterministically. Preflight lands in
+   `base`; the explicit body rule below is unlayered, so it still wins over Preflight's html defaults. */
 @layer theme, base, components, utilities;
 
 /* Token layer first, so the shadcn variables (--background, --primary, ...) it defines are available to
    the @theme mapping below. Kept per the project rule that globals.css imports the token layer. */
 @import "../styles/tokens.css";
 
-/* Tailwind v4, theme + utilities ONLY. Preflight (Tailwind's global element reset) is intentionally
-   NOT imported: enabling it now would restyle the existing hand-built CSS-Module screens and break
-   PR 0's no-visual-change guarantee. Preflight is added by the first migration PR (PR 3), where the
-   screens actually adopt shadcn primitives and parity is verified (ADR-0011). */
+/* Tailwind v4: theme, Preflight (the base reset shadcn primitives rely on, PR 3 / ADR-0011), utilities.
+   Preflight provides box-sizing, the margin reset, and the element normalizations; the per-element
+   overrides the hand-built CSS Modules already set win over it, and the body rule below sets the app font
+   and colour. */
 @import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
 @import "tw-animate-css";
 
@@ -56,17 +58,8 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* Baseline reset the screens already rely on (unchanged from before the Tailwind wiring). */
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
+/* App font and colour. Unlayered so it wins over Preflight's html/body defaults. Box-sizing and the
+   margin reset now come from Preflight. */
 body {
   font-family: var(--md-font-family);
   line-height: 1.5;
