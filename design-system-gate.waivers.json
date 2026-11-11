@@ -1,5 +1,54 @@
 [
   {
+    "rule": "ui-css-module",
+    "path": "src/features/shell/AppShell.module.css",
+    "reason": "TP1-06 app shell built before the shadcn/ui primitives + Tailwind exist (ADR-0012, pre-ADR-0011 migration); migrates to the design system with the shell migration PR.",
+    "approvedBy": "Giuliana Wladessa Manca",
+    "expires": "2027-02-10"
+  },
+  {
+    "rule": "ui-css-module",
+    "path": "src/features/shell/ErrorState.module.css",
+    "reason": "TP1-06 app shell built before the shadcn/ui primitives + Tailwind exist (ADR-0012, pre-ADR-0011 migration); migrates to the design system with the shell migration PR.",
+    "approvedBy": "Giuliana Wladessa Manca",
+    "expires": "2027-02-10"
+  },
+  {
+    "rule": "ui-css-module",
+    "path": "src/features/shell/Placeholder.module.css",
+    "reason": "TP1-06 app shell built before the shadcn/ui primitives + Tailwind exist (ADR-0012, pre-ADR-0011 migration); migrates to the design system with the shell migration PR.",
+    "approvedBy": "Giuliana Wladessa Manca",
+    "expires": "2027-02-10"
+  },
+  {
+    "rule": "ui-css-module",
+    "path": "src/features/shell/SideNav.module.css",
+    "reason": "TP1-06 app shell built before the shadcn/ui primitives + Tailwind exist (ADR-0012, pre-ADR-0011 migration); migrates to the design system with the shell migration PR.",
+    "approvedBy": "Giuliana Wladessa Manca",
+    "expires": "2027-02-10"
+  },
+  {
+    "rule": "ui-css-module",
+    "path": "src/features/shell/TopBar.module.css",
+    "reason": "TP1-06 app shell built before the shadcn/ui primitives + Tailwind exist (ADR-0012, pre-ADR-0011 migration); migrates to the design system with the shell migration PR.",
+    "approvedBy": "Giuliana Wladessa Manca",
+    "expires": "2027-02-10"
+  },
+  {
+    "rule": "raw-control",
+    "path": "src/features/shell/SideNav.tsx",
+    "reason": "TP1-06 side-nav built with raw <button> before the shadcn/ui button primitive exists (ADR-0012, pre-ADR-0011 migration); migrates to @/components/ui/button with the shell migration PR.",
+    "approvedBy": "Giuliana Wladessa Manca",
+    "expires": "2027-02-10"
+  },
+  {
+    "rule": "raw-control",
+    "path": "src/features/shell/ErrorState.tsx",
+    "reason": "TP1-06 error-state built with a raw <button> before the shadcn/ui button primitive exists (ADR-0012, pre-ADR-0011 migration); migrates to @/components/ui/button with the shell migration PR.",
+    "approvedBy": "Giuliana Wladessa Manca",
+    "expires": "2027-02-10"
+  },
+  {
     "rule": "raw-control",
     "path": "src/features/auth/MfaEnrolPage.tsx",
     "reason": "Transitional: PR 3/4 only repoint this file's hand-built Button import during the shadcn migration; its pre-existing raw controls are migrated and this waiver removed in PR 5 (MFA enrol). ADR-0011 D5.",
