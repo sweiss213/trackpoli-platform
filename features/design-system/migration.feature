@@ -11,3 +11,19 @@ Feature: Existing features migrate to the design system
     When a user signs in with valid credentials
     Then the flow behaves exactly as before the migration
     And the password visibility toggle and error banner still work
+
+  # PR 4 (password-reset flow). Executed by ForgotPasswordPage.test.tsx and ResetPasswordPage.test.tsx.
+
+  @audience:end-user @usecase:forgot-password-migrated @category:happy @quality:functional @severity:high
+  Scenario: The forgot-password screen uses design-system components with behaviour parity
+    Given the forgot-password screen migrated to the design-system input, label and alert
+    When a user requests a reset link
+    Then the flow behaves exactly as before the migration
+    And the enumeration-safe check-your-email acknowledgement still shows
+
+  @audience:end-user @usecase:reset-password-migrated @category:happy @quality:functional @severity:high
+  Scenario: The set-new-password screen uses design-system components with behaviour parity
+    Given the set-new-password screen migrated to the design-system input, label, alert and button
+    When a user sets a matching password that meets the length rule
+    Then the flow behaves exactly as before the migration
+    And the password visibility toggles and the mismatch helper still work
