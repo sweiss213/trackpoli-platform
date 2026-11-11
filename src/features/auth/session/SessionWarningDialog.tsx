@@ -11,7 +11,7 @@
 // (aria-hidden) so a screen reader is not spammed every second; the static note sentence carries the meaning.
 
 import { useEffect, useRef } from "react";
-import { Button } from "@/components/ui/LegacyButton";
+import { Button } from "@/components/ui/button";
 import { SESSION_MESSAGES as M } from "@/features/auth/messages";
 import styles from "./SessionWarningDialog.module.css";
 
@@ -101,10 +101,10 @@ export function SessionWarningDialog({
           <span className={styles.noteBody}>{noteBody}</span>
         </div>
         <div className={styles.actions}>
-          <button type="button" className={styles.textButton} onClick={onSecondary}>
+          <Button variant="ghost" size="inline" className={styles.textButton} onClick={onSecondary}>
             {isIdle ? M.signOut : M.dismiss}
-          </button>
-          <Button variant="filled" onClick={onPrimary}>
+          </Button>
+          <Button variant="secondary" onClick={onPrimary}>
             {isIdle ? M.staySignedIn : M.signInAgain}
           </Button>
         </div>

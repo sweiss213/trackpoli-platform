@@ -45,3 +45,12 @@ Feature: Existing features migrate to the design system
     When an administrator replaces their authenticator device
     Then the flow behaves exactly as before the migration
     And the re-authentication, new-device, code steps, lost-device path and modal actions still work
+
+  # PR 7 (session-timeout warning, the final migration PR). Executed by SessionWarningDialog.test.tsx.
+
+  @audience:end-user @usecase:session-warning-migrated @category:happy @quality:functional @severity:high
+  Scenario: The session-timeout warning dialog uses design-system components with behaviour parity
+    Given the session-timeout warning dialog migrated to the design-system button
+    When the dialog warns an administrator their session is about to end
+    Then the flow behaves exactly as before the migration
+    And both actions stay keyboard-focusable buttons with focus on the primary and the trap intact

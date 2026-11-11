@@ -562,6 +562,17 @@
   },
   {
     "feature": "design-system/migration.feature",
+    "scenario": "The session-timeout warning dialog uses design-system components with behaviour parity",
+    "domain": "design-system",
+    "audience": "end-user",
+    "usecase": "session-warning-migrated",
+    "category": "happy",
+    "quality": "functional",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "design-system/migration.feature",
     "scenario": "The set-new-password screen uses design-system components with behaviour parity",
     "domain": "design-system",
     "audience": "end-user",
