@@ -4,9 +4,13 @@
 # understand (release-deployment-safety). The contract phase (dropping anything old) is a separate change
 # made only after a stable release.
 #
-# INERT UNTIL CONFIGURED: set the secrets (SUPABASE_ACCESS_TOKEN, STAGING_SUPABASE_DB_PASSWORD,
-# VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID) and the variable STAGING_SUPABASE_PROJECT_REF in the
-# repo (Settings -> Secrets and variables -> Actions), and create the Vercel + staging Supabase projects.
+# INERT UNTIL CONFIGURED: the deploy job SELF-SKIPS (its `if:` guard below) until the variable
+# STAGING_SUPABASE_PROJECT_REF is set, so on an unconfigured repo this workflow stays neutral/green on every
+# main push instead of erroring (previously `supabase db push --project-ref ""` failed, turning the 'staging'
+# environment red). To enable staging, set the secrets (SUPABASE_ACCESS_TOKEN, STAGING_SUPABASE_DB_PASSWORD,
+# VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID) and the variable STAGING_SUPABASE_PROJECT_REF in the repo
+# (Settings -> Secrets and variables -> Actions), and create the Vercel + staging Supabase projects. The job
+# then runs automatically; no workflow edit is needed (ADR-0015, release-deployment-safety).
 name: deploy-staging
 
 on:
@@ -26,6 +30,12 @@ jobs:
     name: deploy (staging)
     runs-on: ubuntu-latest
     environment: staging
+    # Fail-closed-but-inert: skip the whole job (neutral, not failed) until staging is configured. Without the
+    # project ref the first step (`supabase db push --project-ref ""`) errors and reds the 'staging'
+    # environment on every main push. `vars` is readable in a job-level `if`, so a skipped job attempts no
+    # deploy. deploy-staging is NOT a branch-protection required check (main is unprotected), so a skip blocks
+    # nothing. Enable staging by setting STAGING_SUPABASE_PROJECT_REF. ADR-0015.
+    if: ${{ vars.STAGING_SUPABASE_PROJECT_REF != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
