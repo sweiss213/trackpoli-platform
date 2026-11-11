@@ -10,11 +10,12 @@
 // with NIST SP 800-63B and OWASP; the design's composition hints are intentionally reduced to the length
 // rule. Presentation + wiring only.
 
-import { useState, type FormEvent } from "react";
-import { Banner } from "@/components/ui/Banner";
-import { Button } from "@/components/ui/LegacyButton";
+import { useId, useState, type FormEvent } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/Icon";
-import { TextField } from "@/components/ui/TextField";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/apiFetch";
 import { PASSWORD_RESET_MESSAGES } from "./messages";
 import card from "./authCard.module.css";
@@ -60,7 +61,8 @@ export function ResetLinkInvalidCard() {
           <p className={styles.subtext}>{PASSWORD_RESET_MESSAGES.linkExpired}</p>
         </div>
         <Button
-          variant="filled"
+          variant="secondary"
+          className="w-full"
           onClick={() => {
             // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- full navigation to the request screen
             window.location.assign("/admin/forgot-password");
@@ -75,6 +77,9 @@ export function ResetLinkInvalidCard() {
 }
 
 export function ResetPasswordPage({ email }: { email: string }) {
+  const newPasswordId = useId();
+  const confirmId = useId();
+  const confirmHelperId = useId();
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -135,51 +140,76 @@ export function ResetPasswordPage({ email }: { email: string }) {
           <p className={styles.subtext}>Create a new password for {email}.</p>
         </div>
 
-        {notice ? <Banner icon={<Icon src={warningIcon} size={22} />}>{notice}</Banner> : null}
+        {notice ? (
+          <Alert>
+            <Icon src={warningIcon} size={22} />
+            <AlertDescription>{notice}</AlertDescription>
+          </Alert>
+        ) : null}
 
         <div className={styles.fields}>
-          <TextField
-            label="New password"
-            type={showPassword ? "text" : "password"}
-            name="new-password"
-            autoComplete="new-password"
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            trailing={
-              <button
+          <div className="flex w-full flex-col gap-1.5">
+            <Label htmlFor={newPasswordId}>New password</Label>
+            <div className="relative">
+              <Input
+                id={newPasswordId}
+                type={showPassword ? "text" : "password"}
+                name="new-password"
+                autoComplete="new-password"
+                required
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                className="pr-14"
+              />
+              <Button
                 type="button"
-                className={styles.toggle}
+                variant="ghost"
+                size="icon"
+                className="absolute top-1/2 right-1 -translate-y-1/2"
                 aria-label={showPassword ? "Hide password" : "Show password"}
                 aria-pressed={showPassword}
                 onClick={() => setShowPassword((value) => !value)}
               >
                 <Icon src={visibilityIcon} size={22} />
-              </button>
-            }
-          />
-          <TextField
-            label="Confirm new password"
-            type={showConfirm ? "text" : "password"}
-            name="confirm-password"
-            autoComplete="new-password"
-            required
-            value={confirm}
-            onChange={(event) => setConfirm(event.target.value)}
-            error={mismatch}
-            helperText={mismatch ? "Both passwords must match." : undefined}
-            trailing={
-              <button
+              </Button>
+            </div>
+          </div>
+          <div className="flex w-full flex-col gap-1.5">
+            <Label htmlFor={confirmId}>Confirm new password</Label>
+            <div className="relative">
+              <Input
+                id={confirmId}
+                type={showConfirm ? "text" : "password"}
+                name="confirm-password"
+                autoComplete="new-password"
+                required
+                value={confirm}
+                onChange={(event) => setConfirm(event.target.value)}
+                aria-invalid={mismatch || undefined}
+                aria-describedby={mismatch ? confirmHelperId : undefined}
+                className="pr-14"
+              />
+              <Button
                 type="button"
-                className={styles.toggle}
+                variant="ghost"
+                size="icon"
+                className="absolute top-1/2 right-1 -translate-y-1/2"
                 aria-label={showConfirm ? "Hide password" : "Show password"}
                 aria-pressed={showConfirm}
                 onClick={() => setShowConfirm((value) => !value)}
               >
                 <Icon src={visibilityIcon} size={22} />
-              </button>
-            }
-          />
+              </Button>
+            </div>
+            {mismatch ? (
+              <p
+                id={confirmHelperId}
+                className="m-0 text-[length:var(--md-body-small-size)] leading-[var(--md-body-small-line)] tracking-[var(--md-body-small-tracking)] text-muted-foreground"
+              >
+                Both passwords must match.
+              </p>
+            ) : null}
+          </div>
         </div>
 
         <div className={styles.requirements}>
@@ -190,7 +220,7 @@ export function ResetPasswordPage({ email }: { email: string }) {
           </p>
         </div>
 
-        <Button variant="filled" type="submit" disabled={!canSubmit}>
+        <Button variant="secondary" className="w-full" type="submit" disabled={!canSubmit}>
           Reset password
         </Button>
 
