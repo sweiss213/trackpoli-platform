@@ -10,11 +10,12 @@
 // NOTE: the dedicated "check your email" screen (ForgotPasswordSentPage) is pending its Figma design; until
 // then the acknowledgement is shown inline here, built to the same design system.
 
-import { useCallback, useState, type FormEvent } from "react";
-import { Banner } from "@/components/ui/Banner";
-import { Button } from "@/components/ui/LegacyButton";
+import { useCallback, useId, useState, type FormEvent } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/Icon";
-import { TextField } from "@/components/ui/TextField";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/apiFetch";
 import { ForgotPasswordSentPage } from "./ForgotPasswordSentPage";
 import { TurnstileSlot } from "./TurnstileSlot";
@@ -44,6 +45,7 @@ function BackToSignIn() {
 }
 
 export function ForgotPasswordPage() {
+  const emailId = useId();
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -110,24 +112,32 @@ export function ForgotPasswordPage() {
           </p>
         </div>
 
-        {notice ? <Banner icon={<Icon src={warningIcon} size={22} />}>{notice}</Banner> : null}
+        {notice ? (
+          <Alert>
+            <Icon src={warningIcon} size={22} />
+            <AlertDescription>{notice}</AlertDescription>
+          </Alert>
+        ) : null}
 
         <div className={styles.fields}>
-          <TextField
-            label="Email"
-            type="email"
-            name="email"
-            autoComplete="username"
-            inputMode="email"
-            required
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
+          <div className="flex w-full flex-col gap-1.5">
+            <Label htmlFor={emailId}>Email</Label>
+            <Input
+              id={emailId}
+              type="email"
+              name="email"
+              autoComplete="username"
+              inputMode="email"
+              required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </div>
         </div>
 
         <TurnstileSlot onToken={handleToken} resetKey={turnstileResetKey} />
 
-        <Button variant="filled" type="submit" disabled={!canSubmit}>
+        <Button variant="secondary" className="w-full" type="submit" disabled={!canSubmit}>
           Send reset link
         </Button>
 
