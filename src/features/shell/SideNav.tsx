@@ -9,6 +9,7 @@
 import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/Icon";
 import { apiFetch } from "@/lib/apiFetch";
 import { report } from "@/lib/report";
@@ -69,15 +70,16 @@ export function SideNav({ displayName }: { displayName: string }) {
         <span className={styles.logo} aria-hidden="true" />
         <span className={styles.brandName}>TrackPoli Admin</span>
         <span className={styles.brandSpacer} />
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="inline"
           className={styles.collapseButton}
           aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
           aria-pressed={collapsed}
           onClick={() => setCollapsed((c) => !c)}
         >
           <Icon src={collapseIcon} size={24} />
-        </button>
+        </Button>
       </div>
 
       <ul className={styles.list}>
@@ -92,9 +94,9 @@ export function SideNav({ displayName }: { displayName: string }) {
           <span className={styles.userName}>{displayName}</span>
           <span className={styles.userRole}>{roleLabel(user?.role ?? null)}</span>
         </span>
-        <button type="button" className={styles.logout} onClick={signOut} disabled={signingOut}>
+        <Button variant="ghost" size="inline" className={styles.logout} onClick={signOut} disabled={signingOut}>
           Log out
-        </button>
+        </Button>
       </div>
     </nav>
   );
@@ -114,8 +116,9 @@ export function SideNav({ displayName }: { displayName: string }) {
     const expanded = open[node.label] ?? true;
     return (
       <li key={node.label} className={styles.section}>
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="inline"
           className={styles.sectionHeader}
           aria-expanded={expanded}
           onClick={() => setOpen((o) => ({ ...o, [node.label]: !expanded }))}
@@ -125,7 +128,7 @@ export function SideNav({ displayName }: { displayName: string }) {
           <span className={styles.chevron} data-expanded={expanded} aria-hidden="true">
             <Icon src={chevronIcon} size={24} />
           </span>
-        </button>
+        </Button>
         {expanded && !collapsed ? (
           <ul className={styles.subList}>
             {node.items.map((leaf) => {

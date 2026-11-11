@@ -54,3 +54,12 @@ Feature: Existing features migrate to the design system
     When the dialog warns an administrator their session is about to end
     Then the flow behaves exactly as before the migration
     And both actions stay keyboard-focusable buttons with focus on the primary and the trap intact
+
+  # Shell (TP1-06 app shell, clears the last 7 waivers). Executed by SideNav.test.tsx and ErrorState.test.tsx.
+
+  @audience:administrator @usecase:shell-migrated @category:happy @quality:functional @severity:high
+  Scenario: The app shell (side nav + error screens) uses design-system components with behaviour parity
+    Given the side-nav controls and the error-state action migrated to the design-system button
+    When an administrator collapses the nav, expands a section, or opens a forbidden/not-found screen
+    Then the controls behave exactly as before the migration
+    And they stay native buttons with their names and aria state, and the nav links stay basePath-relative

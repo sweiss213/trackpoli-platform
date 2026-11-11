@@ -551,6 +551,17 @@
   },
   {
     "feature": "design-system/migration.feature",
+    "scenario": "The app shell (side nav + error screens) uses design-system components with behaviour parity",
+    "domain": "design-system",
+    "audience": "administrator",
+    "usecase": "shell-migrated",
+    "category": "happy",
+    "quality": "functional",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "design-system/migration.feature",
     "scenario": "The forgot-password screen uses design-system components with behaviour parity",
     "domain": "design-system",
     "audience": "end-user",

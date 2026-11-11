@@ -6,6 +6,7 @@
 
 import Link from "next/link";
 import type { StaticImageData } from "next/image";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/Icon";
 import styles from "./ErrorState.module.css";
 
@@ -57,8 +58,8 @@ function renderAction(action: ErrorAction, className: string) {
     );
   }
   return (
-    <button type="button" className={className} onClick={action.onClick}>
+    <Button variant="ghost" size="inline" className={className} onClick={action.onClick}>
       {action.label}
-    </button>
+    </Button>
   );
 }
