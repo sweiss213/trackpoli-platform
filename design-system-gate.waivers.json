@@ -1,13 +1,6 @@
 [
   {
     "rule": "raw-control",
-    "path": "src/features/auth/MfaEnrolPage.tsx",
-    "reason": "Transitional: PR 3/4 only repoint this file's hand-built Button import during the shadcn migration; its pre-existing raw controls are migrated and this waiver removed in PR 5 (MFA enrol). ADR-0011 D5.",
-    "approvedBy": "mdenner",
-    "expires": "2026-12-31"
-  },
-  {
-    "rule": "raw-control",
     "path": "src/features/auth/session/SessionWarningDialog.tsx",
     "reason": "Transitional: only the hand-built Button import is repointed; pre-existing raw controls are migrated and this waiver removed in PR 7 (session + home). ADR-0011 D5.",
     "approvedBy": "mdenner",

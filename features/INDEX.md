@@ -49,3 +49,4 @@ Generated from the feature files by `bdd-index-generate.mjs` - do not edit by ha
 | design-system/migration.feature | The forgot-password screen uses design-system components with behaviour parity | design-system | end-user | forgot-password-migrated | happy | functional | high | covered |
 | design-system/migration.feature | The set-new-password screen uses design-system components with behaviour parity | design-system | end-user | reset-password-migrated | happy | functional | high | covered |
 | design-system/migration.feature | The sign-in screen uses design-system components with behaviour parity | design-system | end-user | signin-migrated | happy | functional | high | covered |
+| design-system/migration.feature | The two-factor enrolment wizard uses design-system components with behaviour parity | design-system | end-user | mfa-enrol-migrated | happy | functional | high | covered |

@@ -27,3 +27,12 @@ Feature: Existing features migrate to the design system
     When a user sets a matching password that meets the length rule
     Then the flow behaves exactly as before the migration
     And the password visibility toggles and the mismatch helper still work
+
+  # PR 5 (MFA enrol). Executed by MfaEnrolPage.test.tsx.
+
+  @audience:end-user @usecase:mfa-enrol-migrated @category:happy @quality:functional @severity:high
+  Scenario: The two-factor enrolment wizard uses design-system components with behaviour parity
+    Given the MFA-enrol wizard migrated to the design-system button, input and alert
+    When a new administrator enrols through the instructions, QR and code steps
+    Then the flow behaves exactly as before the migration
+    And the step actions, back links, sign-out and wrong-code alert still work
