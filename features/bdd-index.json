@@ -394,5 +394,82 @@
     "quality": "security",
     "severity": "high",
     "status": "covered"
+  },
+  {
+    "feature": "design-system/component-accessibility.feature",
+    "scenario": "A disabled control is non-interactive and announced as disabled",
+    "domain": "design-system",
+    "audience": "assistive-tech",
+    "usecase": "disabled-control",
+    "category": "edge",
+    "quality": "accessibility",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "design-system/component-accessibility.feature",
+    "scenario": "Components render consistently across supported browsers",
+    "domain": "design-system",
+    "audience": "end-user",
+    "usecase": "cross-browser",
+    "category": "edge",
+    "quality": "functional",
+    "severity": "medium",
+    "status": "covered"
+  },
+  {
+    "feature": "design-system/component-accessibility.feature",
+    "scenario": "Grayscale components meet WCAG 2.2 AA contrast",
+    "domain": "design-system",
+    "audience": "assistive-tech",
+    "usecase": "grayscale-contrast",
+    "category": "boundary",
+    "quality": "accessibility",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "design-system/component-accessibility.feature",
+    "scenario": "The alert announces errors to screen readers",
+    "domain": "design-system",
+    "audience": "assistive-tech",
+    "usecase": "alert-a11y",
+    "category": "happy",
+    "quality": "accessibility",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "design-system/component-accessibility.feature",
+    "scenario": "The button is keyboard operable with a visible focus state",
+    "domain": "design-system",
+    "audience": "assistive-tech",
+    "usecase": "button-a11y",
+    "category": "happy",
+    "quality": "accessibility",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "design-system/component-accessibility.feature",
+    "scenario": "The input exposes its label and invalid state to assistive tech",
+    "domain": "design-system",
+    "audience": "assistive-tech",
+    "usecase": "input-a11y",
+    "category": "happy",
+    "quality": "accessibility",
+    "severity": "high",
+    "status": "covered"
+  },
+  {
+    "feature": "design-system/migration.feature",
+    "scenario": "The sign-in screen uses design-system components with behaviour parity",
+    "domain": "design-system",
+    "audience": "end-user",
+    "usecase": "signin-migrated",
+    "category": "happy",
+    "quality": "functional",
+    "severity": "high",
+    "status": "covered"
   }
 ]
