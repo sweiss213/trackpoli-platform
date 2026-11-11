@@ -32,6 +32,9 @@ const buttonVariants = cva(
         default: "h-[56px] px-6 text-[length:var(--md-label-large-size)] leading-[var(--md-label-large-line)] tracking-[var(--md-label-large-tracking)]",
         sm: "h-10 px-4 text-[length:var(--md-label-large-size)]",
         icon: "h-11 w-11 p-0",
+        // Text / icon-text actions (e.g. "Sign out", a back link) that size to their content and bring
+        // their own padding via a composed className; no fixed control height.
+        inline: "h-auto w-auto p-0",
       },
     },
     defaultVariants: {
