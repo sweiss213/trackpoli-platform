@@ -7,14 +7,16 @@
 // job — `role`/`status` here are for rendering/routing only.
 
 import { createContext, type ReactNode } from "react";
+import type { AdminRole, AdminStatus } from "@/lib/roles";
 
 export interface AuthUser {
   readonly id: string;
   readonly email: string | null;
-  // From the access-token claims (app_role/app_status), wired with the sign-in flow; routing/rendering
-  // only, never authorization. Null until that wiring lands.
-  readonly role: string | null;
-  readonly status: string | null;
+  // From the access-token claims (app_role/app_status, migration 006), read server-side and passed down
+  // (TP1-06). Routing/rendering only, never authorization — the database (RLS) decides access. Null when the
+  // claim is absent or unreadable (e.g. a user with no profile row, whom the hook stamps 'none').
+  readonly role: AdminRole | null;
+  readonly status: AdminStatus | null;
 }
 
 export interface AuthState {
