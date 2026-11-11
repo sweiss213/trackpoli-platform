@@ -1,4 +1,4 @@
-# 0012. Disable Next.js Cache Components (prerender) until the P1-12 app shell adopts it with Suspense
+# 0013. Disable Next.js Cache Components (prerender) until the P1-12 app shell adopts it with Suspense
 
 Date: 2026-11-10
 

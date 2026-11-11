@@ -5,7 +5,7 @@ import type { NextConfig } from "next";
 // Security headers (HSTS, CSP with a per-request nonce, frame-ancestors none, X-Robots-Tag: noindex)
 // are added in the hardening task (P1-16), not here.
 //
-// Cache Components (cacheComponents / partialPrefetching) is intentionally OFF (ADR-0012): the root
+// Cache Components (cacheComponents / partialPrefetching) is intentionally OFF (ADR-0013): the root
 // layout resolves the session (cookies, via getSessionUser) on every route, which Cache Components'
 // strict prerender check rejects for the static /_not-found route on Vercel's build, failing the deploy.
 // The admin app is auth-gated and per-user, so partial prerendering buys little now; proper adoption
