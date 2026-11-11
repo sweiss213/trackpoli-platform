@@ -8,12 +8,13 @@
 // path explains the manager-recreate recovery (role-aware). The session alone is never trusted (OWASP MFA).
 // Presentation + wiring only; the MFA decisions are server-side (/admin/api/mfa/replace).
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Banner } from "@/components/ui/Banner";
-import { Button } from "@/components/ui/LegacyButton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/Icon";
-import { TextField } from "@/components/ui/TextField";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/apiFetch";
 import { report } from "@/lib/report";
 import { MFA_REPLACE_MESSAGES as M } from "@/features/auth/messages";
@@ -59,6 +60,9 @@ export function TwoFactorCard({
 }) {
   const router = useRouter();
   const params = useSearchParams();
+  const passwordId = useId();
+  const currentCodeId = useId();
+  const newCodeId = useId();
 
   // Resume the modal after the Google re-auth round-trip returns (?reauth=ok|mismatch|error) by deriving the
   // initial state from the URL, rather than opening it from an effect.
@@ -190,9 +194,9 @@ export function TwoFactorCard({
         {M.cardStatus}
       </p>
       <p className={styles.note}>{M.cardNote}</p>
-      <button type="button" className={styles.action} onClick={open}>
+      <Button variant="ghost" size="inline" type="button" className={styles.action} onClick={open}>
         {M.replaceButton}
-      </button>
+      </Button>
 
       {step ? renderDialog() : null}
     </section>
@@ -246,10 +250,10 @@ export function TwoFactorCard({
             <span className={styles.infoBody}>{M.introReassure}</span>
           </div>
           <div className={styles.actions}>
-            <button type="button" className={styles.textButton} onClick={close}>
+            <Button variant="ghost" size="inline" type="button" className={styles.textButton} onClick={close}>
               {M.cancel}
-            </button>
-            <Button variant="filled" onClick={() => setStep("reauth")}>
+            </Button>
+            <Button variant="secondary" className="w-full" onClick={() => setStep("reauth")}>
               {M.getStarted}
             </Button>
           </div>
@@ -264,20 +268,25 @@ export function TwoFactorCard({
           <p className={styles.dialogText}>
             {accountType === "password" ? M.step1PasswordIntro : M.step1GoogleIntro}
           </p>
-          {notice ? <Banner icon={<Icon src={warningIcon} size={22} />}>{notice}</Banner> : null}
+          {notice ? <Alert><Icon src={warningIcon} size={22} /><AlertDescription>{notice}</AlertDescription></Alert> : null}
           {accountType === "password" ? (
-            <TextField
-              label={M.passwordLabel}
-              type="password"
-              name="current-password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="flex w-full flex-col gap-1.5">
+              <Label htmlFor={passwordId}>{M.passwordLabel}</Label>
+              <Input
+                id={passwordId}
+                type="password"
+                name="current-password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
           ) : (
             <div className={styles.googleRow}>
               <span className={styles.fieldLabel}>{M.googleAccountLabel}</span>
-              <button
+              <Button
+                variant="ghost"
+                size="inline"
                 type="button"
                 className={styles.googleButton}
                 data-done={googleReauthed}
@@ -289,28 +298,31 @@ export function TwoFactorCard({
               >
                 <Icon src={googleReauthed ? checkIcon : googleIcon} size={20} />
                 <span>{googleReauthed ? M.reauthedGoogle : M.reauthGoogle}</span>
-              </button>
+              </Button>
             </div>
           )}
-          <TextField
-            label={M.currentCodeLabel}
-            name="current-code"
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            pattern="\d{6}"
-            maxLength={6}
-            value={currentCode}
-            error={codeError}
-            onChange={(e) => setCurrentCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-          />
-          <button type="button" className={styles.textLink} onClick={() => setStep("lost")}>
+          <div className="flex w-full flex-col gap-1.5">
+            <Label htmlFor={currentCodeId}>{M.currentCodeLabel}</Label>
+            <Input
+              id={currentCodeId}
+              name="current-code"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              pattern="\d{6}"
+              maxLength={6}
+              value={currentCode}
+              aria-invalid={codeError || undefined}
+              onChange={(e) => setCurrentCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+            />
+          </div>
+          <Button variant="ghost" size="inline" type="button" className={styles.textLink} onClick={() => setStep("lost")}>
             {M.lostLink}
-          </button>
+          </Button>
           <div className={styles.actions}>
-            <button type="button" className={styles.textButton} onClick={close}>
+            <Button variant="ghost" size="inline" type="button" className={styles.textButton} onClick={close}>
               {M.cancel}
-            </button>
-            <Button variant="filled" onClick={authorize} disabled={!canAuthorize || busy}>
+            </Button>
+            <Button variant="secondary" className="w-full" onClick={authorize} disabled={!canAuthorize || busy}>
               {M.continueButton}
             </Button>
           </div>
@@ -326,10 +338,10 @@ export function TwoFactorCard({
           {showKey ? (
             <div className={styles.keyBox}>
               <span className={styles.key}>{groupKey(enrol.secret)}</span>
-              <button type="button" className={styles.keyAction} onClick={copyKey}>
+              <Button variant="ghost" size="inline" type="button" className={styles.keyAction} onClick={copyKey}>
                 <Icon src={copyIcon} size={18} />
                 <span>{copied ? "Copied" : "Copy key"}</span>
-              </button>
+              </Button>
             </div>
           ) : (
             <div className={styles.qrRow}>
@@ -339,14 +351,14 @@ export function TwoFactorCard({
               </span>
             </div>
           )}
-          <button type="button" className={styles.textLink} onClick={() => setShowKey((v) => !v)}>
+          <Button variant="ghost" size="inline" type="button" className={styles.textLink} onClick={() => setShowKey((v) => !v)}>
             {showKey ? "Scan the QR code instead" : "Can't scan? Enter the key manually"}
-          </button>
+          </Button>
           <div className={styles.actions}>
-            <button type="button" className={styles.textButton} onClick={close}>
+            <Button variant="ghost" size="inline" type="button" className={styles.textButton} onClick={close}>
               {M.cancel}
-            </button>
-            <Button variant="filled" onClick={() => setStep("newCode")}>
+            </Button>
+            <Button variant="secondary" className="w-full" onClick={() => setStep("newCode")}>
               {M.continueButton}
             </Button>
           </div>
@@ -359,23 +371,26 @@ export function TwoFactorCard({
         <>
           {renderStepHeader(3, M.step3Title)}
           <p className={styles.dialogText}>{M.step3Body}</p>
-          {notice ? <Banner icon={<Icon src={warningIcon} size={22} />}>{notice}</Banner> : null}
-          <TextField
-            label="6-digit code"
-            name="new-code"
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            pattern="\d{6}"
-            maxLength={6}
-            value={newCode}
-            error={codeError}
-            onChange={(e) => setNewCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-          />
+          {notice ? <Alert><Icon src={warningIcon} size={22} /><AlertDescription>{notice}</AlertDescription></Alert> : null}
+          <div className="flex w-full flex-col gap-1.5">
+            <Label htmlFor={newCodeId}>6-digit code</Label>
+            <Input
+              id={newCodeId}
+              name="new-code"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              pattern="\d{6}"
+              maxLength={6}
+              value={newCode}
+              aria-invalid={codeError || undefined}
+              onChange={(e) => setNewCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+            />
+          </div>
           <div className={styles.actions}>
-            <button type="button" className={styles.textButton} onClick={() => setStep("newDevice")}>
+            <Button variant="ghost" size="inline" type="button" className={styles.textButton} onClick={() => setStep("newDevice")}>
               {M.back}
-            </button>
-            <Button variant="filled" onClick={complete} disabled={!SIX.test(newCode) || busy}>
+            </Button>
+            <Button variant="secondary" className="w-full" onClick={complete} disabled={!SIX.test(newCode) || busy}>
               {M.replaceConfirm}
             </Button>
           </div>
@@ -397,10 +412,10 @@ export function TwoFactorCard({
             <span className={styles.infoBody}>{isManager ? M.lostNextManager : M.lostNextAdmin}</span>
           </div>
           <div className={styles.actions}>
-            <button type="button" className={styles.textButton} onClick={close}>
+            <Button variant="ghost" size="inline" type="button" className={styles.textButton} onClick={close}>
               {M.close}
-            </button>
-            <Button variant="filled" onClick={() => setStep("reauth")}>
+            </Button>
+            <Button variant="secondary" className="w-full" onClick={() => setStep("reauth")}>
               {M.back}
             </Button>
           </div>
@@ -428,7 +443,7 @@ export function TwoFactorCard({
           {title}
         </h3>
         <p className={styles.dialogText}>{body}</p>
-        <Button variant="filled" onClick={close}>
+        <Button variant="secondary" className="w-full" onClick={close}>
           {M.close}
         </Button>
       </div>
